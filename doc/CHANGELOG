@@ -1,0 +1,136 @@
+*** v0.15.0
+
+ - Le traitement par lots est opérationnel, pour tout type de commandes
+ 
+*** v0.14.2
+
+ - Toutes les sorties que ce soit sur la sortie standard ou d'erreur sont faites
+ en UTF-8 au lieu d'ISO-8859-15.
+
+*** v0.14.1
+
+ - Possibilité de choisir le modèle de comptage différentiel ("--normal" par
+ défaut, ou "--effort")
+
+*** v0.14.0
+
+ - Changement de l'analyse de la ligne de commande. La comparaison de fichiers
+ passe de "<après> --reference <avant>" à "--diff <avant> <après>". L'option
+ "--" force l'interprétation de ce qui suit comme des noms de fichier plutôt que
+ comme d'autres options potentielles.
+
+*** v0.13.2
+
+ - Détection automatique du langage si aucun n'est précisé. Cependant, on ne
+ peut pas comparer deux fichiers de langages différents.
+
+*** v0.13.1
+
+ - Nettoyage de code.
+
+*** v0.13.0
+
+ - Les métriques différentielles passent du modèle TRT2007 (propriétaire) à un
+ modèle plus intuitif.
+
+*** v0.12.0
+
+ - Ada95 : retour en arrière sur la tolérance introduite en v0.11.11.
+ - Désormais le message d'erreur fait mention du numéro de ligne et du statut de
+ l'erreur.
+
+*** v0.11.11
+
+ - Ada95 : les '_' multiples sont autorisés dans les identifiants.
+
+*** v0.11.10
+
+ - Ada95 : tous les caractères 8 bits affichables sont autorisés dans les
+ constantes littérales caractère.
+ - C++ : le lexème produit après mention de '#' était erroné.
+
+*** v0.11.9
+
+ - Ada95 et C++ : utilisation du nouveau marqueur de fin de fichier '%U'.
+ - Eiffel : gestion correcte des constantes littérales chaînes multi-ligne.
+
+*** v0.11.8
+
+ - Ada95 : la qualification de type a été corrigée (i.e. une accolade n'implique
+ pas que l'on commence une constante littérale caractère).
+ - Ada95 et C++ : tous les types d'erreur ont été précisés.
+ - Eiffel : simplification de la gestion de la fin du fichier d'entrée (marque
+ '%U').
+
+*** v0.11.7
+
+ - Simplification de la gestion d'erreur.
+ - Eiffel : filtrage direct des sauts de lignes DOS par LUAT_ENTREE.
+
+*** v0.11.6
+
+ - Simplification de la gestion d'erreur.
+
+*** v0.11.5
+
+ - Introduction de LUAT_ENTREE afin de changer la logique de détection de fin de
+ fichier.
+ - Ada95 : le nom du langage est changé de "Ada95" par "Ada".
+
+*** v0.11.4
+
+ - Ada95 : tous les caractères 8 bits affichables sont autorisés dans les
+ constantes littérales chaîne.
+
+*** v0.11.3
+
+ - Plusieurs comptages différentiels peuvent être demandés dans une même
+ commande.
+
+*** v0.11.2
+
+ - Suppression d'appels inutiles.
+
+*** v0.11.1
+
+ - Ada95 : L'analyseur comprend désormais correctement les entrées du type
+ "1..2", et ne provoque donc plus d'erreur sur ce cas précis.
+
+*** v0.11.0
+
+ - Ada95 : Premier support.
+
+*** v0.10.0
+
+ - Menues optimisations, particulièrement sur les chaînes de caractères
+ constantes présentes dans l'application.
+
+*** v0.9.8
+
+ - C++ : Les états de l'analyseur sont plus explicites.
+
+*** v0.9.7
+
+ - C++ : Suppression de la dépendance à GOBO (gelex).
+ - Compatibilité assurée avec SmartEiffel 2.3.
+
+*** v0.9.2
+
+ - Eiffel : Suppression de la dépendance à GOBO (gelex).
+
+*** v0.9.1
+
+ - La ligne de commande est analysée manuellement, ce qui permet de supprimer la
+ dépendance à GOBO (geyacc).
+
+*** v0.9.0
+
+ - Réorganisation du code source.
+
+*** v0.8.0
+
+ - Compatibilité assurée avec SmartEiffel 2.1.
+
+*** v0.7.1
+
+ - Compatibilité assurée avec SmartEiffel 1.1.

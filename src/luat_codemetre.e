@@ -1,0 +1,65 @@
+indexing
+
+	auteur : "seventh"
+	license : "GPL 3.0"
+
+class
+
+	LUAT_CODEMETRE
+
+		--
+		-- Outil de métrologie pour différents langages de
+		-- programmation
+		--
+
+inherit
+
+	ARGUMENTS
+
+creation
+
+	principal
+
+feature
+
+	principal is
+			-- programme principal
+		local
+			analyseur : LUAT_LIGNE_COMMANDE_ANALYSEUR
+		do
+			afficher_mention_legale
+
+			-- analyse la ligne de commande et détermine l'action
+			-- souhaitée par l'utilsateur
+
+			create analyseur.fabriquer
+
+			analyseur.analyser
+
+			-- si la commande est valide, on la lance
+
+			if analyseur.commandes.is_empty then
+				analyseur.usage
+			else
+				analyseur.commandes.do_all( agent {LUAT_COMMANDE}.executer )
+			end
+		end
+
+feature
+
+	afficher_mention_legale is
+			-- affiche une mention légale sur la sortie d'erreur, afin
+			-- de ne pas polluer la sortie standard qui est dédiée aux
+			-- sorties de mesures.
+		do
+			std_error.put_string( once "[
+oOo CodeMetre v0.15.0 (c) 2005-2008 seventh oOo
+Ce programme n'est en aucun cas garanti. Vous êtes invités à redistribuer ce
+logiciel libre sous certaines conditions.
+
+
+												 ]" )
+			std_error.flush
+		end
+
+end
