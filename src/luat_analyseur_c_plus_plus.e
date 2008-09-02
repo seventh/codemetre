@@ -279,7 +279,7 @@ feature {LUAT_ANALYSEUR}
 
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "constante littérale chaîne incomplète" )
+						gerer_erreur( once "incomplete string constant" )
 					when 'u', 'U', 'x', 'X' then
 						chaine.add_last( caractere )
 						etat := etat_notation_hexadecimale_dans_constante_chaine
@@ -414,7 +414,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_constante_litterale_reelle_apres_signe_exposant
 					else
-						gerer_erreur( once "oubli de l'exposant dans une constante littérale numérique" )
+						gerer_erreur( once "forgotten exponent in numerical constant" )
 					end
 
 				when etat_constante_litterale_reelle_apres_signe_exposant then
@@ -425,7 +425,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_constante_litterale_reelle_apres_valeur_exposant
 					else
-						gerer_erreur( once "oubli de l'exposant dans une constante littérale numérique" )
+						gerer_erreur( once "forgotten exponent in numerical constant" )
 					end
 
 				when etat_constante_litterale_reelle_apres_valeur_exposant then
@@ -473,7 +473,7 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						etat := etat_initial
 					else
-						gerer_erreur( once "séparateur %'%%:%%:%' incomplet" )
+						gerer_erreur( once "incomplete %'%%:%%:%' separator" )
 					end
 
 				when etat_apres_double_point_interrogation then
@@ -483,7 +483,7 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						etat := etat_initial
 					else
-						gerer_erreur( once "triglyphe incomplet" )
+						gerer_erreur( once "incomplete triglyph" )
 					end
 
 				when etat_exception_dans_constante_caractere then
@@ -492,7 +492,7 @@ feature {LUAT_ANALYSEUR}
 
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "constante littérale caractère incomplète" )
+						gerer_erreur( once "incomplete character constant" )
 					when 'u', 'U', 'x', 'X' then
 						chaine.add_last( caractere )
 						etat := etat_notation_hexadecimale_dans_constante_caractere
@@ -553,7 +553,7 @@ feature {LUAT_ANALYSEUR}
 									 or caractere = '%R'
 									 or caractere = '%T' )
 					 then
-						gerer_erreur( once "marque de saut de ligne non respectée dans chaîne multi-ligne" )
+						gerer_erreur( once "non respected end-of-line marker in split string" )
 					end
 
 				when etat_commentaire_multiligne then
@@ -576,7 +576,7 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						etat := etat_initial
 					else
-						gerer_erreur( once "ellipse incomplète" )
+						gerer_erreur( once "incomplete ellipsis" )
 					end
 
 				when etat_apres_antislash then
@@ -587,7 +587,7 @@ feature {LUAT_ANALYSEUR}
 						produire_ligne
 						etat := etat_initial
 					else
-						gerer_erreur( once "marque de saut de ligne non respectée" )
+						gerer_erreur( once "non respected end-of-line marker" )
 					end
 
 				when etat_apres_diese_w then
@@ -717,7 +717,7 @@ feature {LUAT_ANALYSEUR}
 				else
 					-- cas non géré
 
-					gerer_erreur( once "bogue dans l'analyseur !" )
+					gerer_erreur( once "lexer is buggy!" )
 				end
 			end
 
@@ -888,7 +888,7 @@ feature {}
 				produire_ligne
 				etat := etat_final
 			else
-				gerer_erreur( once "préfixe non reconnu" )
+				gerer_erreur( once "unknown prefix" )
 			end
 		end
 
@@ -911,7 +911,7 @@ feature {}
 		do
 			inspect caractere
 			when '%U' then
-				gerer_erreur( once "constante littérale caractère incomplète" )
+				gerer_erreur( once "incomplete character constant" )
 			when '\' then
 				chaine.add_last( caractere )
 				etat := etat_exception_dans_constante_caractere
@@ -920,7 +920,7 @@ feature {}
 				produire_code
 				etat := etat_initial
 			when '%N' then
-				gerer_erreur( once "saut de ligne dans un caractère" )
+				gerer_erreur( once "end-of-line in character constant" )
 			else
 				chaine.add_last( caractere )
 				etat := etat_apres_apostrophe
@@ -932,7 +932,7 @@ feature {}
 		do
 			inspect caractere
 			when '%U' then
-				gerer_erreur( once "constante littérale chaîne incomplète" )
+				gerer_erreur( once "incomplete string constant" )
 			when '\' then
 				chaine.add_last( caractere )
 				etat := etat_exception_dans_constante_chaine
@@ -941,7 +941,7 @@ feature {}
 				produire_code
 				etat := etat_initial
 			when '%N' then
-				gerer_erreur( once "saut de ligne dans une chaîne" )
+				gerer_erreur( once "end-of-line in string constant" )
 			else
 				chaine.add_last( caractere )
 				etat := etat_apres_guillemets
@@ -953,7 +953,7 @@ feature {}
 		do
 			inspect caractere
 			when '%U' then
-				gerer_erreur( once "commentaire multi-ligne incomplet" )
+				gerer_erreur( once "incomplete multiline comment" )
 			when '%N' then
 				if not chaine.is_empty then
 					produire_commentaire

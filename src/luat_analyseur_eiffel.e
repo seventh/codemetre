@@ -158,7 +158,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_dans_exposant
 					else
-						gerer_erreur( once "nombre réel incomplet" )
+						gerer_erreur( once "incomplete real constant" )
 					end
 
 				when etat_apres_signe_exposant then
@@ -168,7 +168,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_dans_exposant
 					else
-						gerer_erreur( once "nombre réel incomplet" )
+						gerer_erreur( once "incomplete real constant" )
 					end
 
 				when etat_dans_exposant then
@@ -196,14 +196,14 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_exception_dans_litteral_caractere
 					when '%U' then
-						gerer_erreur( once "constante littérale caractère incomplète" )
+						gerer_erreur( once "incomplete character constant" )
 					else
 						chaine.add_last( caractere )
 					end
 
 				when etat_apres_exception_dans_litteral_caractere then
 					if caractere = '%U' then
-						gerer_erreur( once "constante littérale caractère incomplète" )
+						gerer_erreur( once "incomplete character constant" )
 					else
 						chaine.add_last( caractere )
 						etat := etat_apres_apostrophe
@@ -219,7 +219,7 @@ feature {LUAT_ANALYSEUR}
 				when etat_dans_litteral_chaine then
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "littéral chaîne incomplet" )
+						gerer_erreur( once "incomplete string constant" )
 					when '%N' then
 						-- on supprime les derniers blancs du suffixe
 						from
@@ -255,7 +255,7 @@ feature {LUAT_ANALYSEUR}
 							produire_ligne
 							etat := etat_dans_litteral_chaine_apres_accolade
 						else
-							gerer_erreur( once "saut-de-ligne inattendu dans littéral chaîne" )
+							gerer_erreur( once "unexpected end-of-line in string constant" )
 						end
 					when '%"' then
 						chaine.add_last( caractere )
@@ -369,7 +369,7 @@ feature {LUAT_ANALYSEUR}
 					when ' ', '%T' then
 						etat := etat_dans_litteral_chaine_apres_pourcent_espace
 					else
-						gerer_erreur( once "caractère spécial non reconnu" )
+						gerer_erreur( once "unknown special character" )
 					end
 
 				when etat_dans_litteral_chaine_apres_pourcent_espace then
@@ -381,7 +381,7 @@ feature {LUAT_ANALYSEUR}
 						produire_ligne
 						etat := etat_dans_litteral_chaine_avant_pourcent
 					else
-						gerer_erreur( once "caractère non reconnu après '%%'" )
+						gerer_erreur( once "unknown character after '%%' mark" )
 					end
 
 				when etat_dans_litteral_chaine_avant_pourcent then
@@ -392,9 +392,9 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_dans_litteral_chaine
 					when '%N' then
-						gerer_erreur( once "saut-de-ligne inattendu dans littéral chaîne" )
+						gerer_erreur( once "unexpected end-of-line in string constant" )
 					else
-						gerer_erreur( once "caractère non reconnu après '%%'" )
+						gerer_erreur( once "unknown character after '%%' mark" )
 					end
 
 				when etat_dans_litteral_chaine_code_ascii_apres_slash then
@@ -411,26 +411,26 @@ feature {LUAT_ANALYSEUR}
 							nb_chiffres := 0
 							etat := etat_dans_litteral_chaine_code_ascii_apres_slash_0x
 						else
-							gerer_erreur( once "caractère inattendu dans un code ASCII" )
+							gerer_erreur( once "unexpected character in ASCII code" )
 						end
 					when 'U' then
 						if nb_chiffres = 0 then
 							chaine.add_last( caractere )
 							etat := etat_dans_litteral_chaine_code_ascii_apres_slash_u
 						else
-							gerer_erreur( once "caractère inattendu dans un code ASCII" )
+							gerer_erreur( once "unexpected character in ASCII code" )
 						end
 					when '/' then
 						chaine.add_last( caractere )
 						chaine_litterale.extend(code_ascii.to_character)
 						etat := etat_dans_litteral_chaine
 						if nb_chiffres = 0 then
-							gerer_erreur( once "code ASCII de longueur nulle" )
+							gerer_erreur( once "nul length ASCII code" )
 						elseif code_ascii > Maximum_character_code then
-							gerer_erreur( once "code ASCII hors intervalle autorisé" )
+							gerer_erreur( once "ASCII code is out of range" )
 						end
 					else
-						gerer_erreur( once "caractère inattendu dans un code ASCII" )
+						gerer_erreur( once "unexpected character in ASCII code" )
 					end
 
 				when etat_dans_litteral_chaine_code_ascii_apres_slash_u then
@@ -440,7 +440,7 @@ feature {LUAT_ANALYSEUR}
 						unicode := 0
 						nb_chiffres := 0
 					else
-						gerer_erreur( once "caractère inattendu dans un code ASCII" )
+						gerer_erreur( once "unexpected character in ASCII code" )
 					end
 
 				when etat_dans_litteral_chaine_code_ascii_apres_slash_0x then
@@ -457,12 +457,12 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_dans_litteral_chaine
 						if nb_chiffres = 0 then
-							gerer_erreur( once "code ASCII de longueur nulle" )
+							gerer_erreur( once "nul length ASCII code" )
 						elseif nb_chiffres.is_odd then
-							gerer_erreur( once "les littéraux caractères hexadécimaux doivent être composés d'un nombre pair de chiffres" )
+							gerer_erreur( once "hexadecimal constant shall be made of an even number of digits" )
 						end
 					else
-						gerer_erreur( once "caractère inattendu dans un code ASCII" )
+						gerer_erreur( once "unexpected character in ASCII code" )
 					end
 
 				when etat_dans_litteral_chaine_unicode_apres_slash_ux then
@@ -474,9 +474,9 @@ feature {LUAT_ANALYSEUR}
 					when '/' then
 						chaine.add_last( caractere )
 						if nb_chiffres = 0 then
-							gerer_erreur( once "code ASCII de longueur nulle" )
+							gerer_erreur( once "nul length ASCII code" )
 						elseif nb_chiffres > 8 then
-							gerer_erreur( once "un code hexadécimal pour un caractère unicode ne peut dépasser 8 chiffres" )
+							gerer_erreur( once "hexadecimal code of unicode character is 8 digits max" )
 						else
 							if unicode_string_buffer.valid_unicode(unicode) then
 								unicode_string_buffer.add_last(unicode)
@@ -484,17 +484,17 @@ feature {LUAT_ANALYSEUR}
 								unicode_string_buffer.clear_count
 								etat := etat_dans_litteral_chaine
 							else
-								gerer_erreur( once "notation unicode invalide" )
+								gerer_erreur( once "wrong unicode spelling" )
 							end
 						end
 					else
-						gerer_erreur( once "caractère inattendu dans un code ASCII" )
+						gerer_erreur( once "unexpected character in ASCII code" )
 					end
 
 				when etat_dans_litteral_chaine_apres_crochet then
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "fin de fichier inattendu dans chaîne caractère muli-ligne" )
+						gerer_erreur( once "unexpected end-of-file in multiline constant string" )
 					when ' ', '%T' then
 						indentation := indentation + 1
 					when '%N' then
@@ -518,7 +518,7 @@ feature {LUAT_ANALYSEUR}
 					indentation := indentation + 1
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "fin de fichier inattendu dans chaîne caractère muli-ligne" )
+						gerer_erreur( once "unexpected end-of-file in multiline constant string" )
 					when ' ', '%T' then
 						if indentation >= indentation_minimum then
 							chaine.add_last( caractere )
@@ -547,7 +547,7 @@ feature {LUAT_ANALYSEUR}
 								chaine_litterale.extend( caractere )
 								etat := etat_dans_litteral_chaine_attente_suffixe
 							else
-								gerer_erreur( once "non respect des marges dans littéral chaîne" )
+								gerer_erreur( once "margins in string constant" )
 							end
 						else
 							chaine.add_last( caractere )
@@ -558,7 +558,7 @@ feature {LUAT_ANALYSEUR}
 				when etat_dans_litteral_chaine_attente_suffixe then
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "fin de fichier inattendue dans chaîne caractère muli-ligne" )
+						gerer_erreur( once "unexpected end-of-file in multiline constant string" )
 					when '%"' then
 						chaine.add_last( caractere )
 						chaine_litterale.extend( caractere )
@@ -677,7 +677,7 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						etat := etat_initial
 					else
-						gerer_erreur( once "opérateur inconnu" )
+						gerer_erreur( once "unknown operator" )
 					end
 
 					--
@@ -723,7 +723,7 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						etat := etat_initial
 					else
-						gerer_erreur( once "opérateur inconnu %"\%"" )
+						gerer_erreur( once "unknown operator %"\%"" )
 					end
 
 					--
@@ -750,7 +750,7 @@ feature {LUAT_ANALYSEUR}
 				else
 					-- cas non géré
 
-					gerer_erreur( once "bogue dans l'analyseur !" )
+					gerer_erreur( once "lexer is buggy!" )
 				end
 
 			end
@@ -889,7 +889,7 @@ feature {}
 				-- fin de fichier
 				etat := etat_final
 			else
-				gerer_erreur( once "caractère non autorisé" )
+				gerer_erreur( once "forbidden character" )
 			end
 		end
 

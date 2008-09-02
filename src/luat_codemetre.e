@@ -16,6 +16,8 @@ inherit
 
 	ARGUMENTS
 
+	LUAT_GLOBAL
+
 creation
 
 	principal
@@ -52,13 +54,13 @@ feature
 			-- de ne pas polluer la sortie standard qui est dédiée aux
 			-- sorties de mesures.
 		do
-			std_error.put_string( once "[
-oOo CodeMetre v0.15.0 (c) 2005-2008 seventh oOo
-Ce programme n'est en aucun cas garanti. Vous êtes invités à redistribuer ce
-logiciel libre sous certaines conditions.
+			std_error.put_string( once "oOo CodeMetre v0.16.0 (c) 2005-2008 seventh oOo%N" )
+			std_error.put_string( traduire( "[
+This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you
+are welcome to redistribute it under certain conditions.
 
 
-												 ]" )
+														]" ) )
 			std_error.flush
 		end
 

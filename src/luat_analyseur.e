@@ -11,6 +11,10 @@ deferred class
 		-- Interface générique d'analyseur pour langage de programmation
 		--
 
+inherit
+
+	LUAT_GLOBAL
+
 feature {}
 
 	fabriquer is
@@ -124,9 +128,9 @@ feature
 		do
 			fichier.initialiser( p_fichier )
 			if not fichier.est_ouvert then
-				std_error.put_string( once "*** Erreur : le fichier %"" )
+				std_error.put_string( traduire( once "*** Error: file %"" ) )
 				std_error.put_string( p_fichier )
-				std_error.put_string( once "%" n'est pas accessible.%N" )
+				std_error.put_string( traduire( once "%" is unreachable.%N" ) )
 				std_error.flush
 			else
 				create listage.fabriquer( p_fichier, langage )
@@ -135,14 +139,15 @@ feature
 				fichier.terminer
 
 				if result = void then
-					std_error.put_string( once "*** Erreur : le fichier %"" )
+					std_error.put_string( traduire( once "*** Error: file %"" ) )
 					std_error.put_string( p_fichier )
-					std_error.put_string( once "%" n'est pas du langage " )
+					std_error.put_string( traduire( once "%" is not written in " ) )
 					std_error.put_string( langage )
 
-					std_error.put_string( once " (" )
+					std_error.put_spaces( 1 )
+					std_error.put_character( '(' )
 					std_error.put_string( message_erreur )
-					std_error.put_string( once ")" )
+					std_error.put_character( ')' )
 
 					std_error.put_new_line
 					std_error.flush
@@ -251,11 +256,11 @@ feature {}
 		require
 			message_valide : p_message /= void
 		do
-			message_erreur := "ligne "
+			message_erreur := traduire( once "line " )
 			message_erreur.append_string( indice_ligne.to_string )
 			if not p_message.is_empty then
 				message_erreur.append_string( once " : " )
-				message_erreur.append_string( p_message )
+				message_erreur.append_string( traduire( p_message ) )
 			end
 
 			erreur := true

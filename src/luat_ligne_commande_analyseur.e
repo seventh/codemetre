@@ -87,7 +87,7 @@ feature
 						if analyseur = void then
 							create {LUAT_ANALYSEUR_ADA} analyseur.fabriquer
 						else
-							afficher_erreur( once "le langage est spécifié au moins deux fois" )
+							afficher_erreur( once "language is enforced more than once" )
 							etat := etat_final
 						end
 						lexeme := lexeme + 1
@@ -96,7 +96,7 @@ feature
 						if analyseur = void then
 							create {LUAT_ANALYSEUR_C_PLUS_PLUS} analyseur.fabriquer
 						else
-							afficher_erreur( once "le langage est spécifié au moins deux fois" )
+							afficher_erreur( once "language is enforced more than once" )
 							etat := etat_final
 						end
 						lexeme := lexeme + 1
@@ -105,7 +105,7 @@ feature
 						if analyseur = void then
 							create {LUAT_ANALYSEUR_EIFFEL} analyseur.fabriquer
 						else
-							afficher_erreur( once "le langage est spécifié au moins deux fois" )
+							afficher_erreur( once "language is enforced more than once" )
 							etat := etat_final
 						end
 						lexeme := lexeme + 1
@@ -114,7 +114,7 @@ feature
 
 					when "--code" then
 						if option.code then
-							afficher_erreur( once "option %"--code%" surnuméraire" )
+							afficher_erreur( once "too many %"--code%" option" )
 							etat := etat_final
 						else
 							option.met_code( true )
@@ -123,7 +123,7 @@ feature
 
 					when "--commentaire" then
 						if option.commentaire then
-							afficher_erreur( once "option %"--commentaire%" surnuméraire" )
+							afficher_erreur( once "too many %"--commentaire%" option" )
 							etat := etat_final
 						else
 							option.met_commentaire( true )
@@ -132,7 +132,7 @@ feature
 
 					when "--total" then
 						if option.total then
-							afficher_erreur( once "option %"--total%" surnuméraire" )
+							afficher_erreur( once "too many %"--total%" option" )
 							etat := etat_final
 						else
 							option.met_total( true )
@@ -143,7 +143,7 @@ feature
 
 					when "--effort" then
 						if modele_precise then
-							afficher_erreur( once "le modèle de comparaison est précisé au moins deux fois" )
+							afficher_erreur( once "too many diff models" )
 							etat := etat_final
 						else
 							modele_precise := true
@@ -153,7 +153,7 @@ feature
 
 					when "--normal" then
 						if modele_precise then
-							afficher_erreur( once "le modèle de comparaison est précisé au moins deux fois" )
+							afficher_erreur( once "too many diff models" )
 							etat := etat_final
 						else
 							modele_precise := true
@@ -167,7 +167,7 @@ feature
 						if not lot_active then
 							lot_active := true
 						else
-							afficher_erreur( once "option %"--lot%" surnuméraire" )
+							afficher_erreur( once "too many %"--lot%" option" )
 							etat := etat_final
 						end
 						lexeme := lexeme + 1
@@ -178,7 +178,7 @@ feature
 						if mode = mode_indetermine then
 							mode := mode_analyse
 						else
-							afficher_erreur( once "le mode est spécifié au moins deux fois" )
+							afficher_erreur( once "mode is enforced more than once" )
 							etat := etat_final
 						end
 						lexeme := lexeme + 1
@@ -187,7 +187,7 @@ feature
 						if mode = mode_indetermine then
 							mode := mode_comparaison
 						else
-							afficher_erreur( once "le mode est spécifié au moins deux fois" )
+							afficher_erreur( once "mode is enforced more than once" )
 							etat := etat_final
 						end
 						lexeme := lexeme + 1
@@ -211,13 +211,13 @@ feature
 					inspect mode
 					when mode_analyse then
 						if modele_precise then
-							afficher_erreur( once "il n'est pas utile de préciser le modèle de comptage différentiel pour une analyse" )
+							afficher_erreur( once "no diff model is required for analysis" )
 							etat := etat_final
 						elseif not option.choix_est_effectue then
 							option.met_total( true )
 							etat := etat_commande_analyse
 						elseif not option.choix_est_unique then
-							afficher_erreur( once "une seule option autorisée lors d'une demande d'analyse" )
+							afficher_erreur( once "one option only for analysis" )
 							etat := etat_final
 						else
 							etat := etat_commande_analyse
@@ -228,7 +228,7 @@ feature
 							option.met_code( true )
 							etat := etat_commande_comparaison
 						elseif not option.choix_est_unique then
-							afficher_erreur( once "une seule option autorisée lors d'une demande de comparaison" )
+							afficher_erreur( once "one option only for diff" )
 							etat := etat_final
 						else
 							etat := etat_commande_comparaison
@@ -236,7 +236,7 @@ feature
 
 					when mode_unitaire then
 						if modele_precise then
-							afficher_erreur( once "il n'est pas utile de préciser le modèle de comptage différentiel pour un comptage unitaire" )
+							afficher_erreur( once "no diff model is required for measure" )
 							etat := etat_final
 						elseif not option.choix_est_effectue then
 							option.met( true, true, false )
@@ -258,7 +258,7 @@ feature
 					-- commande de type comparaison
 
 					if lexeme + 1 /= argument_count then
-						afficher_erreur( once "il faut deux fichiers en mode différentiel" )
+						afficher_erreur( once "two files are required in diff mode" )
 					else
 						avant := argument( lexeme )
 						apres := argument( lexeme + 1 )
@@ -276,7 +276,7 @@ feature
 							if avant = void
 								and apres = void
 							 then
-								afficher_erreur( once "on ne peut comparer ce qui n'existait pas et ce qui n'existe plus" )
+								afficher_erreur( once "at least one of the two arguments shall exists" )
 							else
 								produire_commande_differentiel( analyseur, avant, apres, option )
 							end
@@ -316,13 +316,15 @@ feature
 			-- affiche, sur la sortie d'erreur, une aide à l'utilisation
 			-- de l'outil
 		do
-			std_error.put_string( once "[
-usage : codemetre [--ada|--c++|--eiffel] [--code] [--commentaire] [--total]
-[--analyse|--diff] [--normal|--effort] [--lot] [--] FICHIER...
+			std_error.put_string( traduire( once "usage:" ) )
+			std_error.put_string( once " codemetre [--ada|--c++|--eiffel] [--code] [--commentaire] [--total]%N[--analyse|--diff] [--normal|--effort] [--lot] [--] " )
+			std_error.put_string( traduire( once "FILE" ) )
+			std_error.put_string( once "..." )
+			std_error.put_new_line
+			std_error.put_new_line
 
-Pour de plus amples informations, tapez "man codemetre"
-
-                                      ]")
+			std_error.put_string( traduire( once "For further information, see %"man codemetre%"" ) )
+			std_error.put_new_line
 			std_error.flush
 		end
 
@@ -331,8 +333,8 @@ feature {}
 	afficher_erreur( p_message : STRING ) is
 			-- produit sur la sortie d'erreur le message correspondant
 		do
-			std_error.put_string( once "Syntaxe incorrecte : " )
-			std_error.put_string( p_message )
+			std_error.put_string( traduire( once "Syntax error: " ) )
+			std_error.put_string( traduire( p_message ) )
 			std_error.put_new_line
 			std_error.put_new_line
 			std_error.flush
@@ -354,9 +356,9 @@ feature {}
 		do
 			create lot.connect_to( p_lot )
 			if not lot.is_connected then
-				std_error.put_string( once "*** Erreur : le lot %"" )
+				std_error.put_string( traduire( once "*** Error: batch file %"" ) )
 				std_error.put_string( p_lot )
-				std_error.put_string( once "%" est inaccessible en lecture" )
+				std_error.put_string( traduire( once "%" cannot be open for reading" ) )
 				std_error.put_new_line
 				std_error.flush
 			else
@@ -392,9 +394,9 @@ feature {}
 				create commande.fabriquer( analyseur, p_nom_fichier, p_option )
 				commandes.add_last( commande )
 			else
-				std_error.put_string( once "L'extension du fichier " )
+				std_error.put_string( traduire( once "File extension " ) )
 				std_error.put_string( p_nom_fichier )
-				std_error.put_string( once " n'est pas reconnue" )
+				std_error.put_string( traduire( once " is unknown" ) )
 				std_error.put_new_line
 				std_error.flush
 			end
@@ -419,15 +421,15 @@ feature {}
 			create lot_apres.connect_to( p_lot_apres )
 
 			if not lot_avant.is_connected then
-				std_error.put_string( once "*** Erreur : le lot %"" )
+				std_error.put_string( traduire( once "*** Error: batch file %"" ) )
 				std_error.put_string( p_lot_avant )
-				std_error.put_string( once "%" est inaccessible en lecture" )
+				std_error.put_string( traduire( once "%" cannot be open for reading" ) )
 				std_error.put_new_line
 				std_error.flush
 			elseif not lot_apres.is_connected then
-				std_error.put_string( once "*** Erreur : le lot %"" )
+				std_error.put_string( traduire( once "*** Error: batch file %"" ) )
 				std_error.put_string( p_lot_apres )
-				std_error.put_string( once "%" est inaccessible en lecture" )
+				std_error.put_string( traduire( once "%" cannot be open for reading" ) )
 				std_error.put_new_line
 				std_error.flush
 				lot_avant.disconnect
@@ -454,7 +456,7 @@ feature {}
 					if avant = void
 						and apres = void
 					 then
-						afficher_erreur( once "on ne peut comparer ce qui n'existait pas et ce qui n'existe plus" )
+						afficher_erreur( once "at least one of the two arguments shall exists" )
 					else
 						produire_commande_differentiel( p_analyseur, avant, apres, p_option )
 					end
@@ -475,7 +477,7 @@ feature {}
 				if not ( lot_avant.end_of_input
 							and lot_apres.end_of_input )
 				 then
-					std_error.put_string( once "*** Avertissement : les deux lots ne font pas la même taille." )
+					std_error.put_string( traduire( once "*** Warning: batch files does not have the same line count" ) )
 					std_error.put_new_line
 					std_error.flush
 				end
@@ -513,7 +515,7 @@ feature {}
 				create commande.fabriquer( analyseur, p_avant, p_apres, p_option )
 				commandes.add_last( commande )
 			else
-				std_error.put_string( once "Aucune extension de fichier n'a été reconnue" )
+				std_error.put_string( traduire( once "Not any extension has been recognized" ) )
 				std_error.put_new_line
 			end
 		end
@@ -534,9 +536,9 @@ feature {}
 		do
 			create lot.connect_to( p_lot )
 			if not lot.is_connected then
-				std_error.put_string( once "*** Erreur : le lot %"" )
+				std_error.put_string( traduire( once "*** Error: batch file %"" ) )
 				std_error.put_string( p_lot )
-				std_error.put_string( once "%" est inaccessible en lecture" )
+				std_error.put_string( traduire( once "%" cannot be open for reading" ) )
 				std_error.put_new_line
 			else
 				from lot.read_line
@@ -571,9 +573,9 @@ feature {}
 				create commande.fabriquer( analyseur, p_nom_fichier, p_option )
 				commandes.add_last( commande )
 			else
-				std_error.put_string( once "L'extension du fichier " )
+				std_error.put_string( traduire( once "File extension " ) )
 				std_error.put_string( p_nom_fichier )
-				std_error.put_string( once " n'est pas reconnue" )
+				std_error.put_string( traduire( once " is unknown" ) )
 				std_error.put_new_line
 			end
 		end

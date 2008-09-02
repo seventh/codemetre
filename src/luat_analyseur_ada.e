@@ -72,7 +72,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_lettre
 					else
-						gerer_erreur( once "identifiant incomplet" )
+						gerer_erreur( once "incomplete identifier" )
 					end
 
 				when etat_apres_chiffre then
@@ -101,7 +101,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_chiffre
 					else
-						gerer_erreur( once "constante littérale entière incomplète" )
+						gerer_erreur( once "incomplete integer constant" )
 					end
 
 				when etat_apres_base_dans_litteral_numerique then
@@ -110,7 +110,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_chiffre_dans_litteral_numerique_base
 					else
-						gerer_erreur( once "caractère interdit dans constante littérale entière basée" )
+						gerer_erreur( once "forbidden character in based integer constant" )
 					end
 
 				when etat_apres_chiffre_dans_litteral_numerique_base then
@@ -130,7 +130,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_valeur_dans_litteral_numerique_base
 					else
-						gerer_erreur( once "valeur incorrecte dans constante littérale numérique basée" )
+						gerer_erreur( once "wrong value in based integer constant" )
 					end
 
 				when etat_apres_separateur_dans_litteral_numerique_base then
@@ -141,7 +141,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_chiffre_decimal_dans_litteral_numerique_base
 					else
-						gerer_erreur( once "caractère interdit dans partie décimale de constante littérale numérique basée" )
+						gerer_erreur( once "forbidden character in decimal part of based integer constant" )
 					end
 
 				when etat_apres_chiffre_decimal_dans_litteral_numerique_base then
@@ -158,7 +158,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_valeur_dans_litteral_numerique_base
 					else
-						gerer_erreur( once "caractère interdit dans partie décimale de constante littérale numérique basée" )
+						gerer_erreur( once "forbidden character in decimal part of based integer constant" )
 					end
 
 				when etat_apres_valeur_dans_litteral_numerique_base then
@@ -184,7 +184,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_separateur_dans_exposant
 					else
-						gerer_erreur( once "exposant incomplet dans constante littérale numérique" )
+						gerer_erreur( once "incomplete exponent in integer constant" )
 					end
 
 				when etat_apres_chiffre_dans_exposant then
@@ -205,7 +205,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_chiffre_dans_exposant
 					else
-						gerer_erreur( once "exposant incorrect dans constante littérale numérique" )
+						gerer_erreur( once "wrong exponent in integer constant" )
 					end
 
 				when etat_apres_separateur_dans_litteral_numerique then
@@ -222,7 +222,7 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						etat := etat_initial
 					else
-						gerer_erreur( once "partie décimale incorrecte dans constante littérale numérique" )
+						gerer_erreur( once "wrong decimal part in integer constant" )
 					end
 
 				when etat_apres_valeur_entiere_dans_litteral_numerique then
@@ -248,7 +248,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_valeur_entiere_dans_litteral_numerique
 					else
-						gerer_erreur( once "caractère interdit dans partie décimale de constante littérale numérique" )
+						gerer_erreur( once "forbidden character in decimal part of integer constant" )
 					end
 
 				when etat_apres_apostrophe then
@@ -286,7 +286,7 @@ feature {LUAT_ANALYSEUR}
 				when etat_apres_guillemets then
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "constante littérale chaîne incomplète" )
+						gerer_erreur( once "incomplete string constant" )
 					when '%"' then
 						chaine.add_last( caractere )
 						etat := etat_apres_guillemets_dans_litteral_chaine
@@ -311,7 +311,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_pourcentage_dans_litteral_chaine
 					else
-						gerer_erreur( once "caractère interdit dans constante littérale caractère" )
+						gerer_erreur( once "forbidden character in character constant" )
 					end
 
 				when etat_apres_pourcentage_dans_litteral_chaine then
@@ -418,7 +418,7 @@ feature {LUAT_ANALYSEUR}
 				else
 					-- cas non géré
 
-					gerer_erreur( once "bogue dans l'analyseur !" )
+					gerer_erreur( once "lexer is buggy!" )
 				end
 			end
 
@@ -543,7 +543,7 @@ feature {}
 				-- fin de fichier
 				etat := etat_final
 			else
-				gerer_erreur( once "caractère non autorisé" )
+				gerer_erreur( once "forbidden character" )
 			end
 		end
 

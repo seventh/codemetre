@@ -1,7 +1,13 @@
+*** v0.16.0
+
+ - Toutes les sorties sont désormais en anglais par défaut
+ - La gestion de l'internationalisation est mise en place, et une traduction
+ pour le français existe
+
 *** v0.15.0
 
  - Le traitement par lots est opérationnel, pour tout type de commandes
- 
+
 *** v0.14.2
 
  - Toutes les sorties que ce soit sur la sortie standard ou d'erreur sont faites

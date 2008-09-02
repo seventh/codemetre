@@ -1,7 +1,5 @@
 Général :
- * gérer l'internationalisation des sorties
  * fournir des métriques par méthode
 
  Mode analytique :
  * produire le code filtré de tout commentaire qui compile encore
-
