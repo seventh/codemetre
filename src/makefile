@@ -2,14 +2,14 @@ ENTREE := luat_codemetre.e
 
 PREFIXE := codemetre
 
-VERSION := 0.15.0
+VERSION := 0.16.1
 
 SE := compile
 
-.PHONY: info debug sedb release clean
+.PHONY: info debug sedb profile release delivery clean
 
 info :
-	@echo "options : debug, sedb, release ou clean"
+	@echo "options : debug, sedb, profile, release, delivery ou clean"
 
 debug : .Prod
 	$(SE) -debug -all_check $(ENTREE) -o .Prod/$(PREFIXE)_debug
@@ -17,8 +17,21 @@ debug : .Prod
 sedb : .Prod
 	$(SE) -debug -all_check -sedb $(ENTREE) -o .Prod/$(PREFIXE)_sedb
 
+profile : .Prod
+	$(SE) -boost -c_mode profile $(ENTREE) -o .Prod/$(PREFIXE)_profile
+
 release : .Prod
 	$(SE) -clean -boost -c_mode release $(ENTREE) -o .Prod/$(PREFIXE)
+
+delivery : $(PREFIXE)-$(VERSION) $(PREFIXE)-$(VERSION)/doc $(PREFIXE)-$(VERSION)/i18n $(PREFIXE)-$(VERSION)/man $(PREFIXE)-$(VERSION)/src
+	$(SE)_to_c -boost -c_mode release $(ENTREE) -o $(PREFIXE)
+	cp Information/* $(PREFIXE)-$(VERSION)/doc
+	cp Internationalisation/codemetre.fr.UTF-8.mo $(PREFIXE)-$(VERSION)/i18n/fr/LC_MESSAGES/codemetre.mo
+	cp Manuel/* $(PREFIXE)-$(VERSION)/man
+	cp $(patsubst %.e,%,$(ENTREE)).[chim]* $(PREFIXE)-$(VERSION)/src
+	tar cjvf $(PREFIXE)-$(VERSION).tar.bz2 $(PREFIXE)-$(VERSION)
+	clean $(ENTREE)
+	$(RM) -Rf $(PREFIXE)-$(VERSION)
 
 clean :
 	$(RM) -Rf .Prod
@@ -26,3 +39,18 @@ clean :
 
 .Prod:
 	mkdir .Prod
+
+$(PREFIXE)-$(VERSION) :
+	mkdir $(PREFIXE)-$(VERSION)
+
+$(PREFIXE)-$(VERSION)/doc : $(PREFIXE)-$(VERSION)
+	mkdir $(PREFIXE)-$(VERSION)/doc
+
+$(PREFIXE)-$(VERSION)/i18n : $(PREFIXE)-$(VERSION)
+	mkdir -p $(PREFIXE)-$(VERSION)/i18n/fr/LC_MESSAGES
+
+$(PREFIXE)-$(VERSION)/man : $(PREFIXE)-$(VERSION)
+	mkdir $(PREFIXE)-$(VERSION)/man
+
+$(PREFIXE)-$(VERSION)/src : $(PREFIXE)-$(VERSION)
+	mkdir $(PREFIXE)-$(VERSION)/src

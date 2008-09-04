@@ -6,7 +6,7 @@
 codemetre \- comptage de ligne de fichiers source
 .SH SYNOPSIS
 .B codemetre
-[--ada|--c++|--eiffel] [--code] [--commentaire] [--total] [--analyse|--diff] [--effort|--normal] [--lot] [--] FICHIER...
+[--ada|--c++|--eiffel] [--code] [--comment] [--total] [--lot] [--anal|--diff] [--effort|--normal] [--] FICHIER...
 .SH DESCRIPTION
 .B Codemetre
 permet de comptabiliser le nombre de lignes de code et/ou de commentaires contenues dans des fichiers source. Il permet également d'évaluer l'effort réalisé entre deux versions d'un même fichier, toujours en nombre de lignes.
@@ -29,7 +29,7 @@ Respecte le standard Eiffel tel que définit dans le livre "Eiffel, le langage" 
 sait différencier le code des commentaires, et peut ne prendre en compte que l'un ou l'autre. Attention, une seule des options suivantes est autorisée lors d'une demande d'analyse lexicale ou de comparaison différentielle. Dans le cas d'un simple comptage de ligne sans comparaison, on peut spécifier autant de ces options que l'on souhaite.
 .IP --code
 Ne conserve pour l'analyse que les lignes de code.
-.IP --commentaire
+.IP --comment
 Ne conserve pour l'analyse que les lignes de commentaire.
 .IP --total
 Prend en compte à la fois le code et les commentaires lors de l'analyse.
@@ -44,8 +44,8 @@ Détermine l'effort minimal qui a été réalisé pour transformer le fichier
 en le fichier
 .I <après>.
 Ces métriques sont proposées selon un modèle assez intuitif (voir plus loin). Pour préciser qu'un fichier n'existait pas, ou n'existe plus, on peut utiliser le mot-clef spécifique
-.B -rien-.
-.IP "--analyse <fichier> ..."
+.B -nil-.
+.IP "--anal <fichier> ..."
 Produit pour chaque
 .I <fichier>
 en entrée un fichier suffixé

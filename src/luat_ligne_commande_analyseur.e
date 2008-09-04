@@ -121,9 +121,9 @@ feature
 						end
 						lexeme := lexeme + 1
 
-					when "--commentaire" then
+					when "--comment" then
 						if option.commentaire then
-							afficher_erreur( once "too many %"--commentaire%" option" )
+							afficher_erreur( once "too many %"--comment%" option" )
 							etat := etat_final
 						else
 							option.met_commentaire( true )
@@ -174,7 +174,7 @@ feature
 
 						-- commande
 
-					when "--analyse" then
+					when "--anal" then
 						if mode = mode_indetermine then
 							mode := mode_analyse
 						else
@@ -241,6 +241,8 @@ feature
 						elseif not option.choix_est_effectue then
 							option.met( true, true, false )
 							etat := etat_commande_unitaire
+						else
+							etat := etat_commande_unitaire
 						end
 					end
 
@@ -266,10 +268,10 @@ feature
 						if lot_active then
 							produire_lot_commande_differentiel( analyseur, avant, apres, option )
 						else
-							if avant.is_equal( once "-rien-" ) then
+							if avant.is_equal( once "-nil-" ) then
 								avant := void
 							end
-							if apres.is_equal( once "-rien-" ) then
+							if apres.is_equal( once "-nil-" ) then
 								apres := void
 							end
 
@@ -317,7 +319,7 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once " codemetre [--ada|--c++|--eiffel] [--code] [--commentaire] [--total]%N[--analyse|--diff] [--normal|--effort] [--lot] [--] " )
+			std_error.put_string( once " codemetre [--ada|--c++|--eiffel] [--code] [--comment] [--total] [--lot]%N[--anal|--diff] [--normal|--effort] [--] " )
 			std_error.put_string( traduire( once "FILE" ) )
 			std_error.put_string( once "..." )
 			std_error.put_new_line
@@ -446,10 +448,10 @@ feature {}
 				until lot_avant.end_of_input
 					or lot_apres.end_of_input
 				loop
-					if avant.is_equal( once "-rien-" ) then
+					if avant.is_equal( once "-nil-" ) then
 						avant := void
 					end
-					if apres.is_equal( once "-rien-" ) then
+					if apres.is_equal( once "-nil-" ) then
 						apres := void
 					end
 

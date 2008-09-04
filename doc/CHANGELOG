@@ -1,3 +1,11 @@
+*** v0.16.1
+
+ - Remplacement du mot-clef "-rien-" par "-nil-"
+ - Remplacement du mot-clef "--commentaire" par "--comment"
+ - Remplacement du mot-clef "--analyse" par "--anal"
+ - Correction d'un bogue en cas de précision du périmètre à compter dans le cas
+ d'un comptage unitaire
+ 
 *** v0.16.0
 
  - Toutes les sorties sont désormais en anglais par défaut
