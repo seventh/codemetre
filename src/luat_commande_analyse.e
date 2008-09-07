@@ -17,6 +17,8 @@ inherit
 
 	LUAT_COMMANDE
 
+	LUAT_GLOBAL
+
 creation
 
 	fabriquer
@@ -68,9 +70,10 @@ feature
 				nom_sortie.append( once ".codemetre" )
 				create sortie.connect_to( nom_sortie )
 				if not sortie.is_connected then
-					std_error.put_string( once "*** Erreur : impossible de créer le fichier d'analyse " )
+					std_error.put_string( traduire( once "*** Error: file %"" ) )
 					std_error.put_string( nom_sortie )
-					std_error.put_string( once " !%N" )
+					std_error.put_string( traduire( once "%" cannot be written" ) )
+					std_error.put_new_line
 				else
 					source.afficher( sortie )
 					sortie.disconnect

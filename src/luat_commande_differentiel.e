@@ -103,7 +103,7 @@ feature
 				elseif option.code then
 					std_output.put_string( once "[code|" )
 				else -- if option.commentaire then
-					std_output.put_string( once "[commentaire|" )
+					std_output.put_string( once "[comment|" )
 				end
 
 				if reference = void then

@@ -71,7 +71,7 @@ feature
 					std_output.put_integer( source.nb_ligne_code )
 				end
 				if option.commentaire then
-					std_output.put_string( once " commentaire " )
+					std_output.put_string( once " comment " )
 					std_output.put_integer( source.nb_ligne_commentaire )
 				end
 				if option.total then
