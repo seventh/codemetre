@@ -1,3 +1,10 @@
+*** v0.17.0
+
+ - C : premier support
+ - Le mot-clef '-nil-' peut être utilisé en mode différentiel pour désigner un
+ lot
+ - Remplacement du mot-clef "--lot" par "--batch"
+
 *** v0.16.2
 
  - Internationalisation d'un dernier message en mode analyse

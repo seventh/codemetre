@@ -1,25 +1,27 @@
 .\" Formater ce fichier par la commande :
 .\" groff -man -Tutf8 codemetre.1
 .\"
-.TH CODEMETRE 1 "AOÛT 2008" Linux "Manuel utilisateur"
+.TH CODEMETRE 1 "SEPTEMBRE 2008" Linux "Manuel utilisateur"
 .SH NOM
 codemetre \- comptage de ligne de fichiers source
 .SH SYNOPSIS
 .B codemetre
-[--ada|--c++|--eiffel] [--code] [--comment] [--total] [--lot] [--anal|--diff] [--effort|--normal] [--] FICHIER...
+[--ada|--c|--c++|--eiffel] [--code] [--comment] [--total] [--batch] [--anal|--diff] [--effort|--normal] [--] FICHIER...
 .SH DESCRIPTION
 .B Codemetre
 permet de comptabiliser le nombre de lignes de code et/ou de commentaires contenues dans des fichiers source. Il permet également d'évaluer l'effort réalisé entre deux versions d'un même fichier, toujours en nombre de lignes.
 .SH OPTIONS PARTICULIÈRES
 L'option "--" peut être utilisée pour s'assurer que tous les arguments la suivant seront considérés comme des noms de fichier. Ceci peut s'avérer utile lorsqu'un fichier à analyser porte le nom d'une option.
 
-L'option "--lot" permet de spécifier un traitement par lots, c'est-à-dire que les entrées sont considérées comme des liste de fichiers sur lesquels mener la métrologie.
+L'option "--batch" permet de spécifier un traitement par lots, c'est-à-dire que les entrées sont considérées comme des liste de fichiers sur lesquels mener la métrologie.
 .SH LANGAGES SUPPORTÉS
 Si aucun langage n'est spécifié, alors
 .B codemetre
 essaiera de déterminer celui-ci à partir de l'extension du fichier. Si par contre un langage est spécifié, alors ce choix prévaut quelque soit l'extension du ou des fichiers à mesurer. Les options sont les suivantes :
 .IP --ada
 Respecte le standard Ada95. Extensions ".ads" et ".adb".
+.IP --c
+Respecte la norme C ISO/IEC 9899:1999. Extensions ".h" et ".c".
 .IP --c++
 Respecte la norme C++ ISO/IEC 14882:2003. Extensions ".hpp", ".C", ".cc" et ".cpp".
 .IP --eiffel

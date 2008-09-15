@@ -256,7 +256,7 @@ feature {}
 		require
 			message_valide : p_message /= void
 		do
-			message_erreur := traduire( once "line " )
+			message_erreur := traduire( once "line " ).twin
 			message_erreur.append_string( indice_ligne.to_string )
 			if not p_message.is_empty then
 				message_erreur.append_string( once " : " )

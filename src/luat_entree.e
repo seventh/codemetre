@@ -69,7 +69,7 @@ feature
 
 	avancer is
 			-- passe au caractère suivant, tout en sautant tout
-			-- retour-charriot précédant une nouvelle ligne
+			-- retour-chariot précédant une nouvelle ligne
 		require
 			est_ouvert
 			not est_epuise
@@ -79,7 +79,9 @@ feature
 			-- correction par l'équipe de développement de SmartEiffel,
 			-- n'assure pas d'être toujours possible.
 
-			if tampon.count >= 2 then
+			if tampon.upper > tampon.lower then
+				-- au moins deux caractères sont dans le tampon
+
 				tampon.remove_first
 			else
 				fichier.read_character

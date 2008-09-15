@@ -54,7 +54,7 @@ feature
 			-- de ne pas polluer la sortie standard qui est dédiée aux
 			-- sorties de mesures.
 		do
-			std_error.put_string( once "oOo CodeMetre v0.16.2 (c) 2005-2008 seventh oOo%N" )
+			std_error.put_string( once "oOo CodeMetre v0.17.0 (c) 2005-2008 seventh oOo%N" )
 			std_error.put_string( traduire( "[
 This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you
 are welcome to redistribute it under certain conditions.

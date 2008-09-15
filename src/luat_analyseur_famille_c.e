@@ -2,19 +2,22 @@ indexing
 
 	auteur : "seventh"
 	license : "GPL 3.0"
+	reference : "C ISO/IEC 9899:1999"
 	reference : "C++ ISO/IEC 14882:2003"
 
 class
 
-	LUAT_ANALYSEUR_C_PLUS_PLUS
+	LUAT_ANALYSEUR_FAMILLE_C
 
 		--
-		-- Analyseur syntaxique du langage C++
+		-- Analyseur syntaxique des langages de la famille C : C99, C++03
 		--
 
 inherit
 
 	LUAT_ANALYSEUR
+		rename
+			fabriquer as fabriquer_analyseur
 		redefine
 			gerer_erreur
 		end
@@ -23,9 +26,20 @@ creation
 
 	fabriquer
 
+feature {}
+
+	fabriquer( p_langage : STRING ) is
+			-- constructeur
+		do
+			fabriquer_analyseur
+			langage := p_langage
+		ensure
+			langage_ok : langage = p_langage
+		end
+
 feature
 
-	langage : STRING is "C++"
+	langage : STRING
 
 feature {LUAT_ANALYSEUR}
 

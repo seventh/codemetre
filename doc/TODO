@@ -1,5 +1,2 @@
-Général :
- * fournir des métriques par méthode
-
- Mode analytique :
- * produire le code filtré de tout commentaire qui compile encore
+Mode analytique :
+ * produire un code filtré de tout commentaire qui compile encore

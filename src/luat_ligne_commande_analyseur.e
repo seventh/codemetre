@@ -85,7 +85,16 @@ feature
 
 					when "--ada" then
 						if analyseur = void then
-							create {LUAT_ANALYSEUR_ADA} analyseur.fabriquer
+							analyseur := analyseur_ada
+						else
+							afficher_erreur( once "language is enforced more than once" )
+							etat := etat_final
+						end
+						lexeme := lexeme + 1
+
+					when "--c" then
+						if analyseur = void then
+							analyseur := analyseur_c
 						else
 							afficher_erreur( once "language is enforced more than once" )
 							etat := etat_final
@@ -94,7 +103,7 @@ feature
 
 					when "--c++" then
 						if analyseur = void then
-							create {LUAT_ANALYSEUR_C_PLUS_PLUS} analyseur.fabriquer
+							analyseur := analyseur_c_plus_plus
 						else
 							afficher_erreur( once "language is enforced more than once" )
 							etat := etat_final
@@ -103,7 +112,7 @@ feature
 
 					when "--eiffel" then
 						if analyseur = void then
-							create {LUAT_ANALYSEUR_EIFFEL} analyseur.fabriquer
+							analyseur := analyseur_eiffel
 						else
 							afficher_erreur( once "language is enforced more than once" )
 							etat := etat_final
@@ -163,11 +172,11 @@ feature
 
 						-- lot
 
-					when "--lot" then
+					when "--batch" then
 						if not lot_active then
 							lot_active := true
 						else
-							afficher_erreur( once "too many %"--lot%" option" )
+							afficher_erreur( once "too many %"--batch%" option" )
 							etat := etat_final
 						end
 						lexeme := lexeme + 1
@@ -265,23 +274,17 @@ feature
 						avant := argument( lexeme )
 						apres := argument( lexeme + 1 )
 
+						if avant.is_equal( once "-nil-" ) then
+							avant := void
+						end
+						if apres.is_equal( once "-nil-" ) then
+							apres := void
+						end
+
 						if lot_active then
 							produire_lot_commande_differentiel( analyseur, avant, apres, option )
 						else
-							if avant.is_equal( once "-nil-" ) then
-								avant := void
-							end
-							if apres.is_equal( once "-nil-" ) then
-								apres := void
-							end
-
-							if avant = void
-								and apres = void
-							 then
-								afficher_erreur( once "at least one of the two arguments shall exists" )
-							else
-								produire_commande_differentiel( analyseur, avant, apres, option )
-							end
+							produire_commande_differentiel( analyseur, avant, apres, option )
 						end
 					end
 					etat := etat_final
@@ -319,7 +322,7 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once " codemetre [--ada|--c++|--eiffel] [--code] [--comment] [--total] [--lot]%N[--anal|--diff] [--normal|--effort] [--] " )
+			std_error.put_string( once " codemetre [--ada|--c|--c++|--eiffel] [--code] [--comment] [--total]%N[--batch] [--anal|--diff] [--normal|--effort] [--] " )
 			std_error.put_string( traduire( once "FILE" ) )
 			std_error.put_string( once "..." )
 			std_error.put_new_line
@@ -344,6 +347,32 @@ feature {}
 
 feature {}
 
+	ouvrir_lot( p_nom_fichier : STRING ) : LUAT_LOT is
+			-- fournit un descripteur de fichier sur le lot
+			-- correspondant si possible
+		local
+			flux : TEXT_FILE_READ
+		do
+			if p_nom_fichier = void then
+				create {LUAT_LOT_VIDE} result.fabriquer
+			else
+				create flux.connect_to( p_nom_fichier )
+				if flux.is_connected then
+					create {LUAT_LOT_REEL} result.fabriquer( flux )
+				else
+					std_error.put_string( traduire( once "*** Error: batch file %"" ) )
+					std_error.put_string( p_nom_fichier )
+					std_error.put_string( traduire( once "%" cannot be open for reading" ) )
+					std_error.put_new_line
+					std_error.flush
+
+					create {LUAT_LOT_VIDE} result.fabriquer
+				end
+			end
+		end
+
+feature {}
+
 	produire_lot_commande_analyse( p_analyseur : LUAT_ANALYSEUR
 											 p_lot : STRING
 											 p_option : LUAT_OPTION ) is
@@ -354,24 +383,20 @@ feature {}
 			lot_valide : p_lot /= void
 			option_valide : p_option /= void
 		local
-			lot : TEXT_FILE_READ
+			lot : LUAT_LOT
+			nom_fichier : STRING
 		do
-			create lot.connect_to( p_lot )
-			if not lot.is_connected then
-				std_error.put_string( traduire( once "*** Error: batch file %"" ) )
-				std_error.put_string( p_lot )
-				std_error.put_string( traduire( once "%" cannot be open for reading" ) )
-				std_error.put_new_line
-				std_error.flush
-			else
-				from lot.read_line
-				until lot.end_of_input
-				loop
-					produire_commande_analyse( p_analyseur, lot.last_string.twin, p_option )
-					lot.read_line
+			lot := ouvrir_lot( p_lot )
+			from nom_fichier := lot.lire
+			until lot.est_epuise
+			loop
+				if nom_fichier /= void then
+					produire_commande_analyse( p_analyseur, nom_fichier, p_option )
 				end
-				lot.disconnect
+				nom_fichier := lot.lire
 			end
+
+			lot.clore
 		end
 
 	produire_commande_analyse( p_analyseur : LUAT_ANALYSEUR
@@ -413,80 +438,28 @@ feature {}
 			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
 			-- sauf pour ceux dont le langage ne peut être déterminé
 		require
-			lots_valides : p_lot_avant /= void and p_lot_apres /= void
 			option_valide : p_option /= void
 		local
-			lot_avant, lot_apres : TEXT_FILE_READ
 			avant, apres : STRING
+			lot_avant, lot_apres : LUAT_LOT
 		do
-			create lot_avant.connect_to( p_lot_avant )
-			create lot_apres.connect_to( p_lot_apres )
+			lot_avant := ouvrir_lot( p_lot_avant )
+			lot_apres := ouvrir_lot( p_lot_apres )
 
-			if not lot_avant.is_connected then
-				std_error.put_string( traduire( once "*** Error: batch file %"" ) )
-				std_error.put_string( p_lot_avant )
-				std_error.put_string( traduire( once "%" cannot be open for reading" ) )
-				std_error.put_new_line
-				std_error.flush
-			elseif not lot_apres.is_connected then
-				std_error.put_string( traduire( once "*** Error: batch file %"" ) )
-				std_error.put_string( p_lot_apres )
-				std_error.put_string( traduire( once "%" cannot be open for reading" ) )
-				std_error.put_new_line
-				std_error.flush
-				lot_avant.disconnect
-			else
-				from
-					lot_avant.read_line
-					if not lot_avant.end_of_input then
-						avant := lot_avant.last_string.twin
-					end
-					lot_apres.read_line
-					if not lot_apres.end_of_input then
-						apres := lot_apres.last_string.twin
-					end
-				until lot_avant.end_of_input
-					or lot_apres.end_of_input
-				loop
-					if avant.is_equal( once "-nil-" ) then
-						avant := void
-					end
-					if apres.is_equal( once "-nil-" ) then
-						apres := void
-					end
+			from
+				avant := lot_avant.lire
+				apres := lot_apres.lire
+			until lot_avant.est_epuise
+				and lot_apres.est_epuise
+			loop
+				produire_commande_differentiel( p_analyseur, avant, apres, p_option )
 
-					if avant = void
-						and apres = void
-					 then
-						afficher_erreur( once "at least one of the two arguments shall exists" )
-					else
-						produire_commande_differentiel( p_analyseur, avant, apres, p_option )
-					end
-
-					lot_avant.read_line
-					if not lot_avant.end_of_input then
-						avant := lot_avant.last_string.twin
-					end
-					lot_apres.read_line
-					if not lot_apres.end_of_input then
-						apres := lot_apres.last_string.twin
-					end
-				end
-
-				-- production d'un avertissement au cas où les lots ne
-				-- feraient pas la même taille
-
-				if not ( lot_avant.end_of_input
-							and lot_apres.end_of_input )
-				 then
-					std_error.put_string( traduire( once "*** Warning: batch files does not have the same line count" ) )
-					std_error.put_new_line
-					std_error.flush
-				end
-
-				lot_avant.disconnect
-				lot_apres.disconnect
+				avant := lot_avant.lire
+				apres := lot_apres.lire
 			end
+
+			lot_avant.clore
+			lot_apres.clore
 		end
 
 	produire_commande_differentiel( p_analyseur : LUAT_ANALYSEUR
@@ -496,29 +469,41 @@ feature {}
 			-- commandes, à moins que le langage ne puisse être
 			-- déterminé
 		require
-			noms_valides : p_avant /= void or p_apres /= void
 			option_valide : p_option /= void
 		local
 			analyseur : LUAT_ANALYSEUR
 			commande : LUAT_COMMANDE_DIFFERENTIEL
 		do
-			if p_analyseur /= void then
-				analyseur := p_analyseur
+			if p_avant = void
+				and p_apres = void
+			 then
+				afficher_erreur( once "at least one of the two arguments shall exists" )
 			else
-				if p_apres /= void then
-					analyseur := deviner_langage( p_apres )
-				end
-				if analyseur = void and p_avant /= void then
-					analyseur := deviner_langage( p_avant )
-				end
-			end
+				-- détermination du langage si nécessaire
 
-			if analyseur /= void then
-				create commande.fabriquer( analyseur, p_avant, p_apres, p_option )
-				commandes.add_last( commande )
-			else
-				std_error.put_string( traduire( once "Not any extension has been recognized" ) )
-				std_error.put_new_line
+				if p_analyseur /= void then
+					analyseur := p_analyseur
+				else
+					if p_apres /= void then
+						analyseur := deviner_langage( p_apres )
+					end
+					if analyseur = void
+						and p_avant /= void
+					 then
+						analyseur := deviner_langage( p_avant )
+					end
+				end
+
+				-- création de la commande de comparaison si un langage a
+				-- été précisé ou déviné
+
+				if analyseur /= void then
+					create commande.fabriquer( analyseur, p_avant, p_apres, p_option )
+					commandes.add_last( commande )
+				else
+					std_error.put_string( traduire( once "Not any extension has been recognized" ) )
+					std_error.put_new_line
+				end
 			end
 		end
 
@@ -534,23 +519,20 @@ feature {}
 			lot_valide : p_lot /= void
 			option_valide : p_option /= void
 		local
-			lot : TEXT_FILE_READ
+			lot : LUAT_LOT
+			nom_fichier : STRING
 		do
-			create lot.connect_to( p_lot )
-			if not lot.is_connected then
-				std_error.put_string( traduire( once "*** Error: batch file %"" ) )
-				std_error.put_string( p_lot )
-				std_error.put_string( traduire( once "%" cannot be open for reading" ) )
-				std_error.put_new_line
-			else
-				from lot.read_line
-				until lot.end_of_input
-				loop
-					produire_commande_unitaire( p_analyseur, lot.last_string.twin, p_option )
-					lot.read_line
+			lot := ouvrir_lot( p_lot )
+			from nom_fichier := lot.lire
+			until lot.est_epuise
+			loop
+				if nom_fichier /= void then
+					produire_commande_unitaire( p_analyseur, nom_fichier, p_option )
 				end
-				lot.disconnect
+				nom_fichier := lot.lire
 			end
+
+			lot.clore
 		end
 
 	produire_commande_unitaire( p_analyseur : LUAT_ANALYSEUR
@@ -602,12 +584,14 @@ feature {}
 			end
 
 			inspect suffixe
-			when "e" then
-				result := analyseur_eiffel
 			when "ads", "adb" then
 				result := analyseur_ada
+			when "c", "h" then
+				result := analyseur_c
 			when "hpp", "C", "cc", "cpp" then
 				result := analyseur_c_plus_plus
+			when "e" then
+				result := analyseur_eiffel
 			else
 			end
 		end
@@ -617,9 +601,14 @@ feature {}
 			create result.fabriquer
 		end
 
-	analyseur_c_plus_plus : LUAT_ANALYSEUR_C_PLUS_PLUS is
+ 	analyseur_c : LUAT_ANALYSEUR_FAMILLE_C is
 		once
-			create result.fabriquer
+			create result.fabriquer( once "C" )
+		end
+
+ 	analyseur_c_plus_plus : LUAT_ANALYSEUR_FAMILLE_C is
+		once
+			create result.fabriquer( once "C++" )
 		end
 
 	analyseur_eiffel : LUAT_ANALYSEUR_EIFFEL is
