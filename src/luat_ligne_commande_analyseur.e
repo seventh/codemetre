@@ -301,7 +301,7 @@ feature
 
 				else
 					debug
-						std_error.put_string( once "Tiens, un bogue ! 'etat' = " )
+						std_error.put_string( once "Debug: bogue dans l'analyseur de commande - 'etat' = " )
 						std_error.put_integer( etat )
 						std_error.put_new_line
 						std_error.flush
@@ -360,7 +360,7 @@ feature {}
 				if flux.is_connected then
 					create {LUAT_LOT_REEL} result.fabriquer( flux )
 				else
-					std_error.put_string( traduire( once "*** Error: batch file %"" ) )
+					std_error.put_string( traduire( once "Error: batch file %"" ) )
 					std_error.put_string( p_nom_fichier )
 					std_error.put_string( traduire( once "%" cannot be open for reading" ) )
 					std_error.put_new_line
@@ -420,12 +420,6 @@ feature {}
 			if analyseur /= void then
 				create commande.fabriquer( analyseur, p_nom_fichier, p_option )
 				commandes.add_last( commande )
-			else
-				std_error.put_string( traduire( once "File extension " ) )
-				std_error.put_string( p_nom_fichier )
-				std_error.put_string( traduire( once " is unknown" ) )
-				std_error.put_new_line
-				std_error.flush
 			end
 		end
 
@@ -483,15 +477,11 @@ feature {}
 
 				if p_analyseur /= void then
 					analyseur := p_analyseur
-				else
-					if p_apres /= void then
-						analyseur := deviner_langage( p_apres )
-					end
-					if analyseur = void
-						and p_avant /= void
-					 then
-						analyseur := deviner_langage( p_avant )
-					end
+				elseif p_apres /= void then
+					analyseur := deviner_langage( p_apres )
+				end
+				if analyseur = void then
+					analyseur := deviner_langage( p_avant )
 				end
 
 				-- création de la commande de comparaison si un langage a
@@ -500,9 +490,6 @@ feature {}
 				if analyseur /= void then
 					create commande.fabriquer( analyseur, p_avant, p_apres, p_option )
 					commandes.add_last( commande )
-				else
-					std_error.put_string( traduire( once "Not any extension has been recognized" ) )
-					std_error.put_new_line
 				end
 			end
 		end
@@ -556,11 +543,6 @@ feature {}
 			if analyseur /= void then
 				create commande.fabriquer( analyseur, p_nom_fichier, p_option )
 				commandes.add_last( commande )
-			else
-				std_error.put_string( traduire( once "File extension " ) )
-				std_error.put_string( p_nom_fichier )
-				std_error.put_string( traduire( once " is unknown" ) )
-				std_error.put_new_line
 			end
 		end
 
@@ -586,13 +568,18 @@ feature {}
 			inspect suffixe
 			when "ads", "adb" then
 				result := analyseur_ada
-			when "c", "h" then
+			when "h", "c" then
 				result := analyseur_c
 			when "hpp", "C", "cc", "cpp" then
 				result := analyseur_c_plus_plus
 			when "e" then
 				result := analyseur_eiffel
 			else
+				std_error.put_string( traduire( once "Error: extension of file %"" ) )
+				std_error.put_string( p_nom_fichier )
+				std_error.put_string( traduire( once "%" is unknown" ) )
+				std_error.put_new_line
+				std_error.flush
 			end
 		end
 

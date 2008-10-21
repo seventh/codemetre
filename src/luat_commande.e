@@ -13,43 +13,22 @@ deferred class
 		-- fournir un résultat.
 		--
 
-inherit
-
-	COMMANDE
-
 feature
 
 	analyseur : LUAT_ANALYSEUR
-			-- Analyseur du langage présumé dans lequel a été écrit le
-			-- code
+			-- analyseur syntaxique utilisé pour la lecture du fichier
 
 	nom_fichier : STRING
-			-- chemin vers le fichier à analyser
-
-feature
+			-- chemin du fichier à analyser
 
 	option : LUAT_OPTION
 			-- options de l'analyse
 
-	appliquer_option is
-			-- paramètre l'analyseur pour qu'il prenne en compte les
-			-- options demandées
-		do
-			if option.code
-				or option.total
-			 then
-				analyseur.activer_code
-			else
-				analyseur.desactiver_code
-			end
+feature
 
-			if option.commentaire
-				or option.total
-			 then
-				analyseur.activer_commentaire
-			else
-				analyseur.desactiver_commentaire
-			end
+	executer is
+			-- réalise la demande
+		deferred
 		end
 
 end

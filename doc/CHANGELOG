@@ -1,3 +1,9 @@
+*** v0.17.1
+
+ - Ada95 : bogue corrigé par rapport à la détection des constantes littérales
+ caractères. Typiquement, l'instruction STRING'("toto") était remontée comme une
+ erreur, à tort.
+
 *** v0.17.0
 
  - C : premier support

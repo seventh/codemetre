@@ -129,7 +129,8 @@ feature
 			-- vrai si et seulement si la tête de lecture est arrivée en
 			-- fin de fichier
 		do
-			result := not tampon.is_empty and then tampon.first = '%U'
+			result := not tampon.is_empty
+				and then tampon.first = '%U'
 		ensure
 			definition : result implies caractere = '%U'
 		end
@@ -158,7 +159,13 @@ feature
 feature {LUAT_ENTREE}
 
 	fichier : TEXT_FILE_READ
+			-- flux à filtrer
 
 	tampon : FAST_ARRAY[ CHARACTER ]
+			-- caractères déjà lus depuis le fichier mais non encore
+			-- rendus disponibles. Ceci est rendu nécessaire par la
+			-- pré-vision des caractères pour remplacer certaines
+			-- successions par d'autres. Typiquement, les sauts de ligne
+			-- DOS sont remplacés par des sauts de ligne UNIX.
 
 end

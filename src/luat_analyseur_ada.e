@@ -32,6 +32,7 @@ feature {LUAT_ANALYSEUR}
 	analyser is
 		local
 			sauvegarde : CHARACTER
+			autoriser_lecture : BOOLEAN
 		do
 			check
 				chaine.is_empty
@@ -41,11 +42,16 @@ feature {LUAT_ANALYSEUR}
 			indice_ligne := 1
 			erreur := false
 			message_erreur := once ""
+			autoriser_lecture := true
 
 			from etat := etat_initial
 			until etat = etat_final
 			loop
-				fichier.avancer
+				if autoriser_lecture then
+					fichier.avancer
+				else
+					autoriser_lecture := true
+				end
 
 				inspect etat
 				when etat_final then
@@ -278,9 +284,64 @@ feature {LUAT_ANALYSEUR}
 						sauvegarde := chaine.last
 						chaine.remove_last
 						produire_code
-						chaine.add_last( sauvegarde )
-						chaine.add_last( caractere )
-						etat := etat_apres_lettre
+
+						inspect sauvegarde
+						when '0' .. '9' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_chiffre
+						when 'A' .. 'Z', 'a' .. 'z' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_lettre
+						when '%'' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_apostrophe
+						when '%"' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_guillemets
+						when '%%' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_pourcentage
+						when '.' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_point
+						when '/' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_barre_oblique
+						when '<' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_chevron_ouvrant
+						when '>' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_chevron_fermant
+						when ':' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_deux_points
+						when '*' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_etoile
+						when '-' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_tiret
+						when '=' then
+							chaine.add_last( sauvegarde )
+							etat := etat_apres_egal
+						when '&', '(', ')', '+', ',', ';', '|', '!' then
+							chaine.add_last( sauvegarde )
+							produire_code
+							etat := etat_initial
+						when ' ', '%F', '%R', '%T' then
+							-- les séparateurs ne sont pas mémorisés
+							etat := etat_initial
+						when '%N' then
+							produire_ligne
+							etat := etat_initial
+						when '%U' then
+							-- fin de fichier
+							etat := etat_final
+						else
+							gerer_erreur( once "forbidden character" )
+						end
+						autoriser_lecture := false
 					end
 
 				when etat_apres_guillemets then

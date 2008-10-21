@@ -15,6 +15,9 @@ class
 inherit
 
 	LUAT_COMMANDE
+		rename
+			nom_fichier as nom_but
+		end
 
 	LUAT_GLOBAL
 
@@ -25,56 +28,57 @@ creation
 feature {}
 
 	fabriquer( p_analyseur : LUAT_ANALYSEUR
-				  p_nom_reference, p_nom_fichier : STRING
+				  p_nom_nid, p_nom_but : STRING
 				  p_option : LUAT_OPTION ) is
 		require
 			analyseur_ok : p_analyseur /= void
-			nom_valide : p_nom_fichier /= void or p_nom_reference /= void
+			nom_valide : p_nom_nid /= void or p_nom_but /= void
 			option_valide : p_option.choix_est_unique
 		do
 			analyseur := p_analyseur
-			nom_fichier := p_nom_fichier
-			nom_reference := p_nom_reference
+			nom_nid := p_nom_nid
+			nom_but := p_nom_but
 			option := p_option
 		ensure
 			analyseur_ok : analyseur = p_analyseur
-			nom_ok : nom_fichier = p_nom_fichier
-			reference_ok : nom_reference = p_nom_reference
+			nom_ok : nom_but = p_nom_but
+			reference_ok : nom_nid = p_nom_nid
 			option_ok : option = p_option
 		end
 
 feature
 
-	nom_reference : STRING
+	nom_nid : STRING
+			-- chemin de la version de référence du fichier
 
 feature
 
 	executer is
 		local
 			metrique : LUAT_METRIQUE
-			source, reference : LUAT_LISTAGE
+			nid, but : LUAT_LISTAGE
 			erreur : BOOLEAN
 		do
-			-- Configuration de l'analyseur
+			-- configuration de l'analyseur
 
 			if not analyseur.est_utilise_fabrique then
 				analyseur.embrayer_fabrique
 			end
 
-			appliquer_option
+			analyseur.appliquer( option )
 
-			-- Chargement des fichiers
+			-- chargement des fichiers
 
-			if nom_fichier /= void then
-				source := analyseur.lire( nom_fichier )
-				erreur := source = void
+			if nom_nid /= void then
+				nid := analyseur.lire( nom_nid )
+				erreur := nid = void
 			end
 
 			if not erreur
-				and nom_reference /= void
+				and nom_but /= void
 			 then
-				reference := analyseur.lire( nom_reference )
-				erreur := reference = void
+				but := analyseur.lire( nom_but )
+				erreur := but = void
 			end
 
 			-- Production des métriques différentielles
@@ -82,23 +86,21 @@ feature
 			if not erreur then
 				-- mesure
 
-				metrique := usine_metrique.mesurer( reference, source )
+				metrique := usine_metrique.mesurer( nid, but )
 
 				-- sortie
 
-				if source = void then
+				if but = void then
 					std_output.put_string( once "ø" )
 				else
-					std_output.put_string( nom_fichier )
+					std_output.put_string( nom_but )
 				end
 
 				std_output.put_string( once " (" )
 				std_output.put_string( analyseur.langage )
 				std_output.put_string( once ") " )
 
-				if option.total
-					or ( option.code and option.commentaire )
-				 then
+				if option.total then
 					std_output.put_string( once "[total|" )
 				elseif option.code then
 					std_output.put_string( once "[code|" )
@@ -106,10 +108,10 @@ feature
 					std_output.put_string( once "[comment|" )
 				end
 
-				if reference = void then
+				if nid = void then
 					std_output.put_string( once "ø" )
 				else
-					std_output.put_string( nom_reference )
+					std_output.put_string( nom_nid )
 				end
 
 				std_output.put_string( once "] " )

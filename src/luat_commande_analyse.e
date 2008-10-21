@@ -51,32 +51,32 @@ feature
 			nom_sortie : STRING
 			sortie : TEXT_FILE_WRITE
 		do
-			-- Configuration de l'analyseur
+			-- configuration de l'analyseur
 
-			appliquer_option
+			analyseur.appliquer( option )
 
 			if analyseur.est_utilise_fabrique then
 				analyseur.debrayer_fabrique
 			end
 
-			-- Chargement du fichier
+			-- chargement du fichier
 
 			source := analyseur.lire( nom_fichier )
 
-			-- Production du fichier d'analyse
+			-- production du fichier d'analyse
 
 			if source /= void then
 				nom_sortie := nom_fichier.twin
 				nom_sortie.append( once ".codemetre" )
 				create sortie.connect_to( nom_sortie )
-				if not sortie.is_connected then
+				if sortie.is_connected then
+					source.afficher( sortie )
+					sortie.disconnect
+				else
 					std_error.put_string( traduire( once "*** Error: file %"" ) )
 					std_error.put_string( nom_sortie )
 					std_error.put_string( traduire( once "%" cannot be written" ) )
 					std_error.put_new_line
-				else
-					source.afficher( sortie )
-					sortie.disconnect
 				end
 			end
 		end

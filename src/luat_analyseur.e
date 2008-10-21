@@ -83,6 +83,32 @@ feature
 
 feature
 
+	appliquer( p_option : LUAT_OPTION ) is
+			-- paramètre l'analyseur en fonction des options correspondantes
+		do
+			if p_option.code
+				or p_option.total
+			 then
+				activer_code
+			else
+				desactiver_code
+			end
+
+			if p_option.commentaire
+				or p_option.total
+			 then
+				activer_commentaire
+			else
+				desactiver_commentaire
+			end
+		ensure
+			p_option.code implies code_pris_en_compte
+			p_option.commentaire implies commentaire_pris_en_compte
+			p_option.total implies ( code_pris_en_compte and commentaire_pris_en_compte )
+		end
+
+feature
+
 	embrayer_fabrique is
 			-- active l'utilisation d'une fabrique : deux lexèmes
 			-- produits équivalents seront égaux

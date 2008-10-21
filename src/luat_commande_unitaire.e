@@ -46,19 +46,19 @@ feature
 		local
 			source : LUAT_LISTAGE
 		do
-			-- Configuration de l'analyseur
+			-- configuration de l'analyseur
 
-			appliquer_option
+			analyseur.appliquer( option )
 
 			if analyseur.est_utilise_fabrique then
 				analyseur.debrayer_fabrique
 			end
 
-			-- Chargement du fichier
+			-- chargement du fichier
 
 			source := analyseur.lire( nom_fichier )
 
-			-- Production des métriques
+			-- production des métriques
 
 			if source /= void then
 				std_output.put_string( nom_fichier )
