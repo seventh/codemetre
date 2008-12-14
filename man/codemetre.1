@@ -6,14 +6,19 @@
 codemetre \- comptage de ligne de fichiers source
 .SH SYNOPSIS
 .B codemetre
-[--ada|--c|--c++|--eiffel] [--code] [--comment] [--total] [--batch] [--anal|--diff] [--effort|--normal] [--] FICHIER...
+[--ada|--c|--c++|--eiffel] [--code] [--comment] [--total] [--batch|--tree] [--anal|--diff] [--effort|--normal] [--] FICHIER...
 .SH DESCRIPTION
-.B Codemetre
+.B codemetre
 permet de comptabiliser le nombre de lignes de code et/ou de commentaires contenues dans des fichiers source. Il permet également d'évaluer l'effort réalisé entre deux versions d'un même fichier, toujours en nombre de lignes.
 .SH OPTIONS PARTICULIÈRES
 L'option "--" peut être utilisée pour s'assurer que tous les arguments la suivant seront considérés comme des noms de fichier. Ceci peut s'avérer utile lorsqu'un fichier à analyser porte le nom d'une option.
 
 L'option "--batch" permet de spécifier un traitement par lots, c'est-à-dire que les entrées sont considérées comme des liste de fichiers sur lesquels mener la métrologie.
+
+L'option "--tree" a un comportement similaire : elle permet de donner des noms de répertoire en argument plutôt que de fichiers.
+.B codemetre
+détermine alors lui-même tous les fichiers du répertoire. En mode différentiel, les arborescences sont comparées en tentant de les faire se recouvrir.
+
 .SH LANGAGES SUPPORTÉS
 Si aucun langage n'est spécifié, alors
 .B codemetre
@@ -74,10 +79,10 @@ Si malgré le forçage d'un choix de langage, l'analyse d'un fichier venait à �
 .SH TOLÉRANCE PAR RAPPORT AUX NORMES OFFICIELLES
 .IP Ada95
 théoriquement, seuls les caractères ASCII 7 bits sont autorisés pour les constantes littérales.
-.B Codemetre
+.B codemetre
 tolère tous les caractères 8 bits.
 .SH BOGUES ET LIMITATIONS
-.B Codemetre
+.B codemetre
 ne fait pas l'expansion des macro-commandes du C++, même si ceci ne modifierait pas les mesures produites. En effet, certaines macros-commandes peuvent être définies ailleurs que dans le fichier sous analyse, et
 .B codemetre
 n'a pas connaissance de l'organisation du projet et des règles de visibilités entre répertoires.

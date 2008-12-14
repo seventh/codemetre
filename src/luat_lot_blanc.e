@@ -5,7 +5,12 @@ indexing
 
 class
 
-	LUAT_LOT_VIDE
+	LUAT_LOT_BLANC
+
+		--
+		-- Itérateur (à l'infini) de lot vide : toutes les entrées sont
+		-- vides
+		--
 
 inherit
 
@@ -24,10 +29,20 @@ feature {}
 
 feature
 
-	lire : STRING is
-		do
+	entree : STRING is
+		attribute
 		ensure
 			definition : result = void
+		end
+
+	entree_courte : STRING is
+		attribute
+		ensure
+			definition : result = void
+		end
+
+	lire is
+		do
 		end
 
 	est_epuise : BOOLEAN is true

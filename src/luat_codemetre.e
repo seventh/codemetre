@@ -54,7 +54,11 @@ feature
 			-- de ne pas polluer la sortie standard qui est dédiée aux
 			-- sorties de mesures.
 		do
-			std_error.put_string( once "oOo CodeMetre v0.17.1 (c) 2005-2008 seventh oOo%N" )
+			std_error.put_string( once "oOo CodeMetre " )
+			std_error.put_string( version_majeure )
+			std_error.put_string( version_mineure )
+			std_error.put_string( once " (c) 2005-2008 seventh oOo%N" )
+
 			std_error.put_string( traduire( "[
 This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you
 are welcome to redistribute it under certain conditions.
@@ -63,5 +67,12 @@ are welcome to redistribute it under certain conditions.
 														]" ) )
 			std_error.flush
 		end
+
+	version_majeure : STRING is "v0.18.0"
+			-- identifiant de la branche officielle
+
+	version_mineure : STRING is ""
+			-- identifiant de la branche dédiée (par rapport à la
+			-- branche officielle)
 
 end

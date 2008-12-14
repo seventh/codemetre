@@ -1,3 +1,7 @@
+*** v0.18.0
+
+ - Support de l'option "--tree", qui permet à l'utilisateur de fournir un nom de répertoire plutôt qu'une liste de fichiers
+
 *** v0.17.1
 
  - Ada95 : bogue corrigé par rapport à la détection des constantes littérales

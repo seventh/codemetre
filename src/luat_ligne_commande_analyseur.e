@@ -55,6 +55,7 @@ feature
 			avant, apres : STRING
 			modele_precise : BOOLEAN
 			lot_active : BOOLEAN
+			arborescence_active : BOOLEAN
 		do
 			create option.fabriquer
 			mode := mode_indetermine
@@ -173,10 +174,25 @@ feature
 						-- lot
 
 					when "--batch" then
-						if not lot_active then
+						if arborescence_active then
+							afficher_erreur( once "conflict between %"--batch%" and %"--tree%" options" )
+							etat := etat_final
+						elseif not lot_active then
 							lot_active := true
 						else
 							afficher_erreur( once "too many %"--batch%" option" )
+							etat := etat_final
+						end
+						lexeme := lexeme + 1
+
+					when "--tree" then
+						if lot_active then
+							afficher_erreur( once "conflict between %"--batch%" and %"--tree%" options" )
+							etat := etat_final
+						elseif not arborescence_active then
+							arborescence_active := true
+						else
+							afficher_erreur( once "too many %"--tree%" option" )
 							etat := etat_final
 						end
 						lexeme := lexeme + 1
@@ -259,7 +275,9 @@ feature
 					-- commande de type analyse
 
 					if lot_active then
-						produire_lot_commande_analyse( analyseur, argument( lexeme ), option )
+						produire_liste_commande_analyse( analyseur, argument( lexeme ), option )
+					elseif arborescence_active then
+						produire_arbre_commande_analyse( analyseur, argument( lexeme ), option )
 					else
 						produire_commande_analyse( analyseur, argument( lexeme ), option )
 					end
@@ -283,6 +301,8 @@ feature
 
 						if lot_active then
 							produire_lot_commande_differentiel( analyseur, avant, apres, option )
+						elseif arborescence_active then
+							produire_arbre_commande_differentiel( analyseur, avant, apres, option )
 						else
 							produire_commande_differentiel( analyseur, avant, apres, option )
 						end
@@ -293,7 +313,9 @@ feature
 					-- commande de type mesure
 
 					if lot_active then
-						produire_lot_commande_unitaire( analyseur, argument( lexeme ), option )
+						produire_liste_commande_unitaire( analyseur, argument( lexeme ), option )
+					elseif arborescence_active then
+						produire_arbre_commande_unitaire( analyseur, argument( lexeme ), option )
 					else
 						produire_commande_unitaire( analyseur, argument( lexeme ), option )
 					end
@@ -322,7 +344,7 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once " codemetre [--ada|--c|--c++|--eiffel] [--code] [--comment] [--total]%N[--batch] [--anal|--diff] [--normal|--effort] [--] " )
+			std_error.put_string( once " codemetre [--ada|--c|--c++|--eiffel] [--code] [--comment] [--total]%N[--batch|--tree] [--anal|--diff] [--normal|--effort] [--] " )
 			std_error.put_string( traduire( once "FILE" ) )
 			std_error.put_string( once "..." )
 			std_error.put_new_line
@@ -347,18 +369,39 @@ feature {}
 
 feature {}
 
-	ouvrir_lot( p_nom_fichier : STRING ) : LUAT_LOT is
+	ouvrir_arbre( p_racine : STRING
+					  p_est_trie : BOOLEAN ) : LUAT_LOT is
+			-- fournit un descripteur de fichier sur le lot constitué de
+			-- la liste des fichiers depuis la racine correspondante
+		local
+			arbre : LUAT_LOT_ARBRE
+		do
+			create arbre.fabriquer( p_racine, p_est_trie )
+			if arbre.erreur then
+				std_error.put_string( traduire( once "Error: %"" ) )
+				std_error.put_string( p_racine )
+				std_error.put_string( traduire( once "%" is not a valid directory name" ) )
+				std_error.put_new_line
+				std_error.flush
+
+				create {LUAT_LOT_BLANC} result.fabriquer
+			else
+				result := arbre
+			end
+		end
+
+	ouvrir_liste( p_nom_fichier : STRING ) : LUAT_LOT is
 			-- fournit un descripteur de fichier sur le lot
 			-- correspondant si possible
 		local
 			flux : TEXT_FILE_READ
 		do
 			if p_nom_fichier = void then
-				create {LUAT_LOT_VIDE} result.fabriquer
+				create {LUAT_LOT_BLANC} result.fabriquer
 			else
 				create flux.connect_to( p_nom_fichier )
 				if flux.is_connected then
-					create {LUAT_LOT_REEL} result.fabriquer( flux )
+					create {LUAT_LOT_LISTE} result.fabriquer( flux )
 				else
 					std_error.put_string( traduire( once "Error: batch file %"" ) )
 					std_error.put_string( p_nom_fichier )
@@ -366,15 +409,49 @@ feature {}
 					std_error.put_new_line
 					std_error.flush
 
-					create {LUAT_LOT_VIDE} result.fabriquer
+					create {LUAT_LOT_BLANC} result.fabriquer
 				end
 			end
 		end
 
 feature {}
 
+	produire_arbre_commande_analyse( p_analyseur : LUAT_ANALYSEUR
+												p_racine : STRING
+												p_option : LUAT_OPTION ) is
+			-- ajoute autant de commandes d'analyse à la liste de
+			-- commandes qu'il n'y a de fichiers sous la racine, sauf
+			-- pour ceux dont le langage ne peut être déterminé
+		require
+			racine_valide : not p_racine.is_empty
+			option_valide : p_option /= void
+		local
+			lot : LUAT_LOT
+		do
+			lot := ouvrir_arbre( p_racine, false )
+			produire_lot_commande_analyse( p_analyseur, lot, p_option )
+			lot.clore
+		end
+
+	produire_liste_commande_analyse( p_analyseur : LUAT_ANALYSEUR
+												p_liste : STRING
+												p_option : LUAT_OPTION ) is
+			-- ajoute autant de commandes d'analyse à la liste de
+			-- commandes qu'il n'y a de fichiers énumérés dans la liste,
+			-- sauf pour ceux dont le langage ne peut être déterminé
+		require
+			liste_valide : p_liste /= void
+			option_valide : p_option /= void
+		local
+			lot : LUAT_LOT
+		do
+			lot := ouvrir_liste( p_liste )
+			produire_lot_commande_analyse( p_analyseur, lot, p_option )
+			lot.clore
+		end
+
 	produire_lot_commande_analyse( p_analyseur : LUAT_ANALYSEUR
-											 p_lot : STRING
+											 p_lot : LUAT_LOT
 											 p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes d'analyse à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
@@ -383,20 +460,17 @@ feature {}
 			lot_valide : p_lot /= void
 			option_valide : p_option /= void
 		local
-			lot : LUAT_LOT
 			nom_fichier : STRING
 		do
-			lot := ouvrir_lot( p_lot )
-			from nom_fichier := lot.lire
-			until lot.est_epuise
+			from p_lot.lire
+			until p_lot.est_epuise
 			loop
+				nom_fichier := p_lot.entree
 				if nom_fichier /= void then
 					produire_commande_analyse( p_analyseur, nom_fichier, p_option )
 				end
-				nom_fichier := lot.lire
+				p_lot.lire
 			end
-
-			lot.clore
 		end
 
 	produire_commande_analyse( p_analyseur : LUAT_ANALYSEUR
@@ -425,6 +499,66 @@ feature {}
 
 feature {}
 
+	produire_arbre_commande_differentiel( p_analyseur : LUAT_ANALYSEUR
+													  p_racine_avant, p_racine_apres : STRING
+													p_option : LUAT_OPTION ) is
+			-- ajoute autant de commandes de comparaison à la liste de
+			-- commandes qu'il n'y a de fichiers présents sous chacune
+			-- des racines, sauf pour ceux dont le langage ne peut être
+			-- déterminé
+		require
+			option_valide : p_option /= void
+		local
+			avant, apres : STRING
+			lot_avant, lot_apres : LUAT_LOT
+		do
+			lot_avant := ouvrir_arbre( p_racine_avant, true )
+			lot_apres := ouvrir_arbre( p_racine_apres, true )
+
+			from
+				lot_avant.lire
+				lot_apres.lire
+			until lot_avant.est_epuise
+				or lot_apres.est_epuise
+			loop
+				avant := lot_avant.entree
+				if avant /= void then
+					avant := avant.substring( avant.lower + p_racine_avant.count, avant.upper )
+				end
+				apres := lot_apres.entree
+				if apres /= void then
+					apres := apres.substring( apres.lower + p_racine_apres.count, apres.upper )
+				end
+
+				if avant < apres then
+					produire_commande_differentiel( p_analyseur, lot_avant.entree, void, p_option )
+					lot_avant.lire
+				elseif avant > apres then
+					produire_commande_differentiel( p_analyseur, void, lot_apres.entree, p_option )
+					lot_apres.lire
+				else
+					produire_commande_differentiel( p_analyseur, lot_avant.entree, lot_apres.entree, p_option )
+					lot_avant.lire
+					lot_apres.lire
+				end
+			end
+
+			from
+			until lot_avant.est_epuise
+				and lot_apres.est_epuise
+			loop
+				avant := lot_avant.entree
+				apres := lot_apres.entree
+				produire_commande_differentiel( p_analyseur, avant, apres, p_option )
+
+				lot_avant.lire
+				lot_apres.lire
+			end
+
+			lot_avant.clore
+			lot_apres.clore
+		end
+
 	produire_lot_commande_differentiel( p_analyseur : LUAT_ANALYSEUR
 													p_lot_avant, p_lot_apres : STRING
 													p_option : LUAT_OPTION ) is
@@ -437,19 +571,21 @@ feature {}
 			avant, apres : STRING
 			lot_avant, lot_apres : LUAT_LOT
 		do
-			lot_avant := ouvrir_lot( p_lot_avant )
-			lot_apres := ouvrir_lot( p_lot_apres )
+			lot_avant := ouvrir_liste( p_lot_avant )
+			lot_apres := ouvrir_liste( p_lot_apres )
 
 			from
-				avant := lot_avant.lire
-				apres := lot_apres.lire
+				lot_avant.lire
+				lot_apres.lire
 			until lot_avant.est_epuise
 				and lot_apres.est_epuise
 			loop
+				avant := lot_avant.entree
+				apres := lot_apres.entree
 				produire_commande_differentiel( p_analyseur, avant, apres, p_option )
 
-				avant := lot_avant.lire
-				apres := lot_apres.lire
+				lot_avant.lire
+				lot_apres.lire
 			end
 
 			lot_avant.clore
@@ -496,8 +632,42 @@ feature {}
 
 feature {}
 
+	produire_arbre_commande_unitaire( p_analyseur : LUAT_ANALYSEUR
+												 p_racine : STRING
+												 p_option : LUAT_OPTION ) is
+			-- ajoute autant de commandes de mesure à la liste de
+			-- commandes qu'il n'y a de fichiers sous racine, sauf pour
+			-- ceux dont le langage ne peut être déterminé
+		require
+			racine_valide : p_racine /= void
+			option_valide : p_option /= void
+		local
+			lot : LUAT_LOT
+		do
+			lot := ouvrir_arbre( p_racine, false )
+			produire_lot_commande_unitaire( p_analyseur, lot, p_option )
+			lot.clore
+		end
+
+	produire_liste_commande_unitaire( p_analyseur : LUAT_ANALYSEUR
+												 p_liste : STRING
+											  p_option : LUAT_OPTION ) is
+			-- ajoute autant de commandes de mesure à la liste de
+			-- commandes qu'il n'y a de fichiers énumérés dans la liste,
+			-- sauf pour ceux dont le langage ne peut être déterminé
+		require
+			liste_valide : p_liste /= void
+			option_valide : p_option /= void
+		local
+			lot : LUAT_LOT
+		do
+			lot := ouvrir_liste( p_liste )
+			produire_lot_commande_unitaire( p_analyseur, lot, p_option )
+			lot.clore
+		end
+
 	produire_lot_commande_unitaire( p_analyseur : LUAT_ANALYSEUR
-											  p_lot : STRING
+											  p_lot : LUAT_LOT
 											  p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes de mesure à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
@@ -506,20 +676,17 @@ feature {}
 			lot_valide : p_lot /= void
 			option_valide : p_option /= void
 		local
-			lot : LUAT_LOT
 			nom_fichier : STRING
 		do
-			lot := ouvrir_lot( p_lot )
-			from nom_fichier := lot.lire
-			until lot.est_epuise
+			from p_lot.lire
+			until p_lot.est_epuise
 			loop
+				nom_fichier := p_lot.entree
 				if nom_fichier /= void then
 					produire_commande_unitaire( p_analyseur, nom_fichier, p_option )
 				end
-				nom_fichier := lot.lire
+				p_lot.lire
 			end
-
-			lot.clore
 		end
 
 	produire_commande_unitaire( p_analyseur : LUAT_ANALYSEUR

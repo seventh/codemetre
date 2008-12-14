@@ -8,15 +8,25 @@ deferred class
 	LUAT_LOT
 
 		--
-		-- Interface générique d'accès à un descripteur de lot de
-		-- fichiers
+		-- Interface générique d'un itérateur de lot de fichiers
 		--
 
 feature
 
-	lire : STRING is
-			-- nouvelle entrée du lot tant qu'il n'est pas épuisé, et
-			-- void sinon
+	entree : STRING is
+			-- dernière entrée lue du lot, et void lorsque celui-ci est
+			-- épuisé
+		deferred
+		end
+
+	entree_courte : STRING is
+			-- sous-chaîne de l'entrée. La définition de cette
+			-- sous-chaîne est propre à chaque lot
+		deferred
+		end
+
+	lire is
+			-- met à disposition la prochaine entrée du lot
 		deferred
 		end
 

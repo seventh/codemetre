@@ -5,7 +5,12 @@ indexing
 
 class
 
-	LUAT_LOT_REEL
+	LUAT_LOT_LISTE
+
+		--
+		-- Itérateur de fichier texte, chaque ligne représentant le nom
+		-- d'un fichier
+		--
 
 inherit
 
@@ -29,14 +34,27 @@ feature {}
 
 feature
 
-	lire : STRING is
+	entree : STRING is
+		attribute
+		end
+
+	entree_courte : STRING is
+		do
+			result := entree
+		ensure
+			definition : result = entree
+		end
+
+	lire is
 		do
 			if not flux.end_of_input then
 				flux.read_line
-				if not flux.end_of_input
-					and then not flux.last_string.is_empty
+				if flux.end_of_input
+					or else flux.last_string.is_empty
 				 then
-					result := flux.last_string.twin
+					entree := void
+				else
+					entree := flux.last_string.twin
 				end
 			end
 		end
@@ -54,5 +72,6 @@ feature
 feature {}
 
 	flux : INPUT_STREAM
+			-- accesseur au fichier de lot
 
 end
