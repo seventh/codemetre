@@ -373,21 +373,8 @@ feature {}
 					  p_est_trie : BOOLEAN ) : LUAT_LOT is
 			-- fournit un descripteur de fichier sur le lot constitué de
 			-- la liste des fichiers depuis la racine correspondante
-		local
-			arbre : LUAT_LOT_ARBRE
 		do
-			create arbre.fabriquer( p_racine, p_est_trie )
-			if arbre.erreur then
-				std_error.put_string( traduire( once "Error: %"" ) )
-				std_error.put_string( p_racine )
-				std_error.put_string( traduire( once "%" is not a valid directory name" ) )
-				std_error.put_new_line
-				std_error.flush
-
-				create {LUAT_LOT_BLANC} result.fabriquer
-			else
-				result := arbre
-			end
+			create {LUAT_LOT_ARBRE} result.fabriquer( p_racine, p_est_trie )
 		end
 
 	ouvrir_liste( p_nom_fichier : STRING ) : LUAT_LOT is
@@ -521,14 +508,8 @@ feature {}
 			until lot_avant.est_epuise
 				or lot_apres.est_epuise
 			loop
-				avant := lot_avant.entree
-				if avant /= void then
-					avant := avant.substring( avant.lower + p_racine_avant.count, avant.upper )
-				end
-				apres := lot_apres.entree
-				if apres /= void then
-					apres := apres.substring( apres.lower + p_racine_apres.count, apres.upper )
-				end
+				avant := lot_avant.entree_courte
+				apres := lot_apres.entree_courte
 
 				if avant < apres then
 					produire_commande_differentiel( p_analyseur, lot_avant.entree, void, p_option )
@@ -616,7 +597,9 @@ feature {}
 				elseif p_apres /= void then
 					analyseur := deviner_langage( p_apres )
 				end
-				if analyseur = void then
+				if analyseur = void
+					and p_avant /= void
+				 then
 					analyseur := deviner_langage( p_avant )
 				end
 

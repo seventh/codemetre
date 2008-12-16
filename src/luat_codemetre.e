@@ -68,7 +68,7 @@ are welcome to redistribute it under certain conditions.
 			std_error.flush
 		end
 
-	version_majeure : STRING is "v0.18.0"
+	version_majeure : STRING is "v0.18.1"
 			-- identifiant de la branche officielle
 
 	version_mineure : STRING is ""

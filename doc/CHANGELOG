@@ -1,3 +1,8 @@
+*** v0.18.1
+
+ - Correction du comportement ératique de l'option "--tree"
+ - Correction d'un bogue sur la détection automatique du langage en mode différentiel
+
 *** v0.18.0
 
  - Support de l'option "--tree", qui permet à l'utilisateur de fournir un nom de répertoire plutôt qu'une liste de fichiers

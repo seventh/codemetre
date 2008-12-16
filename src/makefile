@@ -2,14 +2,16 @@ ENTREE := luat_codemetre.e
 
 PREFIXE := codemetre
 
-VERSION := 0.17.1
+VERSION_MAJEURE := 0.18.1
+VERSION_MINEURE :=
+VERSION := $(VERSION_MAJEURE)$(VERSION_MINEURE)
 
 SE := compile
 
-.PHONY: info debug sedb profile release delivery clean
+.PHONY: info debug sedb profile release delivery src clean
 
 info :
-	@echo "options : debug, sedb, profile, release, delivery ou clean"
+	@echo "options : debug, sedb, profile, release, delivery, src ou clean"
 
 debug : .Prod
 	$(SE) -debug -all_check $(ENTREE) -o .Prod/$(PREFIXE)_debug
@@ -29,9 +31,12 @@ delivery : $(PREFIXE)-$(VERSION) $(PREFIXE)-$(VERSION)/doc $(PREFIXE)-$(VERSION)
 	cp Internationalisation/codemetre.fr.UTF-8.mo $(PREFIXE)-$(VERSION)/i18n/fr/LC_MESSAGES/codemetre.mo
 	cp Manuel/* $(PREFIXE)-$(VERSION)/man
 	cp $(patsubst %.e,%,$(ENTREE)).[chim]* $(PREFIXE)-$(VERSION)/src
-	tar cjvf $(PREFIXE)-$(VERSION).tar.bz2 $(PREFIXE)-$(VERSION)
+	tar cjvf $(PREFIXE)-$(VERSION).c.tar.bz2 $(PREFIXE)-$(VERSION)
 	clean $(ENTREE)
 	$(RM) -Rf $(PREFIXE)-$(VERSION)
+
+src :
+	./livraison_src.sh $(VERSION)
 
 clean :
 	$(RM) -Rf .Prod

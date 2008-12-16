@@ -27,9 +27,15 @@ feature {}
 			-- constructeur
 		local
 			usine : PROCESS_FACTORY
+			processus : PROCESS
 		do
 			processus := usine.create_process
 			lg_racine := p_racine.count
+
+			-- attention, il se peut qu'un bogue soit ici introduit, du
+			-- fait que la relation d'ordre imposée par 'sort' ne soit
+			-- pas la même que celle utilisée en interne lors de la
+			-- comparaison lexicographique de chaînes de caractères
 
 			if p_est_trie then
 				processus.execute_command_line( "find " + p_racine + " -type f | sort", true )
@@ -37,9 +43,26 @@ feature {}
 				processus.execute_command_line( "find " + p_racine + " -type f", true )
 			end
 
-			processus.error.read_line
-			if not processus.error.end_of_input then
-				erreur := true
+			-- comme il est très difficile de déterminer les échecs du
+			-- processus précédent, on préfère charger en mémoire le
+			-- résultat
+
+			create fichiers.with_capacity( 0 )
+			from processus.output.read_line
+			until processus.output.end_of_input
+			loop
+				fichiers.add_last( processus.output.last_string.twin )
+				processus.output.read_line
+			end
+			ligne := fichiers.lower - 1
+
+			processus.wait
+			if processus.status /= 0 then
+				std_error.put_string( traduire( once "Error: %"" ) )
+				std_error.put_string( p_racine )
+				std_error.put_string( traduire( once "%" is not a valid directory name" ) )
+				std_error.put_new_line
+				std_error.flush
 			end
 		end
 
@@ -51,37 +74,34 @@ feature
 
 	lire is
 		do
-			if not processus.output.end_of_input then
-				processus.output.read_line
-				if processus.output.end_of_input then
+			if ligne <= fichiers.upper then
+				ligne := ligne + 1
+				if ligne > fichiers.upper then
 					entree := void
 					entree_courte := void
+					est_epuise := true
 				else
-					entree := processus.output.last_string.twin
+					entree := fichiers.item( ligne )
 					entree_courte := entree.substring( entree.lower + lg_racine, entree.upper )
 				end
 			end
 		end
 
 	est_epuise : BOOLEAN is
-		do
-			result := processus.output.end_of_input
+		attribute
 		end
 
 	clore is
 		do
-			processus.wait
+			fichiers.clear_count
 		end
 
-feature
-
-	erreur : BOOLEAN
-
 feature {}
-
-	processus : PROCESS
 
 	lg_racine : INTEGER
 			-- nombre de caractères constituant la racine
 
+	fichiers : FAST_ARRAY[ STRING ]
+
+	ligne : INTEGER
 end

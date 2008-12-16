@@ -11,6 +11,10 @@ deferred class
 		-- Interface générique d'un itérateur de lot de fichiers
 		--
 
+inherit
+
+	LUAT_GLOBAL
+
 feature
 
 	entree : STRING is
