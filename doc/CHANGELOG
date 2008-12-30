@@ -1,3 +1,7 @@
+*** v0.18.2
+
+ - Suppression de l'option "--tree" au profit d'une détection automatique
+
 *** v0.18.1
 
  - Correction du comportement ératique de l'option "--tree"

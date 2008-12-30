@@ -6,7 +6,7 @@
 codemetre \- comptage de ligne de fichiers source
 .SH SYNOPSIS
 .B codemetre
-[--ada|--c|--c++|--eiffel] [--code] [--comment] [--total] [--batch|--tree] [--anal|--diff] [--effort|--normal] [--] FICHIER...
+[--ada|--c|--c++|--eiffel] [--code] [--comment] [--total] [--batch] [--anal|--diff] [--effort|--normal] [--] FICHIER|RÉPERTOIRE...
 .SH DESCRIPTION
 .B codemetre
 permet de comptabiliser le nombre de lignes de code et/ou de commentaires contenues dans des fichiers source. Il permet également d'évaluer l'effort réalisé entre deux versions d'un même fichier, toujours en nombre de lignes.
@@ -14,10 +14,6 @@ permet de comptabiliser le nombre de lignes de code et/ou de commentaires conten
 L'option "--" peut être utilisée pour s'assurer que tous les arguments la suivant seront considérés comme des noms de fichier. Ceci peut s'avérer utile lorsqu'un fichier à analyser porte le nom d'une option.
 
 L'option "--batch" permet de spécifier un traitement par lots, c'est-à-dire que les entrées sont considérées comme des liste de fichiers sur lesquels mener la métrologie.
-
-L'option "--tree" a un comportement similaire : elle permet de donner des noms de répertoire en argument plutôt que de fichiers.
-.B codemetre
-détermine alors lui-même tous les fichiers du répertoire. En mode différentiel, les arborescences sont comparées en tentant de les faire se recouvrir.
 
 .SH LANGAGES SUPPORTÉS
 Si aucun langage n'est spécifié, alors
@@ -74,6 +70,8 @@ dénombre les lignes de la nouvelle version du fichier.
 dénombre les lignes communes aux deux versions du fichier.
 .SH MODÈLE DIFFÉRENTIEL : EFFORT
 L'effort entre deux versions d'un fichier est définit comme le nombre de lignes nouvelles sur la taille du fichier. Si l'on prend la notation du modèle normal, cela correspond à (N-C)/N.
+.SH ANALYSE DE RÉPERTOIRES
+Lorsqu'un nom de répertoire est communiqué plutôt qu'un nom de fichier, celui-ci est parcouru en profondeur pour en déterminer tous les fichiers. En mode différentiel, deux fichiers sont comparables s'ils sont à la même position relativement à la racine.
 .SH DIAGNOSTICS
 Si malgré le forçage d'un choix de langage, l'analyse d'un fichier venait à échouer, un message détaillé est produit en indiquant l'endroit.
 .SH TOLÉRANCE PAR RAPPORT AUX NORMES OFFICIELLES

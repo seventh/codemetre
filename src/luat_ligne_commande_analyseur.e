@@ -55,7 +55,7 @@ feature
 			avant, apres : STRING
 			modele_precise : BOOLEAN
 			lot_active : BOOLEAN
-			arborescence_active : BOOLEAN
+			avant_est_repertoire, apres_est_repertoire : BOOLEAN
 		do
 			create option.fabriquer
 			mode := mode_indetermine
@@ -174,25 +174,10 @@ feature
 						-- lot
 
 					when "--batch" then
-						if arborescence_active then
-							afficher_erreur( once "conflict between %"--batch%" and %"--tree%" options" )
-							etat := etat_final
-						elseif not lot_active then
+						if not lot_active then
 							lot_active := true
 						else
 							afficher_erreur( once "too many %"--batch%" option" )
-							etat := etat_final
-						end
-						lexeme := lexeme + 1
-
-					when "--tree" then
-						if lot_active then
-							afficher_erreur( once "conflict between %"--batch%" and %"--tree%" options" )
-							etat := etat_final
-						elseif not arborescence_active then
-							arborescence_active := true
-						else
-							afficher_erreur( once "too many %"--tree%" option" )
 							etat := etat_final
 						end
 						lexeme := lexeme + 1
@@ -274,10 +259,14 @@ feature
 				when etat_commande_analyse then
 					-- commande de type analyse
 
-					if lot_active then
+					if est_repertoire( argument( lexeme ) ) then
+						if lot_active then
+							afficher_erreur( once "batch mode is not compatible with directory as argument" )
+						else
+							produire_arbre_commande_analyse( analyseur, argument( lexeme ), option )
+						end
+					elseif lot_active then
 						produire_liste_commande_analyse( analyseur, argument( lexeme ), option )
-					elseif arborescence_active then
-						produire_arbre_commande_analyse( analyseur, argument( lexeme ), option )
 					else
 						produire_commande_analyse( analyseur, argument( lexeme ), option )
 					end
@@ -299,12 +288,25 @@ feature
 							apres := void
 						end
 
-						if lot_active then
-							produire_lot_commande_differentiel( analyseur, avant, apres, option )
-						elseif arborescence_active then
-							produire_arbre_commande_differentiel( analyseur, avant, apres, option )
+						if avant = void and apres = void then
+							afficher_erreur( once "at least one of the two arguments shall exists" )
 						else
-							produire_commande_differentiel( analyseur, avant, apres, option )
+							avant_est_repertoire := avant /= void and then est_repertoire( avant )
+							apres_est_repertoire := apres /= void and then est_repertoire( apres )
+
+							if avant_est_repertoire xor apres_est_repertoire then
+								afficher_erreur( once "directory cannot be compared to single file" )
+							elseif avant_est_repertoire then
+								if lot_active then
+									afficher_erreur( once "batch mode is not compatible with directory as argument" )
+								else
+									produire_arbre_commande_differentiel( analyseur, avant, apres, option )
+								end
+							elseif lot_active then
+								produire_lot_commande_differentiel( analyseur, avant, apres, option )
+							else
+								produire_commande_differentiel( analyseur, avant, apres, option )
+							end
 						end
 					end
 					etat := etat_final
@@ -312,10 +314,14 @@ feature
 				when etat_commande_unitaire then
 					-- commande de type mesure
 
-					if lot_active then
+					if est_repertoire( argument( lexeme ) ) then
+						if lot_active then
+							afficher_erreur( once "batch mode is not compatible with directory as argument" )
+						else
+							produire_arbre_commande_unitaire( analyseur, argument( lexeme ), option )
+						end
+					elseif lot_active then
 						produire_liste_commande_unitaire( analyseur, argument( lexeme ), option )
-					elseif arborescence_active then
-						produire_arbre_commande_unitaire( analyseur, argument( lexeme ), option )
 					else
 						produire_commande_unitaire( analyseur, argument( lexeme ), option )
 					end
@@ -344,8 +350,8 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once " codemetre [--ada|--c|--c++|--eiffel] [--code] [--comment] [--total]%N[--batch|--tree] [--anal|--diff] [--normal|--effort] [--] " )
-			std_error.put_string( traduire( once "FILE" ) )
+			std_error.put_string( once " codemetre [--ada|--c|--c++|--eiffel] [--code] [--comment] [--total]%N[--batch] [--anal|--diff] [--normal|--effort] [--] " )
+			std_error.put_string( traduire( once "FILE|DIRECTORY" ) )
 			std_error.put_string( once "..." )
 			std_error.put_new_line
 			std_error.put_new_line
@@ -369,12 +375,30 @@ feature {}
 
 feature {}
 
+	est_repertoire( p_nom : STRING ) : BOOLEAN is
+			-- vrai si et seulement si le nom passé en argument est un
+			-- nom de répertoire valide
+		require
+			nom_valide : not p_nom.is_empty
+		local
+			repertoire : DIRECTORY
+		do
+			create repertoire.scan( p_nom )
+			result := repertoire.last_scan_status
+		end
+
+feature {}
+
 	ouvrir_arbre( p_racine : STRING
 					  p_est_trie : BOOLEAN ) : LUAT_LOT is
 			-- fournit un descripteur de fichier sur le lot constitué de
 			-- la liste des fichiers depuis la racine correspondante
 		do
-			create {LUAT_LOT_ARBRE} result.fabriquer( p_racine, p_est_trie )
+			if p_racine = void then
+				create {LUAT_LOT_BLANC} result.fabriquer
+			else
+				create {LUAT_LOT_ARBRE} result.fabriquer( p_racine, p_est_trie )
+			end
 		end
 
 	ouvrir_liste( p_nom_fichier : STRING ) : LUAT_LOT is
@@ -486,9 +510,27 @@ feature {}
 
 feature {}
 
+	comparer( p_nom_1, p_nom_2 : STRING ) : INTEGER is
+			-- résultat équivalent à p_nom_1.compare( p_nom_2 ), mais
+			-- prend en plus en compte les cas spéciaux où p_nom_1 ou
+			-- p_nom_2 valent 'void'
+		require
+			noms_valides : p_nom_1 /= void or p_nom_2 /= void
+		do
+			if p_nom_1 = void then
+				result := 1
+			elseif p_nom_2 = void then
+				result := -1
+			else
+				result := p_nom_1.compare( p_nom_2 )
+			end
+		ensure
+			domaine : result.in_range( -1, 1 )
+		end
+
 	produire_arbre_commande_differentiel( p_analyseur : LUAT_ANALYSEUR
 													  p_racine_avant, p_racine_apres : STRING
-													p_option : LUAT_OPTION ) is
+													  p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes de comparaison à la liste de
 			-- commandes qu'il n'y a de fichiers présents sous chacune
 			-- des racines, sauf pour ceux dont le langage ne peut être
@@ -498,6 +540,7 @@ feature {}
 		local
 			avant, apres : STRING
 			lot_avant, lot_apres : LUAT_LOT
+			ordre : INTEGER
 		do
 			lot_avant := ouvrir_arbre( p_racine_avant, true )
 			lot_apres := ouvrir_arbre( p_racine_apres, true )
@@ -506,38 +549,28 @@ feature {}
 				lot_avant.lire
 				lot_apres.lire
 			until lot_avant.est_epuise
-				or lot_apres.est_epuise
+				and lot_apres.est_epuise
 			loop
 				avant := lot_avant.entree_courte
 				apres := lot_apres.entree_courte
 
-				if avant < apres then
+				-- deux fichiers sont comparés s'ils sont sous le même
+				-- chemin par rapport à la racine
+
+				ordre := comparer( avant, apres )
+				inspect ordre
+				when -1 then
 					produire_commande_differentiel( p_analyseur, lot_avant.entree, void, p_option )
 					lot_avant.lire
-				elseif avant > apres then
-					produire_commande_differentiel( p_analyseur, void, lot_apres.entree, p_option )
-					lot_apres.lire
-				else
+				when 0 then
 					produire_commande_differentiel( p_analyseur, lot_avant.entree, lot_apres.entree, p_option )
 					lot_avant.lire
 					lot_apres.lire
+				when 1 then
+					produire_commande_differentiel( p_analyseur, void, lot_apres.entree, p_option )
+					lot_apres.lire
 				end
 			end
-
-			from
-			until lot_avant.est_epuise
-				and lot_apres.est_epuise
-			loop
-				avant := lot_avant.entree
-				apres := lot_apres.entree
-				produire_commande_differentiel( p_analyseur, avant, apres, p_option )
-
-				lot_avant.lire
-				lot_apres.lire
-			end
-
-			lot_avant.clore
-			lot_apres.clore
 		end
 
 	produire_lot_commande_differentiel( p_analyseur : LUAT_ANALYSEUR
@@ -563,6 +596,9 @@ feature {}
 			loop
 				avant := lot_avant.entree
 				apres := lot_apres.entree
+
+				-- les fichiers sont comparés un à un
+
 				produire_commande_differentiel( p_analyseur, avant, apres, p_option )
 
 				lot_avant.lire
@@ -594,13 +630,15 @@ feature {}
 
 				if p_analyseur /= void then
 					analyseur := p_analyseur
-				elseif p_apres /= void then
-					analyseur := deviner_langage( p_apres )
-				end
-				if analyseur = void
-					and p_avant /= void
-				 then
-					analyseur := deviner_langage( p_avant )
+				else
+					if p_apres /= void then
+						analyseur := deviner_langage( p_apres )
+					end
+					if analyseur = void
+						and p_avant /= void
+					 then
+						analyseur := deviner_langage( p_avant )
+					end
 				end
 
 				-- création de la commande de comparaison si un langage a
@@ -709,12 +747,12 @@ feature {}
 		do
 			-- isolement du suffixe
 			i := p_nom_fichier.last_index_of( '.' )
-			if p_nom_fichier.valid_index( i ) then
-				suffixe := p_nom_fichier.substring( i + 1, p_nom_fichier.upper )
-			else
-				suffixe := once ""
+			check
+				( i + 1 ).in_range( p_nom_fichier.lower, p_nom_fichier.upper + 1 )
 			end
+			suffixe := p_nom_fichier.substring( i + 1, p_nom_fichier.upper )
 
+			-- détermination du langage à partir du dit suffixe
 			inspect suffixe
 			when "ads", "adb" then
 				result := analyseur_ada

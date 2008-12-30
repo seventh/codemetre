@@ -23,6 +23,7 @@ feature
 feature
 
 	traduire( p_message : STRING ) : STRING is
+			-- traduction locale du message d'origine
 		do
 			result := traducteur.traduire( p_message )
 		end
