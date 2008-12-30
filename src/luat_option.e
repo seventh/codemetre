@@ -14,17 +14,22 @@ class
 
 creation
 
-	fabriquer
+	initialiser
 
 feature {}
 
-	fabriquer is
-			-- constructeur
+	initialiser is
+			-- oublie toute les demandes effectuées
 		do
+			code := false
+			commentaire := false
+			total := false
+			resume := false
 		ensure
 			code_desactive : not code
 			commentaire_desactive : not commentaire
 			total_desactive : not total
+			resume_desactive : not resume
 		end
 
 feature
@@ -73,18 +78,9 @@ feature
 
 feature
 
-	initialiser is
-			-- oublie toute les demandes effectuées
-		do
-			code := false
-			commentaire := false
-			total := false
-		ensure
-			not choix_est_effectue
-		end
-
 	choix_est_effectue : BOOLEAN is
 			-- vrai si et seulement si au moins une demande a été faite
+			-- parmi (code, commentaire, total)
 		do
 			result := code or commentaire or total
 		ensure
@@ -93,6 +89,7 @@ feature
 
 	choix_est_unique : BOOLEAN is
 			-- vrai si et seulement si une seule demande a été faite
+			-- parmi (code, commentaire, total)
 		do
 			result := ( code and not commentaire and not total )
 				or ( not code and commentaire and not total )
@@ -100,8 +97,8 @@ feature
 		end
 
 	met( p_code, p_commentaire, p_total : BOOLEAN ) is
-			-- modifie simultanément les valeurs de 'code' et
-			-- 'commentaire'
+			-- modifie simultanément les valeurs de (code, commentaire,
+			-- total)
 		do
 			met_code( p_code )
 			met_commentaire( p_commentaire )
@@ -110,6 +107,21 @@ feature
 			code_ok : code = p_code
 			commentaire_ok : commentaire = p_commentaire
 			total_ok : total = p_total
+		end
+
+feature
+
+	resume : BOOLEAN
+			-- vrai si et seulement si une demande d'affichage court a
+			-- été faite. En mode différentiel, les métriques ne seront
+			-- affichées que s'il y a eu évolution
+
+	met_resume( p_resume : BOOLEAN ) is
+			-- modifie la valeur de 'resume'
+		do
+			resume := p_resume
+		ensure
+			resume_ok : resume = p_resume
 		end
 
 end

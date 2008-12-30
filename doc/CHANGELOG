@@ -1,3 +1,10 @@
+*** v0.18.3
+
+ - Reconnaissance des extensions ".hh", ".tt" et ".ii" comme identifiant des
+ fichiers du langage C++
+ - Ajout de l'option "--short" en mode différentiel pour produire des sorties
+ plus courtes (les fichiers identiques ne sont pas listés)
+
 *** v0.18.2
 
  - Suppression de l'option "--tree" au profit d'une détection automatique
@@ -5,11 +12,13 @@
 *** v0.18.1
 
  - Correction du comportement ératique de l'option "--tree"
- - Correction d'un bogue sur la détection automatique du langage en mode différentiel
+ - Correction d'un bogue sur la détection automatique du langage en mode
+ différentiel
 
 *** v0.18.0
 
- - Support de l'option "--tree", qui permet à l'utilisateur de fournir un nom de répertoire plutôt qu'une liste de fichiers
+ - Support de l'option "--tree", qui permet à l'utilisateur de fournir un nom de
+ répertoire plutôt qu'une liste de fichiers
 
 *** v0.17.1
 

@@ -57,7 +57,7 @@ feature
 			lot_active : BOOLEAN
 			avant_est_repertoire, apres_est_repertoire : BOOLEAN
 		do
-			create option.fabriquer
+			create option.initialiser
 			mode := mode_indetermine
 
 			-- analyse de la ligne de commande à l'aide d'un automate
@@ -149,6 +149,15 @@ feature
 						end
 						lexeme := lexeme + 1
 
+					when "--short" then
+						if option.resume then
+							afficher_erreur( once "too many %"--short%" option" )
+							etat := etat_final
+						else
+							option.met_resume( true )
+						end
+						lexeme := lexeme + 1
+
 						-- modèle différentiel
 
 					when "--effort" then
@@ -223,6 +232,9 @@ feature
 						if modele_precise then
 							afficher_erreur( once "no diff model is required for analysis" )
 							etat := etat_final
+						elseif option.resume then
+							afficher_erreur( once "short output is available only for diff" )
+							etat := etat_final
 						elseif not option.choix_est_effectue then
 							option.met_total( true )
 							etat := etat_commande_analyse
@@ -247,6 +259,9 @@ feature
 					when mode_unitaire then
 						if modele_precise then
 							afficher_erreur( once "no diff model is required for measure" )
+							etat := etat_final
+						elseif option.resume then
+							afficher_erreur( once "short output is available only for diff" )
 							etat := etat_final
 						elseif not option.choix_est_effectue then
 							option.met( true, true, false )
@@ -350,7 +365,7 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once " codemetre [--ada|--c|--c++|--eiffel] [--code] [--comment] [--total]%N[--batch] [--anal|--diff] [--normal|--effort] [--] " )
+			std_error.put_string( once " codemetre [--ada|--c|--c++|--eiffel] [--code] [--comment] [--total]%N[--short] [--batch] [--anal|--diff] [--normal|--effort] [--]%N" )
 			std_error.put_string( traduire( once "FILE|DIRECTORY" ) )
 			std_error.put_string( once "..." )
 			std_error.put_new_line
@@ -758,7 +773,7 @@ feature {}
 				result := analyseur_ada
 			when "h", "c" then
 				result := analyseur_c
-			when "hpp", "C", "cc", "cpp" then
+			when "hh", "hpp", "ii", "C", "cc", "cpp", "tt" then
 				result := analyseur_c_plus_plus
 			when "e" then
 				result := analyseur_eiffel

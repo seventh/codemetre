@@ -84,41 +84,48 @@ feature
 			-- Production des métriques différentielles
 
 			if not erreur then
-				-- mesure
+				-- l'ordre des tests et l'utilisation de 'and then' est
+				-- ici très important pour les performances de
+				-- l'application
+				if not option.resume
+					or else not nid.est_equivalent( but )
+				 then
+					-- mesure
 
-				metrique := usine_metrique.mesurer( nid, but )
+					metrique := usine_metrique.mesurer( nid, but )
 
-				-- sortie
+					-- sortie
 
-				if but = void then
-					std_output.put_string( once "ø" )
-				else
-					std_output.put_string( nom_but )
-				end
+					if but = void then
+						std_output.put_string( once "ø" )
+					else
+						std_output.put_string( nom_but )
+					end
 
-				std_output.put_string( once " (" )
-				std_output.put_string( analyseur.langage )
-				std_output.put_string( once ") " )
+					std_output.put_string( once " (" )
+					std_output.put_string( analyseur.langage )
+					std_output.put_string( once ") " )
 
-				if option.total then
-					std_output.put_string( once "[total|" )
-				elseif option.code then
-					std_output.put_string( once "[code|" )
-				else -- if option.commentaire then
-					std_output.put_string( once "[comment|" )
-				end
+						if option.total then
+							std_output.put_string( once "[total|" )
+						elseif option.code then
+							std_output.put_string( once "[code|" )
+						else -- if option.commentaire then
+							std_output.put_string( once "[comment|" )
+						end
 
-				if nid = void then
-					std_output.put_string( once "ø" )
-				else
-					std_output.put_string( nom_nid )
-				end
+						if nid = void then
+							std_output.put_string( once "ø" )
+						else
+							std_output.put_string( nom_nid )
+						end
 
-				std_output.put_string( once "] " )
+						std_output.put_string( once "] " )
 
-				metrique.afficher( std_output )
+						metrique.afficher( std_output )
 
-				std_output.put_new_line
+						std_output.put_new_line
+					end
 			end
 		end
 
