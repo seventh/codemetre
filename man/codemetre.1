@@ -1,35 +1,34 @@
 .\" Formater ce fichier par la commande :
 .\" groff -man -Tutf8 codemetre.1
 .\"
-.TH CODEMETRE 1 "DÉCEMBRE 2008" Linux "Manuel utilisateur"
+.TH CODEMETRE 1 "JANVIER 2009" Linux "Manuel utilisateur"
 .SH NOM
 codemetre \- comptage de ligne de fichiers source
 .SH SYNOPSIS
 .B codemetre
-[--ada|--c|--c++|--eiffel] [--code] [--comment] [--total] [--short] [--batch] [--anal|--diff] [--effort|--normal] [--] FICHIER|RÉPERTOIRE...
+[--code] [--comment] [--total] [--lang <>] [--batch] [--anal|--diff [--short] [--model <>]] [--] FICHIER|RÉPERTOIRE...
 .SH DESCRIPTION
 .B codemetre
-permet de comptabiliser le nombre de lignes de code et/ou de commentaires contenues dans des fichiers source. Il permet également d'évaluer l'effort réalisé entre deux versions d'un même fichier, toujours en nombre de lignes.
+mesure la taille de fichiers sources en nombre de lignes physiques de code et de commentaires. Il permet également d'évaluer l'effort réalisé entre deux versions d'un même fichier, toujours en nombre de lignes physiques.
 .SH OPTIONS PARTICULIÈRES
-L'option "--" peut être utilisée pour s'assurer que tous les arguments la suivant seront considérés comme des noms de fichier. Ceci peut s'avérer utile lorsqu'un fichier à analyser porte le nom d'une option.
+L'option "--" permet de signifier que les arguments restants ne sont pas des options. Ceci peut s'avérer utile lorsqu'un fichier à analyser porte le nom d'une option.
 
 L'option "--batch" permet de spécifier un traitement par lots, c'est-à-dire que les entrées sont considérées comme des liste de fichiers sur lesquels mener la métrologie.
-
-.SH LANGAGES SUPPORTÉS
-Si aucun langage n'est spécifié, alors
+.SH LANGAGES RECONNUS
+Si aucun langage n'est choisi grâce à l'option --lang, alors
 .B codemetre
-essaiera de déterminer celui-ci à partir de l'extension du fichier. Si par contre un langage est spécifié, alors ce choix prévaut quelque soit l'extension du ou des fichiers à mesurer. Les options sont les suivantes :
-.IP --ada
+essaiera de déterminer celui-ci à partir de l'extension du fichier. Sinon, ce choix prévaut quelque soit l'extension du ou des fichiers à mesurer. Les langages reconnus actuellement sont :
+.IP ada
 Respecte le standard Ada95. Extensions ".ads" et ".adb".
-.IP --c
+.IP c
 Respecte la norme C ISO/IEC 9899:1999. Extensions ".h" et ".c".
-.IP --c++
+.IP c++
 Respecte la norme C++ ISO/IEC 14882:2003. Extensions ".hh", ".hpp", ".C", ".cc", ".cpp", ".ii" et ".tt".
-.IP --eiffel
+.IP eiffel
 Respecte le standard Eiffel tel que définit dans le livre "Eiffel, le langage" de B. Meyer paru chez InterEditions en 1994. Extension ".e".
 .SH SPECTRE DE L'ANALYSE
 .B codemetre
-sait différencier le code des commentaires, et peut ne prendre en compte que l'un ou l'autre. Attention, une seule des options suivantes est autorisée lors d'une demande d'analyse lexicale ou de comparaison différentielle. Dans le cas d'un simple comptage de ligne sans comparaison, on peut spécifier autant de ces options que l'on souhaite.
+sait différencier le code des commentaires, et peut ne prendre en compte que l'un ou l'autre. Attention, une seule des options suivantes est autorisée lors d'une demande d'analyse lexicale ou de comparaison différentielle. Dans le cas d'un simple comptage de ligne sans comparaison, ces options peuvent être combinées.
 .IP --code
 Ne conserve pour l'analyse que les lignes de code.
 .IP --comment
@@ -38,27 +37,40 @@ Ne conserve pour l'analyse que les lignes de commentaire.
 Prend en compte à la fois le code et les commentaires lors de l'analyse.
 .SH COMMANDES
 .IP "<fichier> ..."
-Compte pour chaque
+Détermine le nombre de lignes constituant le
 .I fichier
-le nombre de lignes total, de code ou de commentaire selon les options qui auront été passées. Par défaut, le nombre de lignes de code et de commentaires sont produits. S'il s'agit en fait d'un nom de répertoire, celui-ci est parcouru à la recherche de fichiers pour effectuer autant de comptages.
+. Par défaut, le nombre de lignes de code et de commentaires sont produits.
+.IP "<répertoire> ..."
+Le
+.I répertoire
+est parcouru pour mesurer tous les fichiers qu'il contient.
 .IP "--diff <avant> <après>"
-Détermine l'effort minimal qui a été réalisé pour transformer le fichier
+Détermine l'effort minimal qui a été réalisé pour transformer
 .I <avant>
-en le fichier
+en
 .I <après>.
 Ces métriques sont proposées selon un modèle assez intuitif (voir plus loin). Pour préciser qu'un fichier n'existait pas, ou n'existe plus, on peut utiliser le mot-clef spécifique
 .B -nil-.
+Les deux arguments peuvent être soit des fichiers, soit des répertoires. Dans le cas de répertoires,
+.B codemetre
+cherchera à faire coïncider les noms de fichiers deux à deux, relativement à
+.I <avant>
+et
+.I <après>.
 .IP "--anal <fichier> ..."
 Produit pour chaque
 .I <fichier>
 en entrée un fichier suffixé
 .I .codemetre
 isolant chaque terme et en le qualifiant CODE ou COMMENTAIRE.
+.IP "--anal <répertoire> ..."
+Produit un fichier d'analyse pour chaque fichier du
+.I répertoire.
 .SH MODÈLE DIFFÉRENTIEL
-Il existe plusieurs modèles de comptage différentiel, chacun étant détaillé dans une section plus loin. Le modèle normal est le modèle par défaut.
-.IP "--normal"
+Il existe plusieurs modèles de comptage différentiel, chacun étant détaillé dans une section plus loin. Le modèle normal est le modèle par défaut. Le modèle utilisé est configurable à travers l'option "--model".
+.IP normal
 produit trois métriques fondamentales qui permettent d'en construire d'autre (comme l'effort par exemple)
-.IP "--effort"
+.IP effort
 détermine, en pourcentage de la taille du fichier, l'effort qui a été fourni entre les deux versions.
 À noter que l'option
 .B "--short"
@@ -72,9 +84,7 @@ dénombre les lignes de la nouvelle version du fichier.
 .IP C
 dénombre les lignes communes aux deux versions du fichier.
 .SH MODÈLE DIFFÉRENTIEL : EFFORT
-L'effort entre deux versions d'un fichier est définit comme le nombre de lignes nouvelles sur la taille du fichier. Si l'on prend la notation du modèle normal, cela correspond à (N-C)/N.
-.SH ANALYSE DE RÉPERTOIRES
-Lorsqu'un nom de répertoire est communiqué plutôt qu'un nom de fichier, celui-ci est parcouru en profondeur pour en déterminer tous les fichiers. En mode différentiel, deux fichiers sont comparables s'ils sont à la même position relativement à la racine.
+L'effort entre deux versions d'un fichier est définit comme le nombre de lignes nouvelles sur la taille du fichier. Si l'on prend la notation du modèle normal, cela correspond à (N-C)/N. Par extension, un fichier supprimé correspond à un effort de 0%.
 .SH DIAGNOSTICS
 Si malgré le forçage d'un choix de langage, l'analyse d'un fichier venait à échouer, un message détaillé est produit en indiquant l'endroit.
 .SH TOLÉRANCE PAR RAPPORT AUX NORMES OFFICIELLES
@@ -84,7 +94,7 @@ théoriquement, seuls les caractères ASCII 7 bits sont autorisés pour les cons
 tolère tous les caractères 8 bits.
 .SH BOGUES ET LIMITATIONS
 .B codemetre
-ne fait pas l'expansion des macro-commandes du C++, même si ceci ne modifierait pas les mesures produites. En effet, certaines macros-commandes peuvent être définies ailleurs que dans le fichier sous analyse, et
+ne fait pas l'expansion des macro-commandes du C/C++, même si ceci ne modifierait pas les mesures produites. En effet, certaines macros-commandes peuvent être définies ailleurs que dans le fichier sous analyse, et
 .B codemetre
 n'a pas connaissance de l'organisation du projet et des règles de visibilités entre répertoires.
 

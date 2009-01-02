@@ -84,11 +84,11 @@ feature
 			-- Production des métriques différentielles
 
 			if not erreur then
-				-- l'ordre des tests et l'utilisation de 'and then' est
+				-- l'ordre des tests et l'utilisation de 'or else' est
 				-- ici très important pour les performances de
 				-- l'application
 				if not option.resume
-					or else not nid.est_equivalent( but )
+					or else not sont_equivalents( nid, but )
 				 then
 					-- mesure
 
@@ -106,27 +106,37 @@ feature
 					std_output.put_string( analyseur.langage )
 					std_output.put_string( once ") " )
 
-						if option.total then
-							std_output.put_string( once "[total|" )
-						elseif option.code then
-							std_output.put_string( once "[code|" )
-						else -- if option.commentaire then
-							std_output.put_string( once "[comment|" )
-						end
-
-						if nid = void then
-							std_output.put_string( once "ø" )
-						else
-							std_output.put_string( nom_nid )
-						end
-
-						std_output.put_string( once "] " )
-
-						metrique.afficher( std_output )
-
-						std_output.put_new_line
+					if option.total then
+						std_output.put_string( once "[total|" )
+					elseif option.code then
+						std_output.put_string( once "[code|" )
+					else -- if option.commentaire then
+						std_output.put_string( once "[comment|" )
 					end
+
+					if nid = void then
+						std_output.put_string( once "ø" )
+					else
+						std_output.put_string( nom_nid )
+					end
+
+					std_output.put_string( once "] " )
+
+					metrique.afficher( std_output )
+
+					std_output.put_new_line
+				end
 			end
 		end
 
+feature {}
+
+	sont_equivalents( p_a, p_b : LUAT_LISTAGE ) : BOOLEAN is
+		do
+			if p_a = void then
+				result := p_b = void
+			elseif p_b /= void then
+				result := p_a.est_equivalent( p_b )
+			end
+		end
 end

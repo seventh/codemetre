@@ -1,3 +1,4 @@
+* Trouver un moyen d'avoir une forme unique pour les noms de répertoire, afin de corriger un comportement non ergonomique lors de la comparaison de répertoires
 * Étudier la possibilité de coupler --tree à un SCM, et de donner des révisions plutôt que des noms de fichier par exemple.
 
 Mode analytique :

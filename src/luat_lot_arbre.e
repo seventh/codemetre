@@ -28,9 +28,22 @@ feature {}
 		local
 			usine : PROCESS_FACTORY
 			processus : PROCESS
+			i : INTEGER
 		do
 			processus := usine.create_process
-			lg_racine := p_racine.count
+
+			-- ATTENTION : il faudrait en toute rigueur réduire le
+			-- chemin à un nom unique. Faute de quoi, "rep", "rep/" et
+			-- "./rep" ne sont pas équivalents
+
+			from i := p_racine.upper
+			variant i - p_racine.lower
+			until i < p_racine.lower
+				or else p_racine.item( i ) /= '/'
+			loop
+				i := i - 1
+			end
+			lg_racine := i - p_racine.lower + 1
 
 			-- attention, il se peut qu'un bogue soit ici introduit, du
 			-- fait que la relation d'ordre imposée par 'sort' ne soit

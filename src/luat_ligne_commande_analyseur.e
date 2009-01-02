@@ -32,6 +32,8 @@ feature {}
 feature {}
 
 	etat_lecture_options : INTEGER is unique
+	etat_choix_langage : INTEGER is unique
+	etat_choix_modele : INTEGER is unique
 	etat_coherence_options : INTEGER is unique
 	etat_commande_analyse : INTEGER is unique
 	etat_commande_comparaison : INTEGER is unique
@@ -84,36 +86,9 @@ feature
 
 						-- langage
 
-					when "--ada" then
+					when "--lang" then
 						if analyseur = void then
-							analyseur := analyseur_ada
-						else
-							afficher_erreur( once "language is enforced more than once" )
-							etat := etat_final
-						end
-						lexeme := lexeme + 1
-
-					when "--c" then
-						if analyseur = void then
-							analyseur := analyseur_c
-						else
-							afficher_erreur( once "language is enforced more than once" )
-							etat := etat_final
-						end
-						lexeme := lexeme + 1
-
-					when "--c++" then
-						if analyseur = void then
-							analyseur := analyseur_c_plus_plus
-						else
-							afficher_erreur( once "language is enforced more than once" )
-							etat := etat_final
-						end
-						lexeme := lexeme + 1
-
-					when "--eiffel" then
-						if analyseur = void then
-							analyseur := analyseur_eiffel
+							etat := etat_choix_langage
 						else
 							afficher_erreur( once "language is enforced more than once" )
 							etat := etat_final
@@ -160,23 +135,12 @@ feature
 
 						-- modèle différentiel
 
-					when "--effort" then
+					when "--model" then
 						if modele_precise then
 							afficher_erreur( once "too many diff models" )
 							etat := etat_final
 						else
-							modele_precise := true
-							usine_metrique.met_modele( create {LUAT_METRIQUE_EFFORT}.fabriquer )
-						end
-						lexeme := lexeme + 1
-
-					when "--normal" then
-						if modele_precise then
-							afficher_erreur( once "too many diff models" )
-							etat := etat_final
-						else
-							modele_precise := true
-							usine_metrique.met_modele( create {LUAT_METRIQUE_NORMALE}.fabriquer )
+							etat := etat_choix_modele
 						end
 						lexeme := lexeme + 1
 
@@ -218,6 +182,49 @@ feature
 					else
 						etat := etat_coherence_options
 					end
+
+				when etat_choix_langage then
+					-- spécification du langage, indépendamment de ce qui
+					-- pourrait être déterminé automatiquement à partir
+					-- des extensions de fichier
+
+					inspect argument( lexeme )
+					when "ada" then
+						analyseur := analyseur_ada
+						etat := etat_lecture_options
+					when "c" then
+						analyseur := analyseur_c
+						etat := etat_lecture_options
+					when "c++" then
+						analyseur := analyseur_c_plus_plus
+						etat := etat_lecture_options
+					when "eiffel" then
+						analyseur := analyseur_eiffel
+						etat := etat_lecture_options
+					else
+						afficher_erreur( once "unknown language" )
+						etat := etat_final
+					end
+					lexeme := lexeme + 1
+
+				when etat_choix_modele then
+					-- spécification d'un autre modèle de mesure
+					-- différentielle que celui par défaut
+
+					inspect argument( lexeme )
+					when "effort" then
+						modele_precise := true
+						usine_metrique.met_modele( create {LUAT_METRIQUE_EFFORT}.fabriquer )
+						etat := etat_lecture_options
+					when "normal" then
+						modele_precise := true
+						usine_metrique.met_modele( create {LUAT_METRIQUE_NORMALE}.fabriquer )
+						etat := etat_lecture_options
+					else
+						afficher_erreur( once "unknown diff model" )
+						etat := etat_final
+					end
+					lexeme := lexeme + 1
 
 				when etat_coherence_options then
 					-- sélection du spectre de l'analyse en fonction du
@@ -365,7 +372,7 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once " codemetre [--ada|--c|--c++|--eiffel] [--code] [--comment] [--total]%N[--short] [--batch] [--anal|--diff] [--normal|--effort] [--]%N" )
+			std_error.put_string( once " codemetre [--code] [--comment] [--total] [--lang <>] [--batch]%N%T[--anal|--diff [--short] [--model <>]] [--] " )
 			std_error.put_string( traduire( once "FILE|DIRECTORY" ) )
 			std_error.put_string( once "..." )
 			std_error.put_new_line

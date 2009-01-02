@@ -141,6 +141,8 @@ feature
 			-- vrai si et seulement si les deux instances ont le même
 			-- contenu. La comparaison ligne à ligne est effectuée avec
 			-- '='
+		require
+			autre_valide : p_autre /= void
 		do
 			result := contenu.is_equal( p_autre.contenu )
 		end

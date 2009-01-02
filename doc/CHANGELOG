@@ -1,3 +1,10 @@
+*** v0.18.4
+
+ - Correction d'un bogue lors de l'utilisation de l'option "--short"
+ - Ergonomie : les '/' terminants les noms de répertoire sont désormais
+ supprimés, ce qui permet de comparer par exemple "toto" et "tata/"
+ - Regroupements de certaines options ; apparition de "--lang" et "--model"
+
 *** v0.18.3
 
  - Reconnaissance des extensions ".hh", ".tt" et ".ii" comme identifiant des
