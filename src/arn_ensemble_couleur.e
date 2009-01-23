@@ -24,4 +24,16 @@ feature
 			create result
 		end
 
+feature
+
+	contient( p_couleur : ARN_COULEUR ) : BOOLEAN is
+			-- vrai si et seulement si la couleur fait partie de
+			-- l'ensemble
+		do
+			result := p_couleur = rouge
+				or p_couleur = noir
+		ensure
+			definition : result = ( p_couleur = rouge or p_couleur = noir )
+		end
+
 end

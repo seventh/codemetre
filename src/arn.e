@@ -14,9 +14,9 @@ class
 
 feature {ARN}
 
-	usine_couleur : ARN_ENUMERATION_COULEUR is
+	couleurs : ARN_ENSEMBLE_COULEUR is
 		once
-			create result.fabriquer
+			create result
 		end
 
 end

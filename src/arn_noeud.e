@@ -32,7 +32,7 @@ feature {}
 			initialiser
 		ensure
 			est_attache
-			couleur = usine_couleur.rouge
+			couleur = couleurs.rouge
 			pere = arbre.nil
 			fils_gauche = arbre.nil
 			fils_droite = arbre.nil
@@ -48,7 +48,7 @@ feature {}
 			initialiser_nil
 		ensure
 			est_attache
-			couleur = usine_couleur.noir
+			couleur = couleurs.noir
 			pere = current
 			fils_gauche = current
 			fils_droite = current
@@ -95,12 +95,12 @@ feature {ARN_ARBRE}
 	initialiser is
 			-- initialise le noeud comme un noeud quelconque de l'arbre
 		do
-			couleur := usine_couleur.rouge
+			couleur := couleurs.rouge
 			pere := arbre.nil
 			fils_gauche := arbre.nil
 			fils_droite := arbre.nil
 		ensure
-			couleur = usine_couleur.rouge
+			couleur = couleurs.rouge
 			pere = arbre.nil
 			fils_gauche = arbre.nil
 			fils_droite = arbre.nil
@@ -109,12 +109,12 @@ feature {ARN_ARBRE}
 	initialiser_nil is
 			-- initialise le noeud comme le noeud spécial 'nil'
 		do
-			couleur := usine_couleur.noir
+			couleur := couleurs.noir
 			pere := current
 			fils_gauche := current
 			fils_droite := current
 		ensure
-			couleur = usine_couleur.noir
+			couleur = couleurs.noir
 			pere = current
 			fils_gauche = current
 			fils_droite = current
@@ -128,14 +128,14 @@ feature {ARN_ARBRE}
 			est_attache
 		attribute
 		ensure
-			usine_couleur.contient( result )
+			couleurs.contient( result )
 		end
 
 	met_couleur( p_couleur : ARN_COULEUR ) is
 			-- modifie la couleur du noeud
 		require
 			est_attache
-			couleur_valide : usine_couleur.contient( p_couleur )
+			couleur_valide : couleurs.contient( p_couleur )
 		do
 			couleur := p_couleur
 		ensure
@@ -235,10 +235,8 @@ feature {ARN}
 		require
 			appel_judicieux : current /= arbre.nil
 		do
-			from
-				result := current
-			until
-				result.fils_gauche = arbre.nil
+			from result := current
+			until result.fils_gauche = arbre.nil
 			loop
 				result := result.fils_gauche
 			end
@@ -252,10 +250,8 @@ feature {ARN}
 		require
 			appel_judicieux : current /= arbre.nil
 		do
-			from
-				result := current
-			until
-				result.fils_droite = arbre.nil
+			from result := current
+			until result.fils_droite = arbre.nil
 			loop
 				result := result.fils_droite
 			end
@@ -277,8 +273,8 @@ feature {ARN}
 				from
 					noeud := current
 					result := pere
-				until
-					result = arbre.nil or else noeud /= result.fils_gauche
+				until result = arbre.nil
+					or else noeud /= result.fils_gauche
 				loop
 					noeud := result
 					result := noeud.pere
@@ -303,8 +299,8 @@ feature {ARN}
 				from
 					noeud := current
 					result := pere
-				until
-					result = arbre.nil or else noeud /= result.fils_droite
+				until result = arbre.nil
+					or else noeud /= result.fils_droite
 				loop
 					noeud := result
 					result := noeud.pere

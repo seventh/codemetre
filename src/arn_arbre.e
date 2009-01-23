@@ -192,6 +192,8 @@ feature {}
 
 	rotation_droite( p_noeud : ARN_NOEUD[ E ] ) is
 			-- effectue l'opération de rotation droite sur le noeud
+		require
+			p_noeud.fils_gauche /= nil
 		local
 			autre : ARN_NOEUD[ E ]
 		do
@@ -217,6 +219,8 @@ feature {}
 
 	rotation_gauche( p_noeud : ARN_NOEUD[ E ] ) is
 			-- effectue l'opération de rotation gauche sur le noeud
+		require
+			p_noeud.fils_droite /= nil
 		local
 			autre : ARN_NOEUD[ E ]
 		do
@@ -239,6 +243,8 @@ feature {}
 			autre.met_fils_gauche( p_noeud )
 			p_noeud.met_pere( autre )
 		end
+
+feature {}
 
 	i_inserer( p_noeud : ARN_NOEUD[ E ] ) is
 		local
@@ -275,7 +281,7 @@ feature {}
 
 			until
 
-				z.pere.couleur /= usine_couleur.rouge
+				z.pere.couleur /= couleurs.rouge
 
 			loop
 
@@ -284,41 +290,41 @@ feature {}
 
 				if z.pere = z.pere.pere.fils_gauche then
 					y := z.pere.pere.fils_droite
-					if y.couleur = usine_couleur.rouge then
-						z.pere.met_couleur( usine_couleur.noir )
-						y.met_couleur( usine_couleur.noir )
-						z.pere.pere.met_couleur( usine_couleur.rouge )
+					if y.couleur = couleurs.rouge then
+						z.pere.met_couleur( couleurs.noir )
+						y.met_couleur( couleurs.noir )
+						z.pere.pere.met_couleur( couleurs.rouge )
 						z := z.pere.pere
 					else
 						if z = z.pere.fils_droite then
 							z := z.pere
 							rotation_gauche( z )
 						end
-						z.pere.met_couleur( usine_couleur.noir )
-						z.pere.pere.met_couleur( usine_couleur.rouge )
+						z.pere.met_couleur( couleurs.noir )
+						z.pere.pere.met_couleur( couleurs.rouge )
 						rotation_droite( z.pere.pere )
 					end
 				else
 					y := z.pere.pere.fils_gauche
-					if y.couleur = usine_couleur.rouge then
-						z.pere.met_couleur( usine_couleur.noir )
-						y.met_couleur( usine_couleur.noir )
-						z.pere.pere.met_couleur( usine_couleur.rouge )
+					if y.couleur = couleurs.rouge then
+						z.pere.met_couleur( couleurs.noir )
+						y.met_couleur( couleurs.noir )
+						z.pere.pere.met_couleur( couleurs.rouge )
 						z := z.pere.pere
 					else
 						if z = z.pere.fils_gauche then
 							z := z.pere
 							rotation_droite( z )
 						end
-						z.pere.met_couleur( usine_couleur.noir )
-						z.pere.pere.met_couleur( usine_couleur.rouge )
+						z.pere.met_couleur( couleurs.noir )
+						z.pere.pere.met_couleur( couleurs.rouge )
 						rotation_gauche( z.pere.pere )
 					end
 				end
 
 			end
 
-			racine.met_couleur( usine_couleur.noir )
+			racine.met_couleur( couleurs.noir )
 		end
 
 	i_retirer( p_noeud : ARN_NOEUD[ E ] ) is
@@ -367,84 +373,91 @@ feature {}
 			end
 
 			-- 2 - si la suppression de y provoque un changement de la
-			-- hauteur rouge de l'arbre, on rééquilibre l'arbre
+			-- hauteur noire de l'arbre, on rééquilibre l'arbre
 
-			if y.couleur = usine_couleur.noir then
+			if y.couleur = couleurs.noir then
 				from
-				until
-					x = racine
-						or else x.couleur /= usine_couleur.noir
+				until	x = racine
+					or x.couleur /= couleurs.noir
 				loop
 					if x = x.pere.fils_gauche then
 						z := x.pere.fils_droite
-						if z.couleur = usine_couleur.rouge then
-							z.met_couleur( usine_couleur.noir )
-							x.pere.met_couleur( usine_couleur.rouge )
+						if z.couleur = couleurs.rouge then
+							z.met_couleur( couleurs.noir )
+							x.pere.met_couleur( couleurs.rouge )
 							rotation_gauche( x.pere )
 							z := x.pere.fils_droite
 						end
-						if z.fils_gauche.couleur = usine_couleur.noir
-							and then z.fils_droite.couleur = usine_couleur.noir
+						if z.fils_gauche.couleur = couleurs.noir
+							and z.fils_droite.couleur = couleurs.noir
 						 then
-							z.met_couleur( usine_couleur.rouge )
+							z.met_couleur( couleurs.rouge )
 							x := x.pere
 						else
-							if z.fils_droite.couleur = usine_couleur.noir then
-								z.fils_gauche.met_couleur( usine_couleur.noir )
-								z.met_couleur( usine_couleur.rouge )
+							if z.fils_droite.couleur = couleurs.noir then
+								z.fils_gauche.met_couleur( couleurs.noir )
+								z.met_couleur( couleurs.rouge )
 								rotation_droite( z )
 								z := x.pere.fils_droite
 							end
 							z.met_couleur( x.pere.couleur )
-							x.pere.met_couleur( usine_couleur.noir )
-							z.fils_droite.met_couleur( usine_couleur.noir )
+							x.pere.met_couleur( couleurs.noir )
+							z.fils_droite.met_couleur( couleurs.noir )
 							rotation_gauche( x.pere )
 							x := racine
 						end
 					else
 						z := x.pere.fils_gauche
-						if z.couleur = usine_couleur.rouge then
-							z.met_couleur( usine_couleur.noir )
-							x.pere.met_couleur( usine_couleur.rouge )
+						if z.couleur = couleurs.rouge then
+							z.met_couleur( couleurs.noir )
+							x.pere.met_couleur( couleurs.rouge )
 							rotation_droite( x.pere )
 							z := x.pere.fils_gauche
 						end
-						if z.fils_droite.couleur = usine_couleur.noir
-							and then z.fils_gauche.couleur = usine_couleur.noir
+						if z.fils_gauche.couleur = couleurs.noir
+							and z.fils_droite.couleur = couleurs.noir
 						 then
-							z.met_couleur( usine_couleur.rouge )
+							z.met_couleur( couleurs.rouge )
 							x := x.pere
 						else
-							if z.fils_gauche.couleur = usine_couleur.noir then
-								z.fils_droite.met_couleur( usine_couleur.noir )
-								z.met_couleur( usine_couleur.rouge )
+							if z.fils_gauche.couleur = couleurs.noir then
+								z.fils_droite.met_couleur( couleurs.noir )
+								z.met_couleur( couleurs.rouge )
 								rotation_gauche( z )
 								z := x.pere.fils_gauche
 							end
 							z.met_couleur( x.pere.couleur )
-							x.pere.met_couleur( usine_couleur.noir )
-							z.fils_droite.met_couleur( usine_couleur.noir )
+							x.pere.met_couleur( couleurs.noir )
+							z.fils_gauche.met_couleur( couleurs.noir )
 							rotation_droite( x.pere )
 							x := racine
 						end
 					end
 				end
-				x.met_couleur( usine_couleur.noir )
+				x.met_couleur( couleurs.noir )
 			end
 		end
 
 	i_trouver( p_valeur : E ) : ARN_NOEUD[ E ] is
+		local
+			comparaison : INTEGER
+			fin : BOOLEAN
 		do
-			from
-				result := racine
-			until
-				result = nil
-					or else ordre.egal( p_valeur, result.etiquette )
+			from result := racine
+			until fin
 			loop
-				if ordre.inferieur_strict( p_valeur, result.etiquette ) then
-					result := result.fils_gauche
+				if result = nil then
+					fin := true
 				else
-					result := result.fils_droite
+					comparaison := ordre.trichotomie( p_valeur, result.etiquette )
+					inspect comparaison
+					when -1 then
+						result := result.fils_gauche
+					when 0 then
+						fin := true
+					when +1 then
+						result := result.fils_droite
+					end
 				end
 			end
 		ensure
@@ -541,7 +554,7 @@ feature {ARN_ITERATEUR} -- gestion des itérateurs
 		local
 			position : INTEGER
 		do
-			position := pointeurs.fast_index_of( p_pointeur, pointeurs.lower )
+			position := pointeurs.fast_first_index_of( p_pointeur )
 			pointeurs.put( pointeurs.last, position )
 			pointeurs.remove_last
 		ensure
@@ -586,6 +599,107 @@ feature {ARN_ITERATEUR} -- gestion des itérateurs
 					pointeurs.item( position ).met_noeud( p_destination )
 				end
 				position := position + 1
+			end
+		end
+
+feature {}
+
+	invariant_est_verifie : BOOLEAN is
+			-- vrai si et seulement si l'arbre respecte les quatre
+			-- caractéristiques des arbres rouges et noir :
+			-- * chaque noeud est soit rouge, soit noir
+			-- * la racine et nil sont noirs
+			-- * un noeud rouge a deux enfants noirs
+			-- * tous les chemins des feuilles à la racine comportent le
+			-- même nombre de noeuds noirs
+			-- De plus, on vérifie que le nombre d'éléments stocké est
+			-- le bon
+		local
+			calcul : TUPLE[ BOOLEAN, INTEGER ]
+		do
+			-- vérification de la couleur de la racine et de nil
+
+			result := racine.couleur = couleurs.noir
+				and nil.couleur = couleurs.noir
+
+			-- vérification de la couleur de chaque noeud
+
+			if result then
+				result := invariant_couleur_est_verifie( racine )
+			end
+
+			-- vérification de la hauteur noire de l'arbre
+
+			if result then
+				calcul := invariant_hauteur_est_verifie( racine )
+				result := calcul.item_1
+			end
+
+			-- vérification du nombre d'éléments de l'arbre
+
+			if result then
+				result := nb_element = nb_element_sous_arbre( racine )
+			end
+		end
+
+	invariant_couleur_est_verifie( p_noeud : ARN_NOEUD[ E ] ) : BOOLEAN is
+		do
+			result := couleurs.contient( p_noeud.couleur )
+
+			-- élimination du cas particulier de nil
+
+			if p_noeud /= nil then
+
+				-- vérification de la propriété : un noeud rouge a deux
+				-- enfants noirs
+
+				if result
+					and p_noeud.couleur = couleurs.rouge
+				 then
+					result := p_noeud.fils_gauche.couleur = couleurs.noir
+						and p_noeud.fils_droite.couleur = couleurs.noir
+				end
+
+				-- itération sur chaque fils
+
+				if result then
+					result := invariant_couleur_est_verifie( p_noeud.fils_gauche )
+				end
+				if result then
+					result := invariant_couleur_est_verifie( p_noeud.fils_droite )
+				end
+			end
+		end
+
+	invariant_hauteur_est_verifie( p_noeud : ARN_NOEUD[ E ] ) : TUPLE[ BOOLEAN, INTEGER ] is
+		local
+			h_gauche, h_droite : TUPLE[ BOOLEAN, INTEGER ]
+			participation : INTEGER
+		do
+			participation := ( p_noeud.couleur = couleurs.noir ).to_integer
+
+			if p_noeud = nil then
+				result := [ true, participation ]
+			else
+				h_gauche := invariant_hauteur_est_verifie( p_noeud.fils_gauche )
+				h_droite := invariant_hauteur_est_verifie( p_noeud.fils_droite )
+				if h_gauche.item_1 = false
+					or h_droite.item_1 = false
+					or h_gauche.item_2 /= h_droite.item_2
+				 then
+					result := [ false, (0).to_integer_32 ]
+				else
+					result := [ true, participation + h_gauche.item_2 ]
+				end
+			end
+		end
+
+	nb_element_sous_arbre( p_noeud : ARN_NOEUD[ E ] ) : INTEGER is
+		do
+			if p_noeud /= nil then
+				result := 1
+					+ nb_element_sous_arbre( p_noeud.fils_gauche )
+					+ nb_element_sous_arbre( p_noeud.fils_droite )
 			end
 		end
 

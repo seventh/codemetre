@@ -29,6 +29,7 @@ feature {}
 			usine : PROCESS_FACTORY
 			processus : PROCESS
 			i : INTEGER
+			tri : COLLECTION_SORTER[ STRING ]
 		do
 			processus := usine.create_process
 
@@ -45,16 +46,9 @@ feature {}
 			end
 			lg_racine := i - p_racine.lower + 1
 
-			-- attention, il se peut qu'un bogue soit ici introduit, du
-			-- fait que la relation d'ordre imposée par 'sort' ne soit
-			-- pas la même que celle utilisée en interne lors de la
-			-- comparaison lexicographique de chaînes de caractères
+			-- récupération des fichiers à travers la commande 'find'
 
-			if p_est_trie then
-				processus.execute_command_line( "find " + p_racine + " -type f | sort", true )
-			else
-				processus.execute_command_line( "find " + p_racine + " -type f", true )
-			end
+			processus.execute_command_line( "find " + p_racine + " -type f", true )
 
 			-- comme il est très difficile de déterminer les échecs du
 			-- processus précédent, on préfère charger en mémoire le
@@ -68,6 +62,11 @@ feature {}
 				processus.output.read_line
 			end
 			ligne := fichiers.lower - 1
+			if p_est_trie then
+				tri.sort( fichiers )
+			end
+
+			-- fin de la commande système
 
 			processus.wait
 			if processus.status /= 0 then
