@@ -11,6 +11,16 @@ deferred class
 		-- Variables globales au projet
 		--
 
+feature {LUAT_GLOBAL}
+
+	configuration : LUAT_CONFIGURATION is
+			-- ensemble des variables de configuration utilisateur
+		once
+			create result.fabriquer
+			result.initialiser
+			result.lire
+		end
+
 feature
 
 	usine_metrique : LUAT_FABRIQUE_METRIQUE is
@@ -27,6 +37,15 @@ feature
 		do
 			result := traducteur.traduire( p_message )
 		end
+
+feature
+
+	version_majeure : STRING is "v0.19.0"
+			-- identifiant de la branche officielle
+
+	version_mineure : STRING is ""
+			-- identifiant de la branche dédiée (par rapport à la
+			-- branche officielle)
 
 feature {}
 

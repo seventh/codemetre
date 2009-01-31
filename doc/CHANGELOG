@@ -1,3 +1,13 @@
+*** v0.19.0
+
+ - Mise-en-place d'un fichier de configuration utilisateur
+ - Ajout de l'option "--config" pour produire la configuration courante
+ - Les extensions ".ii" et ".tt" ne sont plus associées au c++ par défaut
+
+*** v0.18.5
+
+ - Les arborescences n'étaient parfois pas complètement apariées.
+
 *** v0.18.4
 
  - Correction d'un bogue lors de l'utilisation de l'option "--short"

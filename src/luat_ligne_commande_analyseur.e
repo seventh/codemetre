@@ -38,6 +38,7 @@ feature {}
 	etat_commande_analyse : INTEGER is unique
 	etat_commande_comparaison : INTEGER is unique
 	etat_commande_unitaire : INTEGER is unique
+	etat_configuration : INTEGER is unique
 	etat_final : INTEGER is unique
 
 	mode_indetermine : INTEGER is unique
@@ -52,7 +53,6 @@ feature
 			-- les commandes en conséquences
 		local
 			lexeme, etat, mode : INTEGER
-			analyseur : LUAT_ANALYSEUR
 			option : LUAT_OPTION
 			avant, apres : STRING
 			modele_precise : BOOLEAN
@@ -84,10 +84,20 @@ feature
 
 					inspect argument( lexeme )
 
+						-- configuration
+
+					when "--config" then
+						if lexeme = 1 then
+							etat := etat_configuration
+						else
+							afficher_erreur( once "cannot both show config and measure files" )
+							etat := etat_final
+						end
+
 						-- langage
 
 					when "--lang" then
-						if analyseur = void then
+						if not configuration.mode_force then
 							etat := etat_choix_langage
 						else
 							afficher_erreur( once "language is enforced more than once" )
@@ -190,16 +200,16 @@ feature
 
 					inspect argument( lexeme )
 					when "ada" then
-						analyseur := analyseur_ada
+						configuration.forcer( argument( lexeme ) )
 						etat := etat_lecture_options
 					when "c" then
-						analyseur := analyseur_c
+						configuration.forcer( argument( lexeme ) )
 						etat := etat_lecture_options
 					when "c++" then
-						analyseur := analyseur_c_plus_plus
+						configuration.forcer( argument( lexeme ) )
 						etat := etat_lecture_options
 					when "eiffel" then
-						analyseur := analyseur_eiffel
+						configuration.forcer( argument( lexeme ) )
 						etat := etat_lecture_options
 					else
 						afficher_erreur( once "unknown language" )
@@ -285,12 +295,12 @@ feature
 						if lot_active then
 							afficher_erreur( once "batch mode is not compatible with directory as argument" )
 						else
-							produire_arbre_commande_analyse( analyseur, argument( lexeme ), option )
+							produire_arbre_commande_analyse( argument( lexeme ), option )
 						end
 					elseif lot_active then
-						produire_liste_commande_analyse( analyseur, argument( lexeme ), option )
+						produire_liste_commande_analyse( argument( lexeme ), option )
 					else
-						produire_commande_analyse( analyseur, argument( lexeme ), option )
+						produire_commande_analyse( argument( lexeme ), option )
 					end
 					lexeme := lexeme + 1
 
@@ -322,12 +332,12 @@ feature
 								if lot_active then
 									afficher_erreur( once "batch mode is not compatible with directory as argument" )
 								else
-									produire_arbre_commande_differentiel( analyseur, avant, apres, option )
+									produire_arbre_commande_differentiel( avant, apres, option )
 								end
 							elseif lot_active then
-								produire_lot_commande_differentiel( analyseur, avant, apres, option )
+								produire_lot_commande_differentiel( avant, apres, option )
 							else
-								produire_commande_differentiel( analyseur, avant, apres, option )
+								produire_commande_differentiel( avant, apres, option )
 							end
 						end
 					end
@@ -340,14 +350,20 @@ feature
 						if lot_active then
 							afficher_erreur( once "batch mode is not compatible with directory as argument" )
 						else
-							produire_arbre_commande_unitaire( analyseur, argument( lexeme ), option )
+							produire_arbre_commande_unitaire( argument( lexeme ), option )
 						end
 					elseif lot_active then
-						produire_liste_commande_unitaire( analyseur, argument( lexeme ), option )
+						produire_liste_commande_unitaire( argument( lexeme ), option )
 					else
-						produire_commande_unitaire( analyseur, argument( lexeme ), option )
+						produire_commande_unitaire( argument( lexeme ), option )
 					end
 					lexeme := lexeme + 1
+
+				when etat_configuration then
+					-- affichage de la configuration
+
+					commandes.add_last( create {LUAT_COMMANDE_CONFIGURATION}.fabriquer )
+					lexeme := argument_count + 1
 
 				else
 					debug
@@ -372,7 +388,9 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once " codemetre [--code] [--comment] [--total] [--lang <>] [--batch]%N%T[--anal|--diff [--short] [--model <>]] [--] " )
+			std_error.put_string( once " codemetre --config" )
+			std_error.put_new_line
+			std_error.put_string( once "%Tcodemetre [--code] [--comment] [--total] [--lang <>] [--batch]%N%T[--anal|--diff [--short] [--model <>]] [--] " )
 			std_error.put_string( traduire( once "FILE|DIRECTORY" ) )
 			std_error.put_string( once "..." )
 			std_error.put_new_line
@@ -388,7 +406,8 @@ feature {}
 	afficher_erreur( p_message : STRING ) is
 			-- produit sur la sortie d'erreur le message correspondant
 		do
-			std_error.put_string( traduire( once "Syntax error: " ) )
+			std_error.put_string( traduire( once "Syntax error" ) )
+			std_error.put_string( once ": " )
 			std_error.put_string( traduire( p_message ) )
 			std_error.put_new_line
 			std_error.put_new_line
@@ -449,8 +468,7 @@ feature {}
 
 feature {}
 
-	produire_arbre_commande_analyse( p_analyseur : LUAT_ANALYSEUR
-												p_racine : STRING
+	produire_arbre_commande_analyse( p_racine : STRING
 												p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes d'analyse à la liste de
 			-- commandes qu'il n'y a de fichiers sous la racine, sauf
@@ -462,12 +480,11 @@ feature {}
 			lot : LUAT_LOT
 		do
 			lot := ouvrir_arbre( p_racine, false )
-			produire_lot_commande_analyse( p_analyseur, lot, p_option )
+			produire_lot_commande_analyse( lot, p_option )
 			lot.clore
 		end
 
-	produire_liste_commande_analyse( p_analyseur : LUAT_ANALYSEUR
-												p_liste : STRING
+	produire_liste_commande_analyse( p_liste : STRING
 												p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes d'analyse à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans la liste,
@@ -479,12 +496,11 @@ feature {}
 			lot : LUAT_LOT
 		do
 			lot := ouvrir_liste( p_liste )
-			produire_lot_commande_analyse( p_analyseur, lot, p_option )
+			produire_lot_commande_analyse( lot, p_option )
 			lot.clore
 		end
 
-	produire_lot_commande_analyse( p_analyseur : LUAT_ANALYSEUR
-											 p_lot : LUAT_LOT
+	produire_lot_commande_analyse( p_lot : LUAT_LOT
 											 p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes d'analyse à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
@@ -500,14 +516,13 @@ feature {}
 			loop
 				nom_fichier := p_lot.entree
 				if nom_fichier /= void then
-					produire_commande_analyse( p_analyseur, nom_fichier, p_option )
+					produire_commande_analyse( nom_fichier, p_option )
 				end
 				p_lot.lire
 			end
 		end
 
-	produire_commande_analyse( p_analyseur : LUAT_ANALYSEUR
-										p_nom_fichier : STRING
+	produire_commande_analyse( p_nom_fichier : STRING
 										p_option : LUAT_OPTION ) is
 			-- ajoute une commande d'analyse à la liste des commandes, à
 			-- moins que le langage ne puisse être déterminé
@@ -518,11 +533,7 @@ feature {}
 			analyseur : LUAT_ANALYSEUR
 			commande : LUAT_COMMANDE_ANALYSE
 		do
-			if p_analyseur /= void then
-				analyseur := p_analyseur
-			else
-				analyseur := deviner_langage( p_nom_fichier )
-			end
+			analyseur := configuration.analyseur( p_nom_fichier )
 
 			if analyseur /= void then
 				create commande.fabriquer( analyseur, p_nom_fichier, p_option )
@@ -550,8 +561,7 @@ feature {}
 			domaine : result.in_range( -1, 1 )
 		end
 
-	produire_arbre_commande_differentiel( p_analyseur : LUAT_ANALYSEUR
-													  p_racine_avant, p_racine_apres : STRING
+	produire_arbre_commande_differentiel( p_racine_avant, p_racine_apres : STRING
 													  p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes de comparaison à la liste de
 			-- commandes qu'il n'y a de fichiers présents sous chacune
@@ -582,21 +592,20 @@ feature {}
 				ordre := comparer( avant, apres )
 				inspect ordre
 				when -1 then
-					produire_commande_differentiel( p_analyseur, lot_avant.entree, void, p_option )
+					produire_commande_differentiel( lot_avant.entree, void, p_option )
 					lot_avant.lire
 				when 0 then
-					produire_commande_differentiel( p_analyseur, lot_avant.entree, lot_apres.entree, p_option )
+					produire_commande_differentiel( lot_avant.entree, lot_apres.entree, p_option )
 					lot_avant.lire
 					lot_apres.lire
 				when 1 then
-					produire_commande_differentiel( p_analyseur, void, lot_apres.entree, p_option )
+					produire_commande_differentiel( void, lot_apres.entree, p_option )
 					lot_apres.lire
 				end
 			end
 		end
 
-	produire_lot_commande_differentiel( p_analyseur : LUAT_ANALYSEUR
-													p_lot_avant, p_lot_apres : STRING
+	produire_lot_commande_differentiel( p_lot_avant, p_lot_apres : STRING
 													p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes de comparaison à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
@@ -621,7 +630,7 @@ feature {}
 
 				-- les fichiers sont comparés un à un
 
-				produire_commande_differentiel( p_analyseur, avant, apres, p_option )
+				produire_commande_differentiel( avant, apres, p_option )
 
 				lot_avant.lire
 				lot_apres.lire
@@ -631,8 +640,7 @@ feature {}
 			lot_apres.clore
 		end
 
-	produire_commande_differentiel( p_analyseur : LUAT_ANALYSEUR
-											  p_avant, p_apres : STRING
+	produire_commande_differentiel( p_avant, p_apres : STRING
 											  p_option : LUAT_OPTION ) is
 			-- ajoute une commande de comparaison à la liste des
 			-- commandes, à moins que le langage ne puisse être
@@ -650,17 +658,13 @@ feature {}
 			else
 				-- détermination du langage si nécessaire
 
-				if p_analyseur /= void then
-					analyseur := p_analyseur
-				else
-					if p_apres /= void then
-						analyseur := deviner_langage( p_apres )
-					end
-					if analyseur = void
-						and p_avant /= void
-					 then
-						analyseur := deviner_langage( p_avant )
-					end
+				if p_apres /= void then
+					analyseur := configuration.analyseur( p_apres )
+				end
+				if analyseur = void
+					and p_avant /= void
+				 then
+					analyseur := configuration.analyseur( p_avant )
 				end
 
 				-- création de la commande de comparaison si un langage a
@@ -675,8 +679,7 @@ feature {}
 
 feature {}
 
-	produire_arbre_commande_unitaire( p_analyseur : LUAT_ANALYSEUR
-												 p_racine : STRING
+	produire_arbre_commande_unitaire( p_racine : STRING
 												 p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes de mesure à la liste de
 			-- commandes qu'il n'y a de fichiers sous racine, sauf pour
@@ -688,12 +691,11 @@ feature {}
 			lot : LUAT_LOT
 		do
 			lot := ouvrir_arbre( p_racine, false )
-			produire_lot_commande_unitaire( p_analyseur, lot, p_option )
+			produire_lot_commande_unitaire( lot, p_option )
 			lot.clore
 		end
 
-	produire_liste_commande_unitaire( p_analyseur : LUAT_ANALYSEUR
-												 p_liste : STRING
+	produire_liste_commande_unitaire( p_liste : STRING
 											  p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes de mesure à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans la liste,
@@ -705,12 +707,11 @@ feature {}
 			lot : LUAT_LOT
 		do
 			lot := ouvrir_liste( p_liste )
-			produire_lot_commande_unitaire( p_analyseur, lot, p_option )
+			produire_lot_commande_unitaire( lot, p_option )
 			lot.clore
 		end
 
-	produire_lot_commande_unitaire( p_analyseur : LUAT_ANALYSEUR
-											  p_lot : LUAT_LOT
+	produire_lot_commande_unitaire( p_lot : LUAT_LOT
 											  p_option : LUAT_OPTION ) is
 			-- ajoute autant de commandes de mesure à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
@@ -726,14 +727,13 @@ feature {}
 			loop
 				nom_fichier := p_lot.entree
 				if nom_fichier /= void then
-					produire_commande_unitaire( p_analyseur, nom_fichier, p_option )
+					produire_commande_unitaire( nom_fichier, p_option )
 				end
 				p_lot.lire
 			end
 		end
 
-	produire_commande_unitaire( p_analyseur : LUAT_ANALYSEUR
-										 p_nom_fichier : STRING
+	produire_commande_unitaire( p_nom_fichier : STRING
 										 p_option : LUAT_OPTION ) is
 			-- ajoute une commande de mesure à la liste des commandes, à
 			-- moins que le langage ne puisse être déterminé
@@ -744,73 +744,12 @@ feature {}
 			analyseur : LUAT_ANALYSEUR
 			commande : LUAT_COMMANDE_UNITAIRE
 		do
-			if p_analyseur /= void then
-				analyseur := p_analyseur
-			else
-				analyseur := deviner_langage( p_nom_fichier )
-			end
+			analyseur := configuration.analyseur( p_nom_fichier )
 
 			if analyseur /= void then
 				create commande.fabriquer( analyseur, p_nom_fichier, p_option )
 				commandes.add_last( commande )
 			end
-		end
-
-feature {}
-
-	deviner_langage( p_nom_fichier : STRING ) : LUAT_ANALYSEUR is
-			-- tente de fournir l'analyseur le plus à même de
-			-- correspondre en fonction de l'extension du fichier
-		require
-			nom_valide : p_nom_fichier /= void
-		local
-			suffixe : STRING
-			i : INTEGER
-		do
-			-- isolement du suffixe
-			i := p_nom_fichier.last_index_of( '.' )
-			check
-				( i + 1 ).in_range( p_nom_fichier.lower, p_nom_fichier.upper + 1 )
-			end
-			suffixe := p_nom_fichier.substring( i + 1, p_nom_fichier.upper )
-
-			-- détermination du langage à partir du dit suffixe
-			inspect suffixe
-			when "ads", "adb" then
-				result := analyseur_ada
-			when "h", "c" then
-				result := analyseur_c
-			when "hh", "hpp", "ii", "C", "cc", "cpp", "tt" then
-				result := analyseur_c_plus_plus
-			when "e" then
-				result := analyseur_eiffel
-			else
-				std_error.put_string( traduire( once "Error: extension of file %"" ) )
-				std_error.put_string( p_nom_fichier )
-				std_error.put_string( traduire( once "%" is unknown" ) )
-				std_error.put_new_line
-				std_error.flush
-			end
-		end
-
-	analyseur_ada : LUAT_ANALYSEUR_ADA is
-		once
-			create result.fabriquer
-		end
-
- 	analyseur_c : LUAT_ANALYSEUR_FAMILLE_C is
-		once
-			create result.fabriquer( once "C" )
-		end
-
- 	analyseur_c_plus_plus : LUAT_ANALYSEUR_FAMILLE_C is
-		once
-			create result.fabriquer( once "C++" )
-		end
-
-	analyseur_eiffel : LUAT_ANALYSEUR_EIFFEL is
-		once
-			create result.fabriquer
 		end
 
 end

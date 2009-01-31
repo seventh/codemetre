@@ -17,13 +17,13 @@ L'option "--batch" permet de spécifier un traitement par lots, c'est-à-dire qu
 .SH LANGAGES RECONNUS
 Si aucun langage n'est choisi grâce à l'option --lang, alors
 .B codemetre
-essaiera de déterminer celui-ci à partir de l'extension du fichier. Sinon, ce choix prévaut quelque soit l'extension du ou des fichiers à mesurer. Les langages reconnus actuellement sont :
+essaiera de déterminer celui-ci à partir de l'extension du fichier. Sinon, ce choix prévaut quelque soit l'extension du ou des fichiers à mesurer. La section "language" du fichier de configuration ${HOME}/.codemetrerc permet d'associer des suffixes supplémentaires aux langages déjà reconnus, voire de remplacer la configuration par défaut. Les langages reconnus actuellement sont :
 .IP ada
 Respecte le standard Ada95. Extensions ".ads" et ".adb".
 .IP c
 Respecte la norme C ISO/IEC 9899:1999. Extensions ".h" et ".c".
 .IP c++
-Respecte la norme C++ ISO/IEC 14882:2003. Extensions ".hh", ".hpp", ".C", ".cc", ".cpp", ".ii" et ".tt".
+Respecte la norme C++ ISO/IEC 14882:2003. Extensions ".hh", ".hpp", ".C", ".cc" et ".cpp".
 .IP eiffel
 Respecte le standard Eiffel tel que définit dans le livre "Eiffel, le langage" de B. Meyer paru chez InterEditions en 1994. Extension ".e".
 .SH SPECTRE DE L'ANALYSE
