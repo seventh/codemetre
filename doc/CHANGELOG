@@ -1,3 +1,9 @@
+*** v0.19.1
+
+ - Nettoyage systématique du cache en mode différentiel entre deux commandes de
+ mesure, améliorant de façon significative les performances (vitesse et mémoire)
+ lors de la comparaison de gros projets, comme le noyau Linux.
+
 *** v0.19.0
 
  - Mise-en-place d'un fichier de configuration utilisateur

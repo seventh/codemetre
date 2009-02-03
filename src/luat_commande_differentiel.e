@@ -127,6 +127,13 @@ feature
 					std_output.put_new_line
 				end
 			end
+
+			-- Réinitialisation de l'analyseur pour limiter la
+			-- consommation de mémoire, et potentiellement améliorer la
+			-- vitesse : moins de symboles implique plus de facilité à
+			-- trouver les doublons
+
+			analyseur.reinitialiser
 		end
 
 feature {}
