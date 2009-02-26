@@ -1,0 +1,470 @@
+# CodeMetre
+# Copyright (C) 2005-2009
+# This file is distributed under the same license as the codemetre package.
+# Guillaume Lemaître <guillaume.lemaitre@gmail.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-01-31 21:23+0100\n"
+"PO-Revision-Date: 2009-01-31 21:42+0100\n"
+"Last-Translator: Guillaume Lemaître <guillaume.lemaitre@gmail.com>\n"
+"Language-Team: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: dang_analyseur.e:114
+#: dang_analyseur.e:190
+#, c-format
+msgid "unauthorized character"
+msgstr "caractère non autorisé"
+
+#: dang_analyseur.e:125
+#, c-format
+msgid "wrong section name"
+msgstr "nom de section incorrect"
+
+#: dang_analyseur.e:144
+#, c-format
+msgid "unassociated variable"
+msgstr "variable sans valeur"
+
+#: dang_analyseur.e:157
+#: dang_analyseur.e:166
+#: dang_analyseur.e:174
+#: luat_analyseur_eiffel.e:680
+#, c-format
+msgid "unknown operator"
+msgstr "opérateur inconnu"
+
+#: dang_analyseur.e:187
+#, c-format
+msgid "no value associated to variable"
+msgstr "aucune valeur n'est associée à la variable"
+
+#: luat_analyseur_ada.e:81
+#, c-format
+msgid "incomplete identifier"
+msgstr "identifiant incomplet"
+
+#: luat_analyseur_ada.e:110
+#, c-format
+msgid "incomplete integer constant"
+msgstr "constante littérale entière incomplète"
+
+#: luat_analyseur_ada.e:119
+#, c-format
+msgid "forbidden character in based integer constant"
+msgstr "caractère interdit dans constante littérale entière basée"
+
+#: luat_analyseur_ada.e:139
+#, c-format
+msgid "wrong value in based integer constant"
+msgstr "valeur incorrecte dans constante littérale numérique basée"
+
+#: luat_analyseur_ada.e:150
+#: luat_analyseur_ada.e:167
+#, c-format
+msgid "forbidden character in decimal part of based integer constant"
+msgstr "caractère interdit dans partie décimale de constante littérale numérique basée"
+
+#: luat_analyseur_ada.e:193
+#, c-format
+msgid "incomplete exponent in integer constant"
+msgstr "exposant incomplet dans constante littérale numérique"
+
+#: luat_analyseur_ada.e:214
+#, c-format
+msgid "wrong exponent in integer constant"
+msgstr "exposant incorrect dans constante littérale numérique"
+
+#: luat_analyseur_ada.e:231
+#, c-format
+msgid "wrong decimal part in integer constant"
+msgstr "partie décimale incorrecte dans constante littérale numérique"
+
+#: luat_analyseur_ada.e:257
+#, c-format
+msgid "forbidden character in decimal part of integer constant"
+msgstr "caractère interdit dans partie décimale de constante littérale numérique"
+
+#: luat_analyseur_ada.e:295
+#: luat_analyseur_eiffel.e:222
+#: luat_analyseur_famille_c.e:296
+#: luat_analyseur_famille_c.e:949
+#, c-format
+msgid "incomplete string constant"
+msgstr "constante littérale chaîne incomplète"
+
+#: luat_analyseur_ada.e:320
+#, c-format
+msgid "forbidden character in character constant"
+msgstr "caractère interdit dans constante littérale caractère"
+
+#: luat_analyseur_ada.e:427
+#: luat_analyseur_eiffel.e:753
+#: luat_analyseur_famille_c.e:734
+#, c-format
+msgid "lexer is buggy!"
+msgstr "bogue dans l'analyseur !"
+
+#: luat_analyseur_ada.e:552
+#: luat_analyseur_eiffel.e:892
+#, c-format
+msgid "forbidden character"
+msgstr "caractère non autorisé"
+
+#: luat_analyseur.e:157
+#: luat_analyseur.e:168
+#: luat_commande_analyse.e:76
+#, c-format
+msgid "*** Error: file \""
+msgstr "*** Erreur : le fichier \""
+
+#: luat_analyseur.e:159
+#, c-format
+msgid "\" is unreachable.\n"
+msgstr "\" n'est pas accessible.\n"
+
+#: luat_analyseur.e:170
+#, c-format
+msgid "\" is not written in "
+msgstr "\" n'est pas du langage "
+
+#: luat_analyseur.e:285
+#, c-format
+msgid "line "
+msgstr "ligne "
+
+#: luat_analyseur_eiffel.e:161
+#: luat_analyseur_eiffel.e:171
+#, c-format
+msgid "incomplete real constant"
+msgstr "nombre réel incomplet"
+
+#: luat_analyseur_eiffel.e:199
+#: luat_analyseur_eiffel.e:206
+#: luat_analyseur_famille_c.e:509
+#: luat_analyseur_famille_c.e:928
+#, c-format
+msgid "incomplete character constant"
+msgstr "constante littérale caractère incomplète"
+
+#: luat_analyseur_eiffel.e:258
+#: luat_analyseur_eiffel.e:395
+#, c-format
+msgid "unexpected end-of-line in string constant"
+msgstr "saut-de-ligne inattendu dans littéral chaîne"
+
+#: luat_analyseur_eiffel.e:372
+#, c-format
+msgid "unknown special character"
+msgstr "caractère spécial non reconnu"
+
+#: luat_analyseur_eiffel.e:384
+#: luat_analyseur_eiffel.e:397
+#, c-format
+msgid "unknown character after '%' mark"
+msgstr "caractère non reconnu après '%%'"
+
+#: luat_analyseur_eiffel.e:414
+#: luat_analyseur_eiffel.e:421
+#: luat_analyseur_eiffel.e:433
+#: luat_analyseur_eiffel.e:443
+#: luat_analyseur_eiffel.e:465
+#: luat_analyseur_eiffel.e:491
+#, c-format
+msgid "unexpected character in ASCII code"
+msgstr "caractère inattendu dans un code ASCII"
+
+#: luat_analyseur_eiffel.e:428
+#: luat_analyseur_eiffel.e:460
+#: luat_analyseur_eiffel.e:477
+#, c-format
+msgid "nul length ASCII code"
+msgstr "code ASCII de longueur nulle"
+
+#: luat_analyseur_eiffel.e:430
+#, c-format
+msgid "ASCII code is out of range"
+msgstr "code ASCII hors intervalle autorisé"
+
+#: luat_analyseur_eiffel.e:462
+#, c-format
+msgid "hexadecimal constant shall be made of an even number of digits"
+msgstr "les littéraux caractères hexadécimaux doivent être composés d'un nombre pair de chiffres"
+
+#: luat_analyseur_eiffel.e:479
+#, c-format
+msgid "hexadecimal code of unicode character is 8 digits max"
+msgstr "un code hexadécimal pour un caractère unicode ne peut dépasser 8 chiffres"
+
+#: luat_analyseur_eiffel.e:487
+#, c-format
+msgid "wrong unicode spelling"
+msgstr "notation unicode invalide"
+
+#: luat_analyseur_eiffel.e:497
+#: luat_analyseur_eiffel.e:521
+#: luat_analyseur_eiffel.e:561
+#, c-format
+msgid "unexpected end-of-file in multiline constant string"
+msgstr "fin de fichier inattendue dans chaîne caractère muli-ligne"
+
+#: luat_analyseur_eiffel.e:550
+#, c-format
+msgid "margins in string constant"
+msgstr "non respect des marges dans littéral chaîne"
+
+#: luat_analyseur_eiffel.e:726
+#, c-format
+msgid "unknown operator \"\\\""
+msgstr "opérateur inconnu \"\\\""
+
+#: luat_analyseur_famille_c.e:431
+#: luat_analyseur_famille_c.e:442
+#, c-format
+msgid "forgotten exponent in numerical constant"
+msgstr "oubli de l'exposant dans une constante littérale numérique"
+
+#: luat_analyseur_famille_c.e:490
+#, c-format
+msgid "incomplete '%:%:' separator"
+msgstr "séparateur '%:%:' incomplet"
+
+#: luat_analyseur_famille_c.e:500
+#, c-format
+msgid "incomplete triglyph"
+msgstr "triglyphe incomplet"
+
+#: luat_analyseur_famille_c.e:570
+#, c-format
+msgid "non respected end-of-line marker in split string"
+msgstr "marque de saut de ligne non respectée dans chaîne multi-ligne"
+
+#: luat_analyseur_famille_c.e:593
+#, c-format
+msgid "incomplete ellipsis"
+msgstr "ellipse incomplète"
+
+#: luat_analyseur_famille_c.e:604
+#, c-format
+msgid "non respected end-of-line marker"
+msgstr "marque de saut de ligne non respectée"
+
+#: luat_analyseur_famille_c.e:905
+#, c-format
+msgid "unknown prefix"
+msgstr "préfixe non reconnu"
+
+#: luat_analyseur_famille_c.e:937
+#, c-format
+msgid "end-of-line in character constant"
+msgstr "saut de ligne dans un caractère"
+
+#: luat_analyseur_famille_c.e:958
+#, c-format
+msgid "end-of-line in string constant"
+msgstr "saut de ligne dans une chaîne"
+
+#: luat_analyseur_famille_c.e:970
+#, c-format
+msgid "incomplete multiline comment"
+msgstr "commentaire multi-ligne incomplet"
+
+#: luat_codemetre.e:62
+#, c-format
+msgid ""
+"This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you\n"
+"are welcome to redistribute it under certain conditions.\n"
+"\n"
+msgstr ""
+"Ce programme n'est en aucun cas garanti. Vous êtes invités à redistribuer ce\n"
+"logiciel libre sous certaines conditions.\n"
+"\n"
+
+#: luat_commande_analyse.e:78
+#, c-format
+msgid "\" cannot be written"
+msgstr "\" ne peut être écrit"
+
+#: luat_configuration.e:129
+#, c-format
+msgid "Error: extension of file \""
+msgstr "L'extension du fichier \""
+
+#: luat_configuration.e:131
+#, c-format
+msgid "\" is unknown"
+msgstr "\" n'est pas reconnue"
+
+#: luat_configuration.e:237
+#: luat_configuration.e:278
+#, c-format
+msgid "language not yet supported"
+msgstr "langage non encore supporté"
+
+#: luat_configuration.e:245
+#, c-format
+msgid "suffix is already associated with another language"
+msgstr "suffixe déjà associé à un autre langage"
+
+#: luat_configuration.e:247
+#, c-format
+msgid "redundant association"
+msgstr "couplage redondant"
+
+#: luat_configuration.e:256
+#: luat_configuration.e:297
+#, c-format
+msgid "unknown section"
+msgstr "section inconnue"
+
+#: luat_configuration.e:303
+#: luat_ligne_commande_analyseur.e:409
+#, c-format
+msgid "Syntax error"
+msgstr "Syntaxe incorrecte"
+
+#: luat_ligne_commande_analyseur.e:93
+#, c-format
+msgid "cannot both show config and measure files"
+msgstr "la configuration ne peut être affichée en même temps que des mesures sont faites"
+
+#: luat_ligne_commande_analyseur.e:103
+#, c-format
+msgid "language is enforced more than once"
+msgstr "le langage est spécifié au moins deux fois"
+
+#: luat_ligne_commande_analyseur.e:112
+#, c-format
+msgid "too many \"--code\" option"
+msgstr "option \"--code\" surnuméraire"
+
+#: luat_ligne_commande_analyseur.e:121
+#, c-format
+msgid "too many \"--comment\" option"
+msgstr "option \"--comment\" surnuméraire"
+
+#: luat_ligne_commande_analyseur.e:130
+#, c-format
+msgid "too many \"--total\" option"
+msgstr "option \"--total\" surnuméraire"
+
+#: luat_ligne_commande_analyseur.e:139
+#, c-format
+msgid "too many \"--short\" option"
+msgstr "option \"--short\" surnuméraire"
+
+#: luat_ligne_commande_analyseur.e:150
+#, c-format
+msgid "too many diff models"
+msgstr "le modèle de comparaison est précisé au moins deux fois"
+
+#: luat_ligne_commande_analyseur.e:163
+#, c-format
+msgid "too many \"--batch\" option"
+msgstr "option \"--batch\" surnuméraire"
+
+#: luat_ligne_commande_analyseur.e:174
+#: luat_ligne_commande_analyseur.e:183
+#, c-format
+msgid "mode is enforced more than once"
+msgstr "le mode est spécifié au moins deux fois"
+
+#: luat_ligne_commande_analyseur.e:215
+#, c-format
+msgid "unknown language"
+msgstr "langage inconnu"
+
+#: luat_ligne_commande_analyseur.e:234
+#, c-format
+msgid "unknown diff model"
+msgstr "modèle de comparaison inconnu"
+
+#: luat_ligne_commande_analyseur.e:250
+#, c-format
+msgid "no diff model is required for analysis"
+msgstr "il n'est pas utile de préciser le modèle de comptage différentiel pour une analyse"
+
+#: luat_ligne_commande_analyseur.e:253
+#: luat_ligne_commande_analyseur.e:281
+#, c-format
+msgid "short output is available only for diff"
+msgstr "l'affichage court n'est possible que lors d'une demande de comparaison"
+
+#: luat_ligne_commande_analyseur.e:259
+#, c-format
+msgid "one option only for analysis"
+msgstr "une seule option autorisée lors d'une demande d'analyse"
+
+#: luat_ligne_commande_analyseur.e:270
+#, c-format
+msgid "one option only for diff"
+msgstr "une seule option autorisée lors d'une demande de comparaison"
+
+#: luat_ligne_commande_analyseur.e:278
+#, c-format
+msgid "no diff model is required for measure"
+msgstr "il n'est pas utile de préciser le modèle de comptage différentiel pour un comptage unitaire"
+
+#: luat_ligne_commande_analyseur.e:296
+#: luat_ligne_commande_analyseur.e:333
+#: luat_ligne_commande_analyseur.e:351
+#, c-format
+msgid "batch mode is not compatible with directory as argument"
+msgstr "les répertoires ne peuvent être traités par lots"
+
+#: luat_ligne_commande_analyseur.e:311
+#, c-format
+msgid "two files are required in diff mode"
+msgstr "il faut deux fichiers en mode différentiel"
+
+#: luat_ligne_commande_analyseur.e:324
+#: luat_ligne_commande_analyseur.e:657
+#, c-format
+msgid "at least one of the two arguments shall exists"
+msgstr "on ne peut comparer ce qui n'existait pas et ce qui n'existe plus"
+
+#: luat_ligne_commande_analyseur.e:330
+#, c-format
+msgid "directory cannot be compared to single file"
+msgstr "réertoires et fichiers seuls ne peuvent être comparés"
+
+#: luat_ligne_commande_analyseur.e:390
+#, c-format
+msgid "usage:"
+msgstr "usage :"
+
+#: luat_ligne_commande_analyseur.e:394
+#, c-format
+msgid "FILE|DIRECTORY"
+msgstr "FICHIER|RÉPERTOIRE"
+
+#: luat_ligne_commande_analyseur.e:399
+#, c-format
+msgid "For further information, see \"man codemetre\""
+msgstr "Pour de plus amples informations, tapez \"man codemetre\""
+
+#: luat_ligne_commande_analyseur.e:458
+#, c-format
+msgid "Error: batch file \""
+msgstr "Erreur : le lot \""
+
+#: luat_ligne_commande_analyseur.e:460
+#, c-format
+msgid "\" cannot be open for reading"
+msgstr "\" est inaccessible en lecture"
+
+#: luat_lot_arbre.e:73
+#, c-format
+msgid "Error: \""
+msgstr "Erreur : \""
+
+#: luat_lot_arbre.e:75
+#, c-format
+msgid "\" is not a valid directory name"
+msgstr "\" n'est pas un nom de répertoire valide"

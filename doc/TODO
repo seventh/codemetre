@@ -1,10 +1,7 @@
 Développements futurs :
- * Trouver un moyen d'avoir une forme unique pour les noms de répertoire, afin de corriger un comportement non ergonomique lors de la comparaison de répertoires
+ * Chercher un mécanisme plus élégant pour la traduction, car il y a du code dupliqué à cause de l'internationalisation.
  * Étudier la possibilité de coupler --tree à un SCM, et de donner des révisions plutôt que des noms de fichier par exemple.
  * Rendre l'application multi-tâche, afin de paralléliser les mesures (en fonction de l'architecture)
 
 Mode analytique :
  * produire un code filtré de tout commentaire qui compile encore
-
-RESTE-À-FAIRE D'ICI LA PROCHAINE VERSION
- * mettre-à-jour la page de manuel
