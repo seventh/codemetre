@@ -1,3 +1,7 @@
+*** v0.19.3
+
+ - Optimisation : le temps de lecture des fichiers a été divisé par deux.
+
 *** v0.19.2
 
  - Suppression de la dépendance à la commande système 'find'. Ceci nécessite d'appliquer un patch spécifique au compilateur pour que DIRECTORY.scan assure que DIRECTORY.path est toujours terminé par une marque de répertoire.

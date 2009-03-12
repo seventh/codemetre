@@ -33,7 +33,8 @@ feature {}
 			-- constructeur
 		do
 			create fichier.make
-			create tampon.with_capacity( 2 )
+			create tampon.make( taille )
+			indice := tampon.upper + 1
 		end
 
 feature
@@ -46,6 +47,7 @@ feature
 		do
 			fichier.connect_to( p_fichier )
 			tampon.clear_count
+			indice := tampon.upper + 1
 		end
 
 	terminer is
@@ -74,37 +76,34 @@ feature
 			est_ouvert
 			not est_epuise
 		do
-			-- l'implémentation ne peut se reposer uniquement sur
-			-- TEXT_FILE_READ.unread_character qui, bien qu'en cours de
-			-- correction par l'équipe de développement de SmartEiffel,
-			-- n'assure pas d'être toujours possible.
+			-- on s'assure qu'il y a toujours au moins deux caractères
+			-- disponibles dans le tampon (sauf lorsque le fichier est
+			-- épuisé)
 
-			if tampon.upper > tampon.lower then
-				-- au moins deux caractères sont dans le tampon
-
-				tampon.remove_first
+			if tampon.valid_index( indice + 2 ) then
+				indice := indice + 1
 			else
-				fichier.read_character
-
-				-- on utilise 'ARRAY.force' car le tampon est vide à la
-				-- première lecture
-
-				if fichier.end_of_input then
-					tampon.force( '%U', tampon.lower )
+				if tampon.valid_index( indice + 1 ) then
+					tampon.keep_tail( 1 )
 				else
-					tampon.force( fichier.last_character, tampon.lower )
-
-					if fichier.last_character = '%R' then
-						fichier.read_character
-						if fichier.end_of_input then
-							tampon.add_last( '%U' )
-						elseif fichier.last_character = '%N' then
-							tampon.put( fichier.last_character, tampon.lower )
-						else
-							tampon.add_last( fichier.last_character )
-						end
-					end
+					tampon.clear_count
 				end
+				fichier.read_available_in( tampon, taille )
+
+				if tampon.is_empty then
+					tampon.append_character( '%U' )
+				end
+				indice := tampon.lower
+			end
+
+			-- on saute les retours-chariot s'ils précèdent un retour à
+			-- la ligne
+
+			if tampon.item( indice ) = '%R'
+				and ( tampon.valid_index( indice + 1 )
+						and then tampon.item( indice + 1 ) = '%N' )
+			 then
+				indice := indice + 1
 			end
 		ensure
 			caractere_est_disponible
@@ -114,7 +113,7 @@ feature
 			-- vrai si et seulement si la dernière demande de lecture a
 			-- réussi
 		do
-			result := not tampon.is_empty
+			result := tampon.valid_index( indice )
 		end
 
 	caractere : CHARACTER is
@@ -122,7 +121,7 @@ feature
 		require
 			caractere_est_disponible
 		do
-			result := tampon.first
+			result := tampon.item( indice )
 		end
 
 	est_epuise : BOOLEAN is
@@ -147,6 +146,7 @@ feature
 				fichier.copy( p_source.fichier )
 				tampon.copy( p_source.tampon )
 			end
+			indice := p_source.indice
 		end
 
 	is_equal( p_autre : like current ) : BOOLEAN is
@@ -154,6 +154,7 @@ feature
 		do
 			result := fichier.is_equal( p_autre.fichier )
 				and tampon.is_equal( p_autre.tampon )
+				and indice = p_autre.indice
 		end
 
 feature {LUAT_ENTREE}
@@ -161,11 +162,13 @@ feature {LUAT_ENTREE}
 	fichier : TEXT_FILE_READ
 			-- flux à filtrer
 
-	tampon : FAST_ARRAY[ CHARACTER ]
-			-- caractères déjà lus depuis le fichier mais non encore
-			-- rendus disponibles. Ceci est rendu nécessaire par la
-			-- pré-vision des caractères pour remplacer certaines
-			-- successions par d'autres. Typiquement, les sauts de ligne
-			-- DOS sont remplacés par des sauts de ligne UNIX.
+	tampon : STRING
+			-- tampon de prélecture
+
+	indice : INTEGER
+			-- position du caractère actuellement lu dans le tampon
+
+	taille : INTEGER is 4_096
+			-- taille du tampon de lecture. Doit au minimum valoir 2
 
 end

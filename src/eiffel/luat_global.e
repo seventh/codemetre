@@ -40,7 +40,7 @@ feature
 
 feature
 
-	version_majeure : STRING is "v0.19.2"
+	version_majeure : STRING is "v0.19.3"
 			-- identifiant de la branche officielle
 
 	version_mineure : STRING is ""
