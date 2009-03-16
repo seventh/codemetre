@@ -15,6 +15,11 @@ inherit
 
 	LUAT_GLOBAL
 
+	LUAT_ELEMENT_CONFIGURABLE
+		rename
+			clef as langage
+		end
+
 feature {}
 
 	fabriquer is

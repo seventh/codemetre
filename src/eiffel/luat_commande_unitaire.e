@@ -23,21 +23,17 @@ creation
 feature {}
 
 	fabriquer( p_analyseur : LUAT_ANALYSEUR
-				  p_nom_fichier : STRING
-				  p_option : LUAT_OPTION ) is
+				  p_nom_fichier : STRING ) is
 			-- constructeur
 		require
 			analyseur_valide : p_analyseur /= void
 			nom_valide : p_nom_fichier /= void
-			option_valide : p_option.choix_est_effectue
 		do
 			analyseur := p_analyseur
 			nom_fichier := p_nom_fichier
-			option := p_option
 		ensure
 			analyseur_ok : analyseur = p_analyseur
 			nom_ok : p_nom_fichier = p_nom_fichier
-			option_ok : option = p_option
 		end
 
 feature
@@ -81,6 +77,16 @@ feature
 				std_output.put_new_line
 				std_output.flush
 			end
+		end
+
+feature {}
+
+	option : LUAT_OPTION is
+			-- options de l'analyse
+		do
+			result := configuration.option_unitaire
+		ensure
+			contrat : result.choix_est_effectue
 		end
 
 end

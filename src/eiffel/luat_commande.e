@@ -13,6 +13,10 @@ deferred class
 		-- fournir un résultat.
 		--
 
+inherit
+
+	LUAT_GLOBAL
+
 feature
 
 	analyseur : LUAT_ANALYSEUR
@@ -20,9 +24,6 @@ feature
 
 	nom_fichier : STRING
 			-- chemin du fichier à analyser
-
-	option : LUAT_OPTION
-			-- options de l'analyse
 
 feature
 

@@ -19,8 +19,6 @@ inherit
 			nom_fichier as nom_but
 		end
 
-	LUAT_GLOBAL
-
 creation
 
 	fabriquer
@@ -28,22 +26,18 @@ creation
 feature {}
 
 	fabriquer( p_analyseur : LUAT_ANALYSEUR
-				  p_nom_nid, p_nom_but : STRING
-				  p_option : LUAT_OPTION ) is
+				  p_nom_nid, p_nom_but : STRING ) is
 		require
 			analyseur_ok : p_analyseur /= void
 			nom_valide : p_nom_nid /= void or p_nom_but /= void
-			option_valide : p_option.choix_est_unique
 		do
 			analyseur := p_analyseur
 			nom_nid := p_nom_nid
 			nom_but := p_nom_but
-			option := p_option
 		ensure
 			analyseur_ok : analyseur = p_analyseur
 			nom_ok : nom_but = p_nom_but
 			reference_ok : nom_nid = p_nom_nid
-			option_ok : option = p_option
 		end
 
 feature
@@ -87,12 +81,13 @@ feature
 				-- l'ordre des tests et l'utilisation de 'or else' est
 				-- ici très important pour les performances de
 				-- l'application
-				if not option.resume
+				if not configuration.sortie_compacte
 					or else not sont_equivalents( nid, but )
 				 then
 					-- mesure
 
-					metrique := usine_metrique.mesurer( nid, but )
+					metrique := configuration.metrique.twin
+					metrique.mesurer( nid, but )
 
 					-- sortie
 
@@ -137,6 +132,14 @@ feature
 		end
 
 feature {}
+
+	option : LUAT_OPTION is
+			-- options de l'analyse
+		do
+			result := configuration.option_differentiel
+		ensure
+			contrat : result.choix_est_unique
+		end
 
 	sont_equivalents( p_a, p_b : LUAT_LISTAGE ) : BOOLEAN is
 		do

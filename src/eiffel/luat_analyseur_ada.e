@@ -25,7 +25,7 @@ creation
 
 feature
 
-	langage : STRING is "Ada"
+	langage : STRING is "ada"
 
 feature {LUAT_ANALYSEUR}
 

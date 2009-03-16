@@ -17,8 +17,6 @@ inherit
 
 	LUAT_COMMANDE
 
-	LUAT_GLOBAL
-
 creation
 
 	fabriquer

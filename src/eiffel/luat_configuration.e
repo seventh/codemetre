@@ -8,8 +8,16 @@ class
 	LUAT_CONFIGURATION
 
 		--
-		-- Permet de déterminer les associations entre suffixe de
-		-- fichier et langage supposé
+		-- Regroupe l'ensemble des choix par défaut :
+		-- * soit ceux fait par l'utilisateur à travers son fichier
+		-- .codemetrerc ;
+		-- * soit ceux de l'application.
+		--
+		-- Ces choix incluent :
+		-- * les associations entre extension de fichier et langage ;
+		-- * le modèle de comparaison ;
+		-- * la sortie allégée lors des comparaisons ;
+		-- * les filtres à appliquer / les sorties à produire.
 		--
 
 inherit
@@ -17,10 +25,6 @@ inherit
 	LUAT_GLOBAL
 
 	DANG_ADAPTATEUR
-
-insert
-
-	SYSTEM
 
 creation
 
@@ -31,18 +35,43 @@ feature {}
 	fabriquer is
 			-- constructeur
 		do
-			create ordre
-			create associations.fabriquer( ordre )
-			configuration_par_defaut := true
+			create associations.fabriquer( create {LUAT_ORDRE_SUFFIXE} )
+			create option_analyse.initialiser
+			create option_differentiel.initialiser
+			create option_unitaire.initialiser
 		end
 
 feature
 
-	initialiser is
-			-- initialise la configuration par défaut
+	appliquer_choix_initial is
+			-- appliquer la configuration initiale, celle par défaut
 		local
 			suffixe : LUAT_SUFFIXE
 		do
+			configuration_par_defaut := true
+
+			--
+			-- section : 'anal'
+			--
+
+			option_analyse.met_code( false )
+			option_analyse.met_commentaire( false )
+			option_analyse.met_total( true )
+
+			--
+			-- section : 'diff'
+			--
+
+			metrique := metrique_normal
+			option_differentiel.met_code( true )
+			option_differentiel.met_commentaire( false )
+			option_differentiel.met_total( false )
+			sortie_compacte := false
+
+			--
+			-- section : 'language'
+			--
+
 			-- Ada
 
 			create suffixe.fabriquer( once ".adb", analyseur_ada )
@@ -74,38 +103,40 @@ feature
 
 			create suffixe.fabriquer( once ".e", analyseur_eiffel )
 			associations.ajouter( suffixe )
+
+			--
+			-- section : 'unit'
+			--
+
+			option_unitaire.met_code( true )
+			option_unitaire.met_commentaire( true )
+			option_unitaire.met_total( false )
+		end
+
+	appliquer_choix_fichier is
+			-- surcharge la configuration actuelle avec les éléments
+			-- précisés dans le fichier de configuration de l'utilisateur
+		local
+			chargeur : DANG_ANALYSEUR
+		do
+			-- lecture
+
+			create chargeur.fabriquer
+			chargeur.ouvrir( nom_fichier_configuration )
+			if chargeur.est_ouvert then
+				configuration_par_defaut := false
+				chargeur.lire( current )
+				chargeur.fermer
+			end
+		end
+
+	appliquer_choix_demande is
+			-- surcharge la configuration actuelle avec les éléments
+			-- précisés en ligne de commande
+		do
 		end
 
 feature
-
-	forcer( p_langage : STRING ) is
-			-- force le choix du langage
-		require
-			p_langage.is_equal( "ada" )
-				or p_langage.is_equal( "c" )
-				or p_langage.is_equal( "c++" )
-				or p_langage.is_equal( "eiffel" )
-		do
-			inspect p_langage
-			when "ada" then
-				analyseur_force := analyseur_ada
-			when "c" then
-				analyseur_force := analyseur_c
-			when "c++" then
-				analyseur_force := analyseur_c_plus_plus
-			when "eiffel" then
-				analyseur_force := analyseur_eiffel
-			end
-		ensure
-			mode_force
-		end
-
-	mode_force : BOOLEAN is
-			-- vrai si et seulement si la sélection du langage est
-			-- forcée par l'utilisateur
-		do
-			result := analyseur_force /= void
-		end
 
 	analyseur( p_nom_fichier : STRING ) : LUAT_ANALYSEUR is
 			-- analyseur associé par la configuration (fichier de
@@ -116,32 +147,53 @@ feature
 			suffixe : LUAT_SUFFIXE
 			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
 		do
-			if mode_force then
+			if analyseur_force /= void then
 				result := analyseur_force
 			else
 				i := p_nom_fichier.last_index_of( '.' )
-				if p_nom_fichier.valid_index( i ) then
-					create suffixe.fabriquer( p_nom_fichier.substring( i, p_nom_fichier.upper ),
-													  void )
-					create it.attacher( associations )
-					associations.trouver( suffixe, it )
-					if it.est_hors_borne then
+				if not p_nom_fichier.valid_index( i ) then
 						std_error.put_string( traduire( once "Error: extension of file %"" ) )
 						std_error.put_string( p_nom_fichier )
 						std_error.put_string( traduire( once "%" is unknown" ) )
 						std_error.put_new_line
 						std_error.flush
-					else
+				else
+					create suffixe.fabriquer( p_nom_fichier.substring( i, p_nom_fichier.upper ),
+													  void )
+					create it.attacher( associations )
+					associations.trouver( suffixe, it )
+					if not it.est_hors_borne then
 						result := it.dereferencer.langage
+					else
+						std_error.put_string( traduire( once "Error: extension of file %"" ) )
+						std_error.put_string( p_nom_fichier )
+						std_error.put_string( traduire( once "%" is unknown" ) )
+						std_error.put_new_line
+						std_error.flush
 					end
 					it.detacher
 				end
 			end
 		end
 
-feature {}
+	metrique : LUAT_METRIQUE
+			-- modèle de comparaison à utiliser
 
-	analyseur_force : LUAT_ANALYSEUR
+	option_analyse : LUAT_OPTION
+			-- ensemble des filtres à utiliser sur les fichiers en
+			-- entrée par une commande d'analyse
+
+	option_differentiel : LUAT_OPTION
+			-- ensemble des filtres à utiliser sur les fichiers en
+			-- entrée par une commande de comptage différentiel
+
+	option_unitaire : LUAT_OPTION
+			-- ensemble des filtres à utiliser sur les fichiers en
+			-- entrée par une commande de comptage unitaire
+
+	sortie_compacte : BOOLEAN
+			-- vrai si et seulement le résultat des comparaisons doit
+			-- être filtré
 
 feature
 
@@ -165,7 +217,31 @@ feature
 			end
 			std_output.put_new_line
 
-			-- section : langage
+			--
+			-- section 'analysis'
+			--
+
+			std_output.put_string( once "[analysis]%N" )
+			afficher_option( option_analyse, std_output )
+
+			--
+			-- section : 'diff'
+			--
+
+			std_output.put_string( once "[diff]%N" )
+			afficher_option( option_differentiel, std_output )
+
+			std_output.put_string( once "%Tmodel := " )
+			std_output.put_string( metrique.nom )
+			std_output.put_new_line
+
+			std_output.put_string( once "%Tshort := " )
+			std_output.put_boolean( sortie_compacte )
+			std_output.put_new_line
+
+			--
+			-- section : 'language'
+			--
 
 			std_output.put_string( once "[language]%N" )
 
@@ -185,7 +261,7 @@ feature
 				loop
 					if it.dereferencer.langage = analyseurs.item( l ) then
 						if not aucune_entree then
-							std_output.put_character( ',' )
+							std_output.put_string( once ", " )
 						end
 						std_output.put_string( it.dereferencer.suffixe )
 						aucune_entree := false
@@ -196,89 +272,173 @@ feature
 				l := l + 1
 			end
 			it.detacher
+
+			--
+			-- section 'unit'
+			--
+
+			std_output.put_string( once "[unit]%N" )
+			afficher_option( option_unitaire, std_output )
 		end
 
-	lire is
-			-- surcharge la configuration par défaut avec celle de
-			-- l'utilisateur le cas échéant
+feature
+
+	forcer_analyseur( p_langage : STRING ) : BOOLEAN is
+			-- force le choix du langage (s'il existe)
+		require
+			langage_valide : not p_langage.is_empty
 		local
-			chargeur : DANG_ANALYSEUR
+			a : LUAT_ANALYSEUR
 		do
-			create chargeur.fabriquer
-			chargeur.ouvrir( nom_fichier_configuration )
-			if chargeur.est_ouvert then
-				configuration_par_defaut := false
-				chargeur.lire( current )
-				chargeur.fermer
+			a := trouver_analyseur( p_langage )
+
+			if a /= void then
+				analyseur_force := a
+				result := true
 			end
 		end
+
+	forcer_metrique( p_metrique : STRING ) : BOOLEAN is
+			-- choisit une métrique par son nom
+		require
+			metrique_valide : not p_metrique.is_empty
+		local
+			m : LUAT_METRIQUE
+		do
+			m := trouver_metrique( p_metrique )
+
+			if m /= void then
+				metrique := m
+				result := true
+			end
+		end
+
+	forcer_sortie_compacte( p_sortie_compacte : BOOLEAN ) is
+		do
+			sortie_compacte := p_sortie_compacte
+		ensure
+			sortie_compacte_ok : sortie_compacte = p_sortie_compacte
+		end
+
+feature {LUAT_CONFIGURATION}
+
+	analyseur_force : LUAT_ANALYSEUR
+			-- analyseur à utiliser indépendamment du suffixe du fichier
+
+	associations : ARN_ARBRE[ LUAT_SUFFIXE ]
 
 feature {DANG_ANALYSEUR}
 
 	ajouter( p_section : STRING
 				p_variable : STRING
-				p_suffixe : STRING ) is
+				p_valeur : STRING ) is
 		local
 			suffixe : LUAT_SUFFIXE
 			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
+			a : LUAT_ANALYSEUR
 		do
 			inspect p_section
-			when "language" then
+
+			when "analysis" then
 				inspect p_variable
-				when "ada" then
-					create suffixe.fabriquer( p_suffixe.twin, analyseur_ada )
-				when "c" then
-					create suffixe.fabriquer( p_suffixe.twin, analyseur_c )
-				when "c++" then
-					create suffixe.fabriquer( p_suffixe.twin, analyseur_c_plus_plus )
-				when "eiffel" then
-					create suffixe.fabriquer( p_suffixe.twin, analyseur_eiffel )
+				when "filter" then
+					traiter_erreur( "analysis:filter can only have a single value" )
 				else
-					remonter_erreur( once "language not yet supported" )
+					traiter_erreur( once "unknown parameter in analysis section" )
 				end
 
-				if suffixe /= void then
+			when "diff" then
+				inspect p_variable
+				when "filter" then
+					traiter_erreur( "diff:filter can only have a single value" )
+				when "model" then
+					traiter_erreur( once "analysis:model is not a list" )
+				when "short" then
+					traiter_erreur( once "analysis:short is not a list" )
+				else
+					traiter_erreur( once "unknown parameter in diff section" )
+				end
+
+			when "language" then
+				a := trouver_analyseur( p_variable )
+
+				if a = void then
+					traiter_erreur( once "language not yet supported" )
+				else
+					create suffixe.fabriquer( p_valeur.twin, a )
 					create it.attacher( associations )
 					associations.trouver( suffixe, it )
 					if not it.est_hors_borne then
 						if it.dereferencer.langage /= suffixe.langage then
-							remonter_erreur( once "suffix is already associated with another language" )
+							traiter_erreur( once "suffix is already associated with another language" )
 						else
-							remonter_erreur( once "redundant association" )
+							traiter_erreur( once "redundant association" )
 						end
 					else
 						associations.ajouter( suffixe )
 					end
 					it.detacher
 				end
+
+			when "unit" then
+				inspect p_variable
+				when "filter" then
+					ajouter_option( option_unitaire, p_valeur )
+				else
+					traiter_erreur( once "unknown parameter in unit section" )
+				end
+
 			else
 				-- section inconnue
-				remonter_erreur( once "unknown section" )
+				traiter_erreur( once "unknown section" )
 			end
 		end
 
-	effacer( p_section : STRING
-				p_variable : STRING ) is
+	imposer( p_section : STRING
+				p_variable : STRING
+				p_valeur : STRING ) is
 		local
 			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
 			a : LUAT_ANALYSEUR
+			m : LUAT_METRIQUE
 		do
 			inspect p_section
-			when "language" then
+
+			when "analysis" then
 				inspect p_variable
-				when "ada" then
-					a := analyseur_ada
-				when "c" then
-					a := analyseur_c
-				when "c++" then
-					a := analyseur_c_plus_plus
-				when "eiffel" then
-					a := analyseur_eiffel
+				when "filter" then
+					imposer_option( option_analyse, p_valeur )
 				else
-					remonter_erreur( once "language not yet supported" )
+					traiter_erreur( once "unknown parameter in analysis section" )
 				end
 
-				if a /= void then
+			when "diff" then
+				inspect p_variable
+				when "filter" then
+					imposer_option( option_differentiel, p_valeur )
+				when "model" then
+					m := trouver_metrique( p_valeur )
+					if m = void then
+						traiter_erreur( once "unknown diff model" )
+					else
+						metrique := m
+					end
+				when "short" then
+					if p_valeur.is_boolean then
+						sortie_compacte := p_valeur.to_boolean
+					else
+						traiter_erreur( once "invalid boolean value" )
+					end
+				else
+					traiter_erreur( once "unknown parameter in diff section" )
+				end
+
+			when "language" then
+				a := trouver_analyseur( p_variable )
+
+				if a = void then
+					traiter_erreur( once "language not yet supported" )
+				else
 					create it.attacher( associations )
 					from it.pointer_premier
 					until it.est_hors_borne
@@ -291,14 +451,86 @@ feature {DANG_ANALYSEUR}
 						end
 					end
 					it.detacher
+
+					ajouter( p_section, p_variable, p_valeur )
 				end
+
+			when "unit" then
+				inspect p_variable
+				when "filter" then
+					imposer_option( option_unitaire, p_valeur )
+				else
+					traiter_erreur( once "unknown parameter in unit section" )
+				end
+
 			else
 				-- section inconnue
-				remonter_erreur( once "unknown section" )
+				traiter_erreur( once "unknown section" )
 			end
 		end
 
-	remonter_erreur( p_message : STRING ) is
+	retirer( p_section : STRING
+				p_variable : STRING
+				p_valeur : STRING ) is
+		local
+			suffixe : LUAT_SUFFIXE
+			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
+			a : LUAT_ANALYSEUR
+		do
+			inspect p_section
+
+			when "analysis" then
+				inspect p_variable
+				when "filter" then
+					traiter_erreur( "analysis:filter can only have a single value" )
+				else
+					traiter_erreur( once "unknown parameter in analysis section" )
+				end
+
+			when "diff" then
+				inspect p_variable
+				when "filter" then
+					traiter_erreur( "diff:filter can only have a single value" )
+				when "model" then
+					traiter_erreur( once "analysis:model is not a list" )
+				when "short" then
+					traiter_erreur( once "analysis:short is not a list" )
+				else
+					traiter_erreur( once "unknown parameter in diff section" )
+				end
+
+			when "language" then
+				a := trouver_analyseur( p_variable )
+
+				if a = void then
+					traiter_erreur( once "language not yet supported" )
+				else
+					create suffixe.fabriquer( p_valeur.twin, a )
+					create it.attacher( associations )
+					associations.trouver( suffixe, it )
+					if it.est_hors_borne then
+						traiter_erreur( once "no such association exists" )
+					else
+						associations.retirer( it )
+					end
+					it.detacher
+				end
+
+			when "unit" then
+				inspect p_variable
+				when "filter" then
+					retirer_option( option_unitaire, p_valeur )
+				else
+					traiter_erreur( once "unknown parameter in unit section" )
+				end
+
+			else
+				-- section inconnue
+				traiter_erreur( once "unknown section" )
+			end
+		end
+
+	traiter_erreur( p_message : STRING ) is
 		do
 			std_error.put_string( traduire( once "Syntax error" ) )
 			std_error.put_string( once " (" )
@@ -311,15 +543,13 @@ feature {DANG_ANALYSEUR}
 
 feature {LUAT_CONFIGURATION}
 
-	associations : ARN_ARBRE[ LUAT_SUFFIXE ]
-
-	ordre : LUAT_ORDRE_SUFFIXE
-
 	configuration_par_defaut : BOOLEAN
 
 	nom_fichier_configuration : STRING is
+		local
+			sys : SYSTEM
 		once
-			result := get_environment_variable( once "HOME" )
+			result := sys.get_environment_variable( once "HOME" )
 			if result = void then
 				create result.make_empty
 			end
@@ -330,33 +560,197 @@ feature {LUAT_CONFIGURATION}
 
 feature {}
 
-	analyseur_ada : LUAT_ANALYSEUR_ADA is
+	analyseur_ada : LUAT_ANALYSEUR is
 		once
-			create result.fabriquer
-			analyseurs.add_last( result )
+			result := analyseurs.item( 0 )
 		end
 
-	analyseur_c : LUAT_ANALYSEUR_FAMILLE_C is
+	analyseur_c : LUAT_ANALYSEUR is
 		once
-			create result.fabriquer( once "C" )
-			analyseurs.add_last( result )
+			result := analyseurs.item( 1 )
 		end
 
-	analyseur_c_plus_plus : LUAT_ANALYSEUR_FAMILLE_C is
+	analyseur_c_plus_plus : LUAT_ANALYSEUR is
 		once
-			create result.fabriquer( once "C++" )
-			analyseurs.add_last( result )
+			result := analyseurs.item( 2 )
 		end
 
-	analyseur_eiffel : LUAT_ANALYSEUR_EIFFEL is
+	analyseur_eiffel : LUAT_ANALYSEUR is
 		once
-			create result.fabriquer
-			analyseurs.add_last( result )
+			result := analyseurs.item( 3 )
 		end
 
 	analyseurs : FAST_ARRAY[ LUAT_ANALYSEUR ] is
+			-- ensemble des analyseurs lexicaux
 		once
 			create result.with_capacity( 4 )
+			result.add_last( create {LUAT_ANALYSEUR_ADA}.fabriquer )
+			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c" ) )
+			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c++" ) )
+			result.add_last( create {LUAT_ANALYSEUR_EIFFEL}.fabriquer )
+		end
+
+	trouver_analyseur( p_clef : STRING ) : LUAT_ANALYSEUR is
+		require
+			clef_valide : not p_clef.is_empty
+		local
+			i : INTEGER
+		do
+			i := trouver_element_configurable( analyseurs, p_clef )
+
+			if analyseurs.valid_index( i ) then
+				result := analyseurs.item( i )
+			end
+		end
+
+feature {}
+
+	metrique_effort : LUAT_METRIQUE is
+		once
+			result := metriques.item( 0 )
+		end
+
+	metrique_normal : LUAT_METRIQUE is
+		once
+			result := metriques.item( 1 )
+		end
+
+	metriques : FAST_ARRAY[ LUAT_METRIQUE ] is
+		once
+			create result.with_capacity( 2 )
+			result.add_last( create {LUAT_METRIQUE_EFFORT}.fabriquer )
+			result.add_last( create {LUAT_METRIQUE_NORMALE}.fabriquer )
+		end
+
+	trouver_metrique( p_clef : STRING ) : LUAT_METRIQUE is
+		require
+			clef_valide : not p_clef.is_empty
+		local
+			i : INTEGER
+		do
+			i := trouver_element_configurable( metriques, p_clef )
+
+			if metriques.valid_index( i ) then
+				result := metriques.item( i )
+			end
+		end
+
+feature {}
+
+	afficher_option( p_option : LUAT_OPTION
+						  p_flux : OUTPUT_STREAM ) is
+		require
+			option_valide : p_option.choix_est_effectue
+			flux_valide : p_flux /= void
+		local
+			separateur_doit_etre_ajoute : BOOLEAN
+		do
+			p_flux.put_string( once "%Tfilter := " )
+
+			if p_option.code then
+				separateur_doit_etre_ajoute := true
+				p_flux.put_string( once "code" )
+			end
+			if p_option.commentaire then
+				if separateur_doit_etre_ajoute then
+					p_flux.put_string( once ", " )
+				end
+				separateur_doit_etre_ajoute := true
+				p_flux.put_string( once "comment" )
+			end
+			if p_option.total then
+				if separateur_doit_etre_ajoute then
+					p_flux.put_string( once ", " )
+				end
+				separateur_doit_etre_ajoute := true
+				p_flux.put_string( once "total" )
+			end
+
+			p_flux.put_new_line
+		end
+
+	ajouter_option( p_option : LUAT_OPTION
+						 p_variable : STRING ) is
+		require
+			option_valide : p_option /= void
+			variable_valide : not p_variable.is_empty
+		do
+			inspect p_variable
+			when "code" then
+				p_option.met_code( true )
+			when "comment" then
+				p_option.met_commentaire( true )
+			when "total" then
+				p_option.met_total( true )
+			else
+				traiter_erreur( once "unknown filter" )
+			end
+		end
+
+	imposer_option( p_option : LUAT_OPTION
+						 p_variable : STRING ) is
+		require
+			option_valide : p_option /= void
+			variable_valide : not p_variable.is_empty
+		do
+			inspect p_variable
+			when "code" then
+				p_option.met( true, false, false )
+			when "comment" then
+				p_option.met( false, true, false )
+			when "total" then
+				p_option.met( false, false, true )
+			else
+				traiter_erreur( once "unknown filter" )
+			end
+		end
+
+	retirer_option( p_option : LUAT_OPTION
+						 p_variable : STRING ) is
+		require
+			option_valide : p_option.choix_est_effectue
+			variable_valide : not p_variable.is_empty
+		local
+			old_option : like p_option
+		do
+			old_option := p_option.twin
+
+			inspect p_variable
+			when "code" then
+				p_option.met_code( false )
+			when "comment" then
+				p_option.met_commentaire( false )
+			when "total" then
+				p_option.met_total( false )
+			else
+				traiter_erreur( once "unknown filter" )
+			end
+
+			if not p_option.choix_est_effectue then
+				p_option.copy( old_option )
+				traiter_erreur( once "removing filters leaves empty set" )
+			end
+		ensure
+			option_ok : p_option.choix_est_effectue
+		end
+
+feature {}
+
+	trouver_element_configurable( p_ensemble : COLLECTION[ LUAT_ELEMENT_CONFIGURABLE ]
+											p_clef : STRING ) : INTEGER is
+		require
+			ensemble_valide : p_ensemble /= void
+			clef_valide : not p_clef.is_empty
+		do
+			from result := p_ensemble.lower
+			variant p_ensemble.upper - result
+			until result > p_ensemble.upper
+				or else p_ensemble.item( result ).clef.is_equal( p_clef )
+			loop
+				result := result + 1
+			end
+		ensure
+			p_ensemble.valid_index( result ) implies p_ensemble.item( result ).clef.is_equal( p_clef )
 		end
 
 end

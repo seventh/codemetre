@@ -11,11 +11,25 @@ deferred class
 		-- Interface commune de métrique
 		--
 
+inherit
+
+	LUAT_ELEMENT_CONFIGURABLE
+		rename
+			clef as nom
+		end
+
 feature {}
 
 	fabriquer is
 			-- constructeur
 		do
+		end
+
+feature
+
+	nom : STRING is
+			-- identifiant du modèle de comparaison
+		deferred
 		end
 
 feature

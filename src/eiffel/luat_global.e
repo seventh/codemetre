@@ -17,20 +17,11 @@ feature {LUAT_GLOBAL}
 			-- ensemble des variables de configuration utilisateur
 		once
 			create result.fabriquer
-			result.initialiser
-			result.lire
+			result.appliquer_choix_initial
+			result.appliquer_choix_fichier
 		end
 
-feature
-
-	usine_metrique : LUAT_FABRIQUE_METRIQUE is
-			-- fabrique de métriques différentielles. Permet de
-			-- configurer dynamiquement le modèle de comparaison
-		once
-			create result.fabriquer
-		end
-
-feature
+feature {LUAT_GLOBAL}
 
 	traduire( p_message : STRING ) : STRING is
 			-- traduction locale du message d'origine
@@ -38,9 +29,9 @@ feature
 			result := traducteur.traduire( p_message )
 		end
 
-feature
+feature {LUAT_GLOBAL}
 
-	version_majeure : STRING is "v0.19.3"
+	version_majeure : STRING is "v0.20.0"
 			-- identifiant de la branche officielle
 
 	version_mineure : STRING is ""

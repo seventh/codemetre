@@ -30,7 +30,7 @@ creation
 
 feature
 
-	langage : STRING is "Eiffel"
+	langage : STRING is "eiffel"
 
 feature {}
 

@@ -38,7 +38,6 @@ feature {}
 	etat_commande_analyse : INTEGER is unique
 	etat_commande_comparaison : INTEGER is unique
 	etat_commande_unitaire : INTEGER is unique
-	etat_configuration : INTEGER is unique
 	etat_final : INTEGER is unique
 
 	mode_indetermine : INTEGER is unique
@@ -55,7 +54,9 @@ feature
 			lexeme, etat, mode : INTEGER
 			option : LUAT_OPTION
 			avant, apres : STRING
+			analyseur_precise : BOOLEAN
 			modele_precise : BOOLEAN
+			sortie_compacte_precise : BOOLEAN
 			lot_active : BOOLEAN
 			avant_est_repertoire, apres_est_repertoire : BOOLEAN
 		do
@@ -87,21 +88,24 @@ feature
 						-- configuration
 
 					when "--config" then
-						if lexeme = 1 then
-							etat := etat_configuration
+						if lexeme = 1
+							and argument_count = 1
+						 then
+							commandes.add_last( create {LUAT_COMMANDE_CONFIGURATION}.fabriquer )
 						else
 							afficher_erreur( once "cannot both show config and measure files" )
-							etat := etat_final
 						end
+						etat := etat_final
 
 						-- langage
 
 					when "--lang" then
-						if not configuration.mode_force then
-							etat := etat_choix_langage
-						else
+						if analyseur_precise then
 							afficher_erreur( once "language is enforced more than once" )
 							etat := etat_final
+						else
+							analyseur_precise := true
+							etat := etat_choix_langage
 						end
 						lexeme := lexeme + 1
 
@@ -135,11 +139,12 @@ feature
 						lexeme := lexeme + 1
 
 					when "--short" then
-						if option.resume then
+						if sortie_compacte_precise then
 							afficher_erreur( once "too many %"--short%" option" )
 							etat := etat_final
 						else
-							option.met_resume( true )
+							sortie_compacte_precise := true
+							configuration.forcer_sortie_compacte( true )
 						end
 						lexeme := lexeme + 1
 
@@ -150,6 +155,7 @@ feature
 							afficher_erreur( once "too many diff models" )
 							etat := etat_final
 						else
+							modele_precise := true
 							etat := etat_choix_modele
 						end
 						lexeme := lexeme + 1
@@ -198,18 +204,7 @@ feature
 					-- pourrait être déterminé automatiquement à partir
 					-- des extensions de fichier
 
-					inspect argument( lexeme )
-					when "ada" then
-						configuration.forcer( argument( lexeme ) )
-						etat := etat_lecture_options
-					when "c" then
-						configuration.forcer( argument( lexeme ) )
-						etat := etat_lecture_options
-					when "c++" then
-						configuration.forcer( argument( lexeme ) )
-						etat := etat_lecture_options
-					when "eiffel" then
-						configuration.forcer( argument( lexeme ) )
+					if configuration.forcer_analyseur( argument( lexeme ) ) then
 						etat := etat_lecture_options
 					else
 						afficher_erreur( once "unknown language" )
@@ -221,14 +216,7 @@ feature
 					-- spécification d'un autre modèle de mesure
 					-- différentielle que celui par défaut
 
-					inspect argument( lexeme )
-					when "effort" then
-						modele_precise := true
-						usine_metrique.met_modele( create {LUAT_METRIQUE_EFFORT}.fabriquer )
-						etat := etat_lecture_options
-					when "normal" then
-						modele_precise := true
-						usine_metrique.met_modele( create {LUAT_METRIQUE_NORMALE}.fabriquer )
+					if configuration.forcer_metrique( argument( lexeme ) ) then
 						etat := etat_lecture_options
 					else
 						afficher_erreur( once "unknown diff model" )
@@ -249,27 +237,27 @@ feature
 						if modele_precise then
 							afficher_erreur( once "no diff model is required for analysis" )
 							etat := etat_final
-						elseif option.resume then
+						elseif sortie_compacte_precise then
 							afficher_erreur( once "short output is available only for diff" )
 							etat := etat_final
 						elseif not option.choix_est_effectue then
-							option.met_total( true )
 							etat := etat_commande_analyse
 						elseif not option.choix_est_unique then
 							afficher_erreur( once "one option only for analysis" )
 							etat := etat_final
 						else
+							configuration.option_analyse.copy( option )
 							etat := etat_commande_analyse
 						end
 
 					when mode_comparaison then
 						if not option.choix_est_effectue then
-							option.met_code( true )
 							etat := etat_commande_comparaison
 						elseif not option.choix_est_unique then
 							afficher_erreur( once "one option only for diff" )
 							etat := etat_final
 						else
+							configuration.option_differentiel.copy( option )
 							etat := etat_commande_comparaison
 						end
 
@@ -277,11 +265,11 @@ feature
 						if modele_precise then
 							afficher_erreur( once "no diff model is required for measure" )
 							etat := etat_final
-						elseif option.resume then
+						elseif sortie_compacte_precise then
 							afficher_erreur( once "short output is available only for diff" )
 							etat := etat_final
-						elseif not option.choix_est_effectue then
-							option.met( true, true, false )
+						elseif option.choix_est_effectue then
+							configuration.option_unitaire.copy( option )
 							etat := etat_commande_unitaire
 						else
 							etat := etat_commande_unitaire
@@ -295,12 +283,12 @@ feature
 						if lot_active then
 							afficher_erreur( once "batch mode is not compatible with directory as argument" )
 						else
-							produire_arbre_commande_analyse( argument( lexeme ), option )
+							produire_arbre_commande_analyse( argument( lexeme ) )
 						end
 					elseif lot_active then
-						produire_liste_commande_analyse( argument( lexeme ), option )
+						produire_liste_commande_analyse( argument( lexeme ) )
 					else
-						produire_commande_analyse( argument( lexeme ), option )
+						produire_commande_analyse( argument( lexeme ) )
 					end
 					lexeme := lexeme + 1
 
@@ -332,12 +320,12 @@ feature
 								if lot_active then
 									afficher_erreur( once "batch mode is not compatible with directory as argument" )
 								else
-									produire_arbre_commande_differentiel( avant, apres, option )
+									produire_arbre_commande_differentiel( avant, apres )
 								end
 							elseif lot_active then
-								produire_lot_commande_differentiel( avant, apres, option )
+								produire_lot_commande_differentiel( avant, apres )
 							else
-								produire_commande_differentiel( avant, apres, option )
+								produire_commande_differentiel( avant, apres )
 							end
 						end
 					end
@@ -350,20 +338,14 @@ feature
 						if lot_active then
 							afficher_erreur( once "batch mode is not compatible with directory as argument" )
 						else
-							produire_arbre_commande_unitaire( argument( lexeme ), option )
+							produire_arbre_commande_unitaire( argument( lexeme ) )
 						end
 					elseif lot_active then
-						produire_liste_commande_unitaire( argument( lexeme ), option )
+						produire_liste_commande_unitaire( argument( lexeme ) )
 					else
-						produire_commande_unitaire( argument( lexeme ), option )
+						produire_commande_unitaire( argument( lexeme ) )
 					end
 					lexeme := lexeme + 1
-
-				when etat_configuration then
-					-- affichage de la configuration
-
-					commandes.add_last( create {LUAT_COMMANDE_CONFIGURATION}.fabriquer )
-					lexeme := argument_count + 1
 
 				else
 					debug
@@ -468,46 +450,40 @@ feature {}
 
 feature {}
 
-	produire_arbre_commande_analyse( p_racine : STRING
-												p_option : LUAT_OPTION ) is
+	produire_arbre_commande_analyse( p_racine : STRING ) is
 			-- ajoute autant de commandes d'analyse à la liste de
 			-- commandes qu'il n'y a de fichiers sous la racine, sauf
 			-- pour ceux dont le langage ne peut être déterminé
 		require
 			racine_valide : not p_racine.is_empty
-			option_valide : p_option /= void
 		local
 			lot : LUAT_LOT
 		do
 			lot := ouvrir_arbre( p_racine, false )
-			produire_lot_commande_analyse( lot, p_option )
+			produire_lot_commande_analyse( lot )
 			lot.clore
 		end
 
-	produire_liste_commande_analyse( p_liste : STRING
-												p_option : LUAT_OPTION ) is
+	produire_liste_commande_analyse( p_liste : STRING ) is
 			-- ajoute autant de commandes d'analyse à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans la liste,
 			-- sauf pour ceux dont le langage ne peut être déterminé
 		require
 			liste_valide : p_liste /= void
-			option_valide : p_option /= void
 		local
 			lot : LUAT_LOT
 		do
 			lot := ouvrir_liste( p_liste )
-			produire_lot_commande_analyse( lot, p_option )
+			produire_lot_commande_analyse( lot )
 			lot.clore
 		end
 
-	produire_lot_commande_analyse( p_lot : LUAT_LOT
-											 p_option : LUAT_OPTION ) is
+	produire_lot_commande_analyse( p_lot : LUAT_LOT ) is
 			-- ajoute autant de commandes d'analyse à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
 			-- sauf pour ceux dont le langage ne peut être déterminé
 		require
 			lot_valide : p_lot /= void
-			option_valide : p_option /= void
 		local
 			nom_fichier : STRING
 		do
@@ -516,19 +492,17 @@ feature {}
 			loop
 				nom_fichier := p_lot.entree
 				if nom_fichier /= void then
-					produire_commande_analyse( nom_fichier, p_option )
+					produire_commande_analyse( nom_fichier )
 				end
 				p_lot.lire
 			end
 		end
 
-	produire_commande_analyse( p_nom_fichier : STRING
-										p_option : LUAT_OPTION ) is
+	produire_commande_analyse( p_nom_fichier : STRING ) is
 			-- ajoute une commande d'analyse à la liste des commandes, à
 			-- moins que le langage ne puisse être déterminé
 		require
 			nom_valide : p_nom_fichier /= void
-			option_valide : p_option /= void
 		local
 			analyseur : LUAT_ANALYSEUR
 			commande : LUAT_COMMANDE_ANALYSE
@@ -536,7 +510,7 @@ feature {}
 			analyseur := configuration.analyseur( p_nom_fichier )
 
 			if analyseur /= void then
-				create commande.fabriquer( analyseur, p_nom_fichier, p_option )
+				create commande.fabriquer( analyseur, p_nom_fichier )
 				commandes.add_last( commande )
 			end
 		end
@@ -561,14 +535,11 @@ feature {}
 			domaine : result.in_range( -1, 1 )
 		end
 
-	produire_arbre_commande_differentiel( p_racine_avant, p_racine_apres : STRING
-													  p_option : LUAT_OPTION ) is
+	produire_arbre_commande_differentiel( p_racine_avant, p_racine_apres : STRING ) is
 			-- ajoute autant de commandes de comparaison à la liste de
 			-- commandes qu'il n'y a de fichiers présents sous chacune
 			-- des racines, sauf pour ceux dont le langage ne peut être
 			-- déterminé
-		require
-			option_valide : p_option /= void
 		local
 			avant, apres : STRING
 			lot_avant, lot_apres : LUAT_LOT
@@ -592,26 +563,23 @@ feature {}
 				ordre := comparer( avant, apres )
 				inspect ordre
 				when -1 then
-					produire_commande_differentiel( lot_avant.entree, void, p_option )
+					produire_commande_differentiel( lot_avant.entree, void )
 					lot_avant.lire
 				when 0 then
-					produire_commande_differentiel( lot_avant.entree, lot_apres.entree, p_option )
+					produire_commande_differentiel( lot_avant.entree, lot_apres.entree )
 					lot_avant.lire
 					lot_apres.lire
 				when 1 then
-					produire_commande_differentiel( void, lot_apres.entree, p_option )
+					produire_commande_differentiel( void, lot_apres.entree )
 					lot_apres.lire
 				end
 			end
 		end
 
-	produire_lot_commande_differentiel( p_lot_avant, p_lot_apres : STRING
-													p_option : LUAT_OPTION ) is
+	produire_lot_commande_differentiel( p_lot_avant, p_lot_apres : STRING ) is
 			-- ajoute autant de commandes de comparaison à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
 			-- sauf pour ceux dont le langage ne peut être déterminé
-		require
-			option_valide : p_option /= void
 		local
 			avant, apres : STRING
 			lot_avant, lot_apres : LUAT_LOT
@@ -630,7 +598,7 @@ feature {}
 
 				-- les fichiers sont comparés un à un
 
-				produire_commande_differentiel( avant, apres, p_option )
+				produire_commande_differentiel( avant, apres )
 
 				lot_avant.lire
 				lot_apres.lire
@@ -640,13 +608,10 @@ feature {}
 			lot_apres.clore
 		end
 
-	produire_commande_differentiel( p_avant, p_apres : STRING
-											  p_option : LUAT_OPTION ) is
+	produire_commande_differentiel( p_avant, p_apres : STRING ) is
 			-- ajoute une commande de comparaison à la liste des
 			-- commandes, à moins que le langage ne puisse être
 			-- déterminé
-		require
-			option_valide : p_option /= void
 		local
 			analyseur : LUAT_ANALYSEUR
 			commande : LUAT_COMMANDE_DIFFERENTIEL
@@ -671,7 +636,7 @@ feature {}
 				-- été précisé ou déviné
 
 				if analyseur /= void then
-					create commande.fabriquer( analyseur, p_avant, p_apres, p_option )
+					create commande.fabriquer( analyseur, p_avant, p_apres )
 					commandes.add_last( commande )
 				end
 			end
@@ -679,46 +644,40 @@ feature {}
 
 feature {}
 
-	produire_arbre_commande_unitaire( p_racine : STRING
-												 p_option : LUAT_OPTION ) is
+	produire_arbre_commande_unitaire( p_racine : STRING ) is
 			-- ajoute autant de commandes de mesure à la liste de
 			-- commandes qu'il n'y a de fichiers sous racine, sauf pour
 			-- ceux dont le langage ne peut être déterminé
 		require
 			racine_valide : p_racine /= void
-			option_valide : p_option /= void
 		local
 			lot : LUAT_LOT
 		do
 			lot := ouvrir_arbre( p_racine, false )
-			produire_lot_commande_unitaire( lot, p_option )
+			produire_lot_commande_unitaire( lot )
 			lot.clore
 		end
 
-	produire_liste_commande_unitaire( p_liste : STRING
-											  p_option : LUAT_OPTION ) is
+	produire_liste_commande_unitaire( p_liste : STRING ) is
 			-- ajoute autant de commandes de mesure à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans la liste,
 			-- sauf pour ceux dont le langage ne peut être déterminé
 		require
 			liste_valide : p_liste /= void
-			option_valide : p_option /= void
 		local
 			lot : LUAT_LOT
 		do
 			lot := ouvrir_liste( p_liste )
-			produire_lot_commande_unitaire( lot, p_option )
+			produire_lot_commande_unitaire( lot )
 			lot.clore
 		end
 
-	produire_lot_commande_unitaire( p_lot : LUAT_LOT
-											  p_option : LUAT_OPTION ) is
+	produire_lot_commande_unitaire( p_lot : LUAT_LOT ) is
 			-- ajoute autant de commandes de mesure à la liste de
 			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
 			-- sauf pour ceux dont le langage ne peut être déterminé
 		require
 			lot_valide : p_lot /= void
-			option_valide : p_option /= void
 		local
 			nom_fichier : STRING
 		do
@@ -727,19 +686,17 @@ feature {}
 			loop
 				nom_fichier := p_lot.entree
 				if nom_fichier /= void then
-					produire_commande_unitaire( nom_fichier, p_option )
+					produire_commande_unitaire( nom_fichier )
 				end
 				p_lot.lire
 			end
 		end
 
-	produire_commande_unitaire( p_nom_fichier : STRING
-										 p_option : LUAT_OPTION ) is
+	produire_commande_unitaire( p_nom_fichier : STRING ) is
 			-- ajoute une commande de mesure à la liste des commandes, à
 			-- moins que le langage ne puisse être déterminé
 		require
 			nom_valide : p_nom_fichier /= void
-			option_valide : p_option /= void
 		local
 			analyseur : LUAT_ANALYSEUR
 			commande : LUAT_COMMANDE_UNITAIRE
@@ -747,7 +704,7 @@ feature {}
 			analyseur := configuration.analyseur( p_nom_fichier )
 
 			if analyseur /= void then
-				create commande.fabriquer( analyseur, p_nom_fichier, p_option )
+				create commande.fabriquer( analyseur, p_nom_fichier )
 				commandes.add_last( commande )
 			end
 		end

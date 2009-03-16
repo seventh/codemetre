@@ -21,6 +21,10 @@ creation
 
 feature
 
+	nom : STRING is "normal"
+
+feature
+
 	a : INTEGER
 			-- nombre de ligne de l'ancienne version
 

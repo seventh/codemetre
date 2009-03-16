@@ -24,12 +24,10 @@ feature {}
 			code := false
 			commentaire := false
 			total := false
-			resume := false
 		ensure
 			code_desactive : not code
 			commentaire_desactive : not commentaire
 			total_desactive : not total
-			resume_desactive : not resume
 		end
 
 feature
@@ -107,21 +105,6 @@ feature
 			code_ok : code = p_code
 			commentaire_ok : commentaire = p_commentaire
 			total_ok : total = p_total
-		end
-
-feature
-
-	resume : BOOLEAN
-			-- vrai si et seulement si une demande d'affichage court a
-			-- été faite. En mode différentiel, les métriques ne seront
-			-- affichées que s'il y a eu évolution
-
-	met_resume( p_resume : BOOLEAN ) is
-			-- modifie la valeur de 'resume'
-		do
-			resume := p_resume
-		ensure
-			resume_ok : resume = p_resume
 		end
 
 end

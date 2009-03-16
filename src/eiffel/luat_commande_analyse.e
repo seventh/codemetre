@@ -17,8 +17,6 @@ inherit
 
 	LUAT_COMMANDE
 
-	LUAT_GLOBAL
-
 creation
 
 	fabriquer
@@ -26,21 +24,17 @@ creation
 feature {}
 
 	fabriquer( p_analyseur : LUAT_ANALYSEUR
-				  p_nom_fichier : STRING
-				  p_option : LUAT_OPTION ) is
+				  p_nom_fichier : STRING ) is
 			-- constructeur
 		require
 			analyseur_valide : p_analyseur /= void
 			nom_valide : p_nom_fichier /= void
-			option_valide : p_option.choix_est_unique
 		do
 			analyseur := p_analyseur
 			nom_fichier := p_nom_fichier
-			option := p_option
 		ensure
 			analyseur_ok : analyseur = p_analyseur
 			nom_ok : nom_fichier = p_nom_fichier
-			option_ok : option = p_option
 		end
 
 feature
@@ -79,6 +73,16 @@ feature
 					std_error.put_new_line
 				end
 			end
+		end
+
+feature {}
+
+	option : LUAT_OPTION is
+			-- options de l'analyse
+		do
+			result := configuration.option_analyse
+		ensure
+			contrat : result.choix_est_unique
 		end
 
 end

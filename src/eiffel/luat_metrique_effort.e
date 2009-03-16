@@ -22,6 +22,10 @@ creation
 
 feature
 
+	nom : STRING is "effort"
+
+feature
+
 	effort : INTEGER
 			-- taux de modification, en pourcentage
 
