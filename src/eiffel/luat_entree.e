@@ -80,10 +80,10 @@ feature
 			-- disponibles dans le tampon (sauf lorsque le fichier est
 			-- épuisé)
 
-			if tampon.valid_index( indice + 2 ) then
+			if indice + 2 <= tampon.upper then
 				indice := indice + 1
 			else
-				if tampon.valid_index( indice + 1 ) then
+				if indice < tampon.upper then
 					tampon.keep_tail( 1 )
 				else
 					tampon.clear_count

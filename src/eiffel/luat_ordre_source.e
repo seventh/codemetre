@@ -16,24 +16,32 @@ class
 inherit
 
 	CAP_ORDRE[ LUAT_SOURCE ]
+		redefine
+			trichotomie
+		end
 
 feature
 
 	est_verifie( a, b : LUAT_SOURCE ) : BOOLEAN is
 		do
 			if a.est_code xor b.est_commentaire then
-				result := ordre_lexeme.est_verifie( a.lexeme, b.lexeme )
+				result := a.lexeme <= b.lexeme
 			else
 				result := a.est_code
 			end
 		end
 
-feature {}
+feature
 
-	ordre_lexeme : LUAT_ORDRE_LEXEME is
-			-- ordre utilitaire entre LEXEME
-		once
-			create result
+	trichotomie( a, b : LUAT_SOURCE ) : INTEGER is
+		do
+			if a.est_code xor b.est_commentaire then
+				result := a.lexeme.compare( b.lexeme )
+			elseif a.est_code then
+				result := -1
+			else -- if b.est_code then
+				result := 1
+			end
 		end
 
 end

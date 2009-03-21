@@ -44,7 +44,7 @@ feature
 		do
 			-- configuration de l'analyseur
 
-			analyseur.appliquer( option )
+			analyseur.appliquer( filtre )
 
 			if analyseur.est_utilise_fabrique then
 				analyseur.debrayer_fabrique
@@ -62,15 +62,15 @@ feature
 				std_output.put_string( analyseur.langage )
 				std_output.put_string( once ")" )
 
-				if option.code then
+				if filtre.code then
 					std_output.put_string( once " code " )
 					std_output.put_integer( source.nb_ligne_code )
 				end
-				if option.commentaire then
+				if filtre.commentaire then
 					std_output.put_string( once " comment " )
 					std_output.put_integer( source.nb_ligne_commentaire )
 				end
-				if option.total then
+				if filtre.total then
 					std_output.put_string( once " total " )
 					std_output.put_integer( source.nb_ligne )
 				end
@@ -81,10 +81,10 @@ feature
 
 feature {}
 
-	option : LUAT_OPTION is
-			-- options de l'analyse
+	filtre : LUAT_FILTRE is
+			-- filtres de l'analyse
 		do
-			result := configuration.option_unitaire
+			result := configuration.filtre_unitaire
 		ensure
 			contrat : result.choix_est_effectue
 		end

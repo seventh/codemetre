@@ -1,3 +1,9 @@
+*** v0.20.1
+
+ - Mesure différentielle : mise en place d'un certain nombre d'optimisations
+ (relations d'ordre, suppression d'un dictionnaire) qui permettent de réduire le
+ temps écoulé de 40% environ.
+
 *** v0.20.0
 
  - Configuration : ajout des sections 'analysis', 'diff' et 'unit' qui

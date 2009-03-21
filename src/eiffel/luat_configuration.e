@@ -36,9 +36,9 @@ feature {}
 			-- constructeur
 		do
 			create associations.fabriquer( create {LUAT_ORDRE_SUFFIXE} )
-			create option_analyse.initialiser
-			create option_differentiel.initialiser
-			create option_unitaire.initialiser
+			create filtre_analyse.initialiser
+			create filtre_differentiel.initialiser
+			create filtre_unitaire.initialiser
 		end
 
 feature
@@ -54,18 +54,18 @@ feature
 			-- section : 'anal'
 			--
 
-			option_analyse.met_code( false )
-			option_analyse.met_commentaire( false )
-			option_analyse.met_total( true )
+			filtre_analyse.met_code( false )
+			filtre_analyse.met_commentaire( false )
+			filtre_analyse.met_total( true )
 
 			--
 			-- section : 'diff'
 			--
 
 			metrique := metrique_normal
-			option_differentiel.met_code( true )
-			option_differentiel.met_commentaire( false )
-			option_differentiel.met_total( false )
+			filtre_differentiel.met_code( true )
+			filtre_differentiel.met_commentaire( false )
+			filtre_differentiel.met_total( false )
 			sortie_compacte := false
 
 			--
@@ -108,9 +108,9 @@ feature
 			-- section : 'unit'
 			--
 
-			option_unitaire.met_code( true )
-			option_unitaire.met_commentaire( true )
-			option_unitaire.met_total( false )
+			filtre_unitaire.met_code( true )
+			filtre_unitaire.met_commentaire( true )
+			filtre_unitaire.met_total( false )
 		end
 
 	appliquer_choix_fichier is
@@ -179,15 +179,15 @@ feature
 	metrique : LUAT_METRIQUE
 			-- modèle de comparaison à utiliser
 
-	option_analyse : LUAT_OPTION
+	filtre_analyse : LUAT_FILTRE
 			-- ensemble des filtres à utiliser sur les fichiers en
 			-- entrée par une commande d'analyse
 
-	option_differentiel : LUAT_OPTION
+	filtre_differentiel : LUAT_FILTRE
 			-- ensemble des filtres à utiliser sur les fichiers en
 			-- entrée par une commande de comptage différentiel
 
-	option_unitaire : LUAT_OPTION
+	filtre_unitaire : LUAT_FILTRE
 			-- ensemble des filtres à utiliser sur les fichiers en
 			-- entrée par une commande de comptage unitaire
 
@@ -222,14 +222,14 @@ feature
 			--
 
 			std_output.put_string( once "[analysis]%N" )
-			afficher_option( option_analyse, std_output )
+			afficher_filtre( filtre_analyse, std_output )
 
 			--
 			-- section : 'diff'
 			--
 
 			std_output.put_string( once "[diff]%N" )
-			afficher_option( option_differentiel, std_output )
+			afficher_filtre( filtre_differentiel, std_output )
 
 			std_output.put_string( once "%Tmodel := " )
 			std_output.put_string( metrique.nom )
@@ -278,7 +278,7 @@ feature
 			--
 
 			std_output.put_string( once "[unit]%N" )
-			afficher_option( option_unitaire, std_output )
+			afficher_filtre( filtre_unitaire, std_output )
 		end
 
 feature
@@ -383,7 +383,7 @@ feature {DANG_ANALYSEUR}
 			when "unit" then
 				inspect p_variable
 				when "filter" then
-					ajouter_option( option_unitaire, p_valeur )
+					ajouter_filtre( filtre_unitaire, p_valeur )
 				else
 					traiter_erreur( once "unknown parameter in unit section" )
 				end
@@ -407,7 +407,7 @@ feature {DANG_ANALYSEUR}
 			when "analysis" then
 				inspect p_variable
 				when "filter" then
-					imposer_option( option_analyse, p_valeur )
+					imposer_filtre( filtre_analyse, p_valeur )
 				else
 					traiter_erreur( once "unknown parameter in analysis section" )
 				end
@@ -415,7 +415,7 @@ feature {DANG_ANALYSEUR}
 			when "diff" then
 				inspect p_variable
 				when "filter" then
-					imposer_option( option_differentiel, p_valeur )
+					imposer_filtre( filtre_differentiel, p_valeur )
 				when "model" then
 					m := trouver_metrique( p_valeur )
 					if m = void then
@@ -458,7 +458,7 @@ feature {DANG_ANALYSEUR}
 			when "unit" then
 				inspect p_variable
 				when "filter" then
-					imposer_option( option_unitaire, p_valeur )
+					imposer_filtre( filtre_unitaire, p_valeur )
 				else
 					traiter_erreur( once "unknown parameter in unit section" )
 				end
@@ -519,7 +519,7 @@ feature {DANG_ANALYSEUR}
 			when "unit" then
 				inspect p_variable
 				when "filter" then
-					retirer_option( option_unitaire, p_valeur )
+					retirer_filtre( filtre_unitaire, p_valeur )
 				else
 					traiter_erreur( once "unknown parameter in unit section" )
 				end
@@ -637,28 +637,28 @@ feature {}
 
 feature {}
 
-	afficher_option( p_option : LUAT_OPTION
+	afficher_filtre( p_filtre : LUAT_FILTRE
 						  p_flux : OUTPUT_STREAM ) is
 		require
-			option_valide : p_option.choix_est_effectue
+			filtre_valide : p_filtre.choix_est_effectue
 			flux_valide : p_flux /= void
 		local
 			separateur_doit_etre_ajoute : BOOLEAN
 		do
 			p_flux.put_string( once "%Tfilter := " )
 
-			if p_option.code then
+			if p_filtre.code then
 				separateur_doit_etre_ajoute := true
 				p_flux.put_string( once "code" )
 			end
-			if p_option.commentaire then
+			if p_filtre.commentaire then
 				if separateur_doit_etre_ajoute then
 					p_flux.put_string( once ", " )
 				end
 				separateur_doit_etre_ajoute := true
 				p_flux.put_string( once "comment" )
 			end
-			if p_option.total then
+			if p_filtre.total then
 				if separateur_doit_etre_ajoute then
 					p_flux.put_string( once ", " )
 				end
@@ -669,69 +669,69 @@ feature {}
 			p_flux.put_new_line
 		end
 
-	ajouter_option( p_option : LUAT_OPTION
+	ajouter_filtre( p_filtre : LUAT_FILTRE
 						 p_variable : STRING ) is
 		require
-			option_valide : p_option /= void
+			filtre_valide : p_filtre /= void
 			variable_valide : not p_variable.is_empty
 		do
 			inspect p_variable
 			when "code" then
-				p_option.met_code( true )
+				p_filtre.met_code( true )
 			when "comment" then
-				p_option.met_commentaire( true )
+				p_filtre.met_commentaire( true )
 			when "total" then
-				p_option.met_total( true )
+				p_filtre.met_total( true )
 			else
 				traiter_erreur( once "unknown filter" )
 			end
 		end
 
-	imposer_option( p_option : LUAT_OPTION
+	imposer_filtre( p_filtre : LUAT_FILTRE
 						 p_variable : STRING ) is
 		require
-			option_valide : p_option /= void
+			filtre_valide : p_filtre /= void
 			variable_valide : not p_variable.is_empty
 		do
 			inspect p_variable
 			when "code" then
-				p_option.met( true, false, false )
+				p_filtre.met( true, false, false )
 			when "comment" then
-				p_option.met( false, true, false )
+				p_filtre.met( false, true, false )
 			when "total" then
-				p_option.met( false, false, true )
+				p_filtre.met( false, false, true )
 			else
 				traiter_erreur( once "unknown filter" )
 			end
 		end
 
-	retirer_option( p_option : LUAT_OPTION
+	retirer_filtre( p_filtre : LUAT_FILTRE
 						 p_variable : STRING ) is
 		require
-			option_valide : p_option.choix_est_effectue
+			filtre_valide : p_filtre.choix_est_effectue
 			variable_valide : not p_variable.is_empty
 		local
-			old_option : like p_option
+			old_filtre : like p_filtre
 		do
-			old_option := p_option.twin
+			old_filtre := p_filtre.twin
 
 			inspect p_variable
 			when "code" then
-				p_option.met_code( false )
+				p_filtre.met_code( false )
 			when "comment" then
-				p_option.met_commentaire( false )
+				p_filtre.met_commentaire( false )
 			when "total" then
-				p_option.met_total( false )
+				p_filtre.met_total( false )
 			else
 				traiter_erreur( once "unknown filter" )
 			end
 
-			if not p_option.choix_est_effectue then
-				p_option.copy( old_option )
+			if not p_filtre.choix_est_effectue then
+				p_filtre.copy( old_filtre )
 				traiter_erreur( once "removing filters leaves empty set" )
 			end
 		ensure
-			option_ok : p_option.choix_est_effectue
+			filtre_ok : p_filtre.choix_est_effectue
 		end
 
 feature {}

@@ -88,28 +88,28 @@ feature
 
 feature
 
-	appliquer( p_option : LUAT_OPTION ) is
-			-- paramètre l'analyseur en fonction des options correspondantes
+	appliquer( p_filtre : LUAT_FILTRE ) is
+			-- paramètre l'analyseur en fonction des filtres correspondantes
 		do
-			if p_option.code
-				or p_option.total
+			if p_filtre.code
+				or p_filtre.total
 			 then
 				activer_code
 			else
 				desactiver_code
 			end
 
-			if p_option.commentaire
-				or p_option.total
+			if p_filtre.commentaire
+				or p_filtre.total
 			 then
 				activer_commentaire
 			else
 				desactiver_commentaire
 			end
 		ensure
-			p_option.code implies code_pris_en_compte
-			p_option.commentaire implies commentaire_pris_en_compte
-			p_option.total implies ( code_pris_en_compte and commentaire_pris_en_compte )
+			p_filtre.code implies code_pris_en_compte
+			p_filtre.commentaire implies commentaire_pris_en_compte
+			p_filtre.total implies ( code_pris_en_compte and commentaire_pris_en_compte )
 		end
 
 feature

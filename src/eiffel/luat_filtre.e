@@ -5,7 +5,7 @@ indexing
 
 class
 
-	LUAT_OPTION
+	LUAT_FILTRE
 
 		--
 		-- Réunit les options d'analyse du code et des commentaires

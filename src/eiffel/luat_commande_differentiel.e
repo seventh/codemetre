@@ -59,7 +59,7 @@ feature
 				analyseur.embrayer_fabrique
 			end
 
-			analyseur.appliquer( option )
+			analyseur.appliquer( filtre )
 
 			-- chargement des fichiers
 
@@ -101,11 +101,11 @@ feature
 					std_output.put_string( analyseur.langage )
 					std_output.put_string( once ") " )
 
-					if option.total then
+					if filtre.total then
 						std_output.put_string( once "[total|" )
-					elseif option.code then
+					elseif filtre.code then
 						std_output.put_string( once "[code|" )
-					else -- if option.commentaire then
+					else -- if filtre.commentaire then
 						std_output.put_string( once "[comment|" )
 					end
 
@@ -133,10 +133,10 @@ feature
 
 feature {}
 
-	option : LUAT_OPTION is
-			-- options de l'analyse
+	filtre : LUAT_FILTRE is
+			-- filtres de l'analyse
 		do
-			result := configuration.option_differentiel
+			result := configuration.filtre_differentiel
 		ensure
 			contrat : result.choix_est_unique
 		end

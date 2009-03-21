@@ -47,7 +47,7 @@ feature
 		do
 			-- configuration de l'analyseur
 
-			analyseur.appliquer( option )
+			analyseur.appliquer( filtre )
 
 			if analyseur.est_utilise_fabrique then
 				analyseur.debrayer_fabrique
@@ -77,10 +77,10 @@ feature
 
 feature {}
 
-	option : LUAT_OPTION is
-			-- options de l'analyse
+	filtre : LUAT_FILTRE is
+			-- filtres de l'analyse
 		do
-			result := configuration.option_analyse
+			result := configuration.filtre_analyse
 		ensure
 			contrat : result.choix_est_unique
 		end

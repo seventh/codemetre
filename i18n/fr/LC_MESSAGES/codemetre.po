@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.20.0\n"
+"Project-Id-Version: 0.20.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-16 23:32+0100\n"
-"PO-Revision-Date: 2009-03-16 23:48+0100\n"
+"POT-Creation-Date: 2009-03-21 14:40+0100\n"
+"PO-Revision-Date: 2009-03-21 14:41+0100\n"
 "Last-Translator: Guillaume Lemaître <guillaume.lemaitre@gmail.com>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -478,13 +478,13 @@ msgstr "l'affichage court n'est possible que lors d'une demande de comparaison"
 
 #: luat_ligne_commande_analyseur.e:246
 #, c-format
-msgid "one option only for analysis"
-msgstr "une seule option autorisée lors d'une demande d'analyse"
+msgid "one filter only for analysis"
+msgstr "une seule filtre autorisé lors d'une demande d'analyse"
 
 #: luat_ligne_commande_analyseur.e:257
 #, c-format
-msgid "one option only for diff"
-msgstr "une seule option autorisée lors d'une demande de comparaison"
+msgid "one filter only for diff"
+msgstr "une seule filtre autorisé lors d'une demande de comparaison"
 
 #: luat_ligne_commande_analyseur.e:266
 #, c-format

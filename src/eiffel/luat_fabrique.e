@@ -26,7 +26,6 @@ feature {}
 		do
 			create dico_ligne.fabriquer( create {LUAT_ORDRE_LIGNE} )
 			create dico_source.fabriquer( create {LUAT_ORDRE_SOURCE} )
-			create dico_lexeme.fabriquer( create {LUAT_ORDRE_LEXEME} )
 		end
 
 feature
@@ -40,13 +39,9 @@ feature
 			if not dico_source.est_vide then
 				dico_source.vider
 			end
-			if not dico_lexeme.est_vide then
-				dico_lexeme.vider
-			end
 		ensure
 			dico_ligne.est_vide
 			dico_source.est_vide
-			dico_lexeme.est_vide
 		end
 
 	activer_memoire is
@@ -81,7 +76,7 @@ feature
 		local
 			it_source : ARN_ITERATEUR[ LUAT_SOURCE ]
 		do
-			create result.fabriquer_code( produire_lexeme( p_lexeme ) )
+			create result.fabriquer_code( p_lexeme )
 
 			if est_active_memoire then
 				create it_source.attacher( dico_source )
@@ -116,7 +111,6 @@ feature
 				else
 					result := it_source.dereferencer
 				end
-
 				it_source.detacher
 			end
 		ensure
@@ -172,46 +166,10 @@ feature
 
 feature {}
 
-	produire_lexeme( p_texte : STRING ) : STRING is
-			-- fournit la chaîne de référence pour un lexème donné.
-			-- Ainsi, on ne peut pas avoir deux chaînes équivalentes
-			-- dans un source
-		local
-			it_lexeme : ARN_ITERATEUR[ STRING ]
-		do
-			result := p_texte
-
-			if est_active_memoire then
-				create it_lexeme.attacher( dico_lexeme )
-				dico_lexeme.trouver( p_texte, it_lexeme )
-
-				if it_lexeme.est_hors_borne then
-					dico_lexeme.ajouter( p_texte )
-				else
-					result := it_lexeme.dereferencer
-				end
-
-				it_lexeme.detacher
-			end
-		ensure
-			est_active_memoire implies est_connu_lexeme( result )
-		end
-
-	est_connu_lexeme( p_lexeme : STRING ) : BOOLEAN is
-			-- vrai si et seulement si l'élément est référencé
-		do
-			result := dico_lexeme.est_present( p_lexeme )
-		end
-
-feature {}
-
 	dico_ligne : ARN_ARBRE[ LUAT_LIGNE ]
 			-- ensemble des lignes
 
 	dico_source : ARN_ARBRE[ LUAT_SOURCE ]
 			-- ensemble des éléments de code ou commentaire
-
-	dico_lexeme : ARN_ARBRE[ STRING ]
-			-- ensemble des lexèmes
 
 end

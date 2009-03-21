@@ -52,7 +52,7 @@ feature
 			-- les commandes en conséquences
 		local
 			lexeme, etat, mode : INTEGER
-			option : LUAT_OPTION
+			filtre : LUAT_FILTRE
 			avant, apres : STRING
 			analyseur_precise : BOOLEAN
 			modele_precise : BOOLEAN
@@ -60,7 +60,7 @@ feature
 			lot_active : BOOLEAN
 			avant_est_repertoire, apres_est_repertoire : BOOLEAN
 		do
-			create option.initialiser
+			create filtre.initialiser
 			mode := mode_indetermine
 
 			-- analyse de la ligne de commande à l'aide d'un automate
@@ -112,29 +112,29 @@ feature
 						-- filtre
 
 					when "--code" then
-						if option.code then
+						if filtre.code then
 							afficher_erreur( once "too many %"--code%" option" )
 							etat := etat_final
 						else
-							option.met_code( true )
+							filtre.met_code( true )
 						end
 						lexeme := lexeme + 1
 
 					when "--comment" then
-						if option.commentaire then
+						if filtre.commentaire then
 							afficher_erreur( once "too many %"--comment%" option" )
 							etat := etat_final
 						else
-							option.met_commentaire( true )
+							filtre.met_commentaire( true )
 						end
 						lexeme := lexeme + 1
 
 					when "--total" then
-						if option.total then
+						if filtre.total then
 							afficher_erreur( once "too many %"--total%" option" )
 							etat := etat_final
 						else
-							option.met_total( true )
+							filtre.met_total( true )
 						end
 						lexeme := lexeme + 1
 
@@ -240,24 +240,24 @@ feature
 						elseif sortie_compacte_precise then
 							afficher_erreur( once "short output is available only for diff" )
 							etat := etat_final
-						elseif not option.choix_est_effectue then
+						elseif not filtre.choix_est_effectue then
 							etat := etat_commande_analyse
-						elseif not option.choix_est_unique then
-							afficher_erreur( once "one option only for analysis" )
+						elseif not filtre.choix_est_unique then
+							afficher_erreur( once "one filter only for analysis" )
 							etat := etat_final
 						else
-							configuration.option_analyse.copy( option )
+							configuration.filtre_analyse.copy( filtre )
 							etat := etat_commande_analyse
 						end
 
 					when mode_comparaison then
-						if not option.choix_est_effectue then
+						if not filtre.choix_est_effectue then
 							etat := etat_commande_comparaison
-						elseif not option.choix_est_unique then
-							afficher_erreur( once "one option only for diff" )
+						elseif not filtre.choix_est_unique then
+							afficher_erreur( once "one filter only for diff" )
 							etat := etat_final
 						else
-							configuration.option_differentiel.copy( option )
+							configuration.filtre_differentiel.copy( filtre )
 							etat := etat_commande_comparaison
 						end
 
@@ -268,8 +268,8 @@ feature
 						elseif sortie_compacte_precise then
 							afficher_erreur( once "short output is available only for diff" )
 							etat := etat_final
-						elseif option.choix_est_effectue then
-							configuration.option_unitaire.copy( option )
+						elseif filtre.choix_est_effectue then
+							configuration.filtre_unitaire.copy( filtre )
 							etat := etat_commande_unitaire
 						else
 							etat := etat_commande_unitaire
@@ -360,7 +360,7 @@ feature
 		end
 
 	commandes : FAST_ARRAY[ LUAT_COMMANDE ]
-			-- traduction des options de la ligne de commande en un
+			-- traduction des directives de la ligne de commande en un
 			-- ensemble de commandes
 
 feature
