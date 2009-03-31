@@ -71,9 +71,6 @@ feature {LUAT_ANALYSEUR}
 				fichier.avancer
 
 				inspect etat
-				when etat_final then
-					-- état puits
-
 				when etat_initial then
 					traiter_etat_initial
 

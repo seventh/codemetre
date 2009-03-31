@@ -3,6 +3,7 @@ indexing
 	auteur : "seventh"
 	license : "GPL 3.0"
 	reference : "Ada 2005 reference manual, http://www.adaic.com/standards/05rm/html/RM-P.html"
+	reference : "GCC 4.3.3 source code"
 
 class
 
@@ -16,12 +17,22 @@ inherit
 
 	LUAT_ANALYSEUR
 		redefine
-			gerer_erreur
+			fabriquer,
+			gerer_erreur,
+			produire_code
 		end
 
 creation
 
 	fabriquer
+
+feature {}
+
+	fabriquer is
+		do
+			precursor
+			create avant.make_empty
+		end
 
 feature
 
@@ -29,10 +40,24 @@ feature
 
 feature {LUAT_ANALYSEUR}
 
+	produire_code is
+		do
+			-- On mémorise le lexème produit. Ceci est nécessaire pour
+			-- pouvoir effectuer l'analyse lexicale correctement.
+			-- Conserver la référence sans faire de copie est suffisant,
+			-- car 'precursor' regénère une nouvelle instance à chaque
+			-- appel
+
+			avant := chaine
+			precursor
+		end
+
+	avant : STRING
+			-- dernier lexème reconnu
+
+feature {LUAT_ANALYSEUR}
+
 	analyser is
-		local
-			sauvegarde : CHARACTER
-			autoriser_lecture : BOOLEAN
 		do
 			check
 				chaine.is_empty
@@ -42,23 +67,15 @@ feature {LUAT_ANALYSEUR}
 			indice_ligne := 1
 			erreur := false
 			message_erreur := once ""
-			autoriser_lecture := true
 
 			from etat := etat_initial
 			until etat = etat_final
 			loop
-				if autoriser_lecture then
-					fichier.avancer
-				else
-					autoriser_lecture := true
-				end
+				fichier.avancer
 
 				inspect etat
-				when etat_final then
-					-- aucun traitement
-
 				when etat_initial then
-					traiter_etat_initial( caractere )
+					traiter_etat_initial
 
 				when etat_apres_lettre then
 					inspect caractere
@@ -69,7 +86,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_apres_souligne_dans_identifiant
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_souligne_dans_identifiant then
@@ -99,7 +116,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_apres_exposant
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_souligne_dans_entier then
@@ -176,7 +193,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_apres_exposant
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_exposant then
@@ -201,7 +218,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_apres_separateur_dans_exposant
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_separateur_dans_exposant then
@@ -245,7 +262,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_apres_exposant
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_souligne_dans_partie_decimale then
@@ -258,35 +275,22 @@ feature {LUAT_ANALYSEUR}
 					end
 
 				when etat_apres_apostrophe then
-					if caractere >= ' ' then
+					inspect caractere
+					when '%U' then
+						gerer_erreur( once "incomplete character constant" )
+					else
 						chaine.add_last( caractere )
 						etat := etat_apres_apostrophe_caractere
-					else
-						chaine.add_last( '%'' )
-						produire_code
-						traiter_etat_initial( caractere )
 					end
 
 				when etat_apres_apostrophe_caractere then
 					inspect caractere
-					when '%U' then
-						sauvegarde := chaine.last
-						chaine.remove_last
-						produire_code
-						chaine.add_last( sauvegarde )
-						produire_code
-						etat := etat_final
 					when '%'' then
 						chaine.add_last( caractere )
 						produire_code
 						etat := etat_initial
 					else
-						sauvegarde := chaine.last
-						chaine.remove_last
-						produire_code
-
-						traiter_etat_initial( sauvegarde )
-						autoriser_lecture := false
+						gerer_erreur( once "incomplete character constant" )
 					end
 
 				when etat_apres_guillemets then
@@ -306,7 +310,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_apres_guillemets
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_pourcentage then
@@ -326,7 +330,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_apres_pourcentage
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_point then
@@ -336,7 +340,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_initial
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_barre_oblique then
@@ -346,7 +350,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_initial
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_chevron_ouvrant then
@@ -357,7 +361,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_initial
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_chevron_fermant then
@@ -368,7 +372,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_initial
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_deux_points then
@@ -378,7 +382,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_initial
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_etoile then
@@ -388,7 +392,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_initial
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_egal then
@@ -398,7 +402,7 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_initial
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_tiret then
@@ -407,18 +411,21 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_apres_double_tiret
 					else
 						produire_code
-						traiter_etat_initial( caractere )
+						traiter_etat_initial
 					end
 
 				when etat_apres_double_tiret then
-					if caractere /= '%N' then
-						chaine.add_last( caractere )
-					else
-						if not chaine.is_empty then
-							produire_commentaire
-						end
+					inspect caractere
+					when '%U' then
+						produire_commentaire
+						produire_ligne
+						etat := etat_final
+					when '%N' then
+						produire_commentaire
 						produire_ligne
 						etat := etat_initial
+					else
+						chaine.add_last( caractere )
 					end
 
 				else
@@ -492,51 +499,91 @@ feature {}
 
 feature {}
 
-	traiter_etat_initial( p_caractere : CHARACTER ) is
+	traiter_etat_initial is
 			-- aucun préfixe
 		do
-			inspect p_caractere
+			inspect caractere
 			when '0' .. '9' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_chiffre
 			when 'A' .. 'Z', 'a' .. 'z' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_lettre
 			when '%'' then
-				chaine.add_last( p_caractere )
-				etat := etat_apres_apostrophe
+				chaine.add_last( caractere )
+				-- on considère qu'on a affaire à une simple apostrophe
+				-- si cette apostrophe suit :
+				-- * un identifiant (donc pas un mot-clef) ;
+				-- * une parenthèse fermante ;
+				-- * une constante littérale chaîne ou caractère ;
+				if avant.is_empty then
+					etat := etat_apres_apostrophe
+				else
+					inspect avant.first
+					when 'A' .. 'Z', 'a' .. 'z' then
+						if avant.count = 2
+							and then ( avant.item( 1 ) = 'I' or avant.item( 1 ) = 'i' )
+							and then ( avant.item( 2 ) = 'N' or avant.item( 2 ) = 'n' )
+						 then
+							etat := etat_apres_apostrophe
+						elseif avant.count = 4
+							and then ( avant.item( 1 ) = 'W' or avant.item( 1 ) = 'w' )
+							and then ( avant.item( 2 ) = 'H' or avant.item( 2 ) = 'h' )
+							and then ( avant.item( 3 ) = 'E' or avant.item( 3 ) = 'e' )
+							and then ( avant.item( 4 ) = 'N' or avant.item( 4 ) = 'n' )
+						 then
+							etat := etat_apres_apostrophe
+						elseif avant.count = 5
+							and then ( avant.item( 1 ) = 'R' or avant.item( 1 ) = 'r' )
+							and then ( avant.item( 2 ) = 'A' or avant.item( 2 ) = 'a' )
+							and then ( avant.item( 3 ) = 'N' or avant.item( 3 ) = 'n' )
+							and then ( avant.item( 4 ) = 'G' or avant.item( 4 ) = 'g' )
+							and then ( avant.item( 5 ) = 'E' or avant.item( 5 ) = 'e' )
+						 then
+							etat := etat_apres_apostrophe
+						else
+							produire_code
+							etat := etat_initial
+						end
+					when '%"', '%'', ')' then
+						produire_code
+						etat := etat_initial
+					else
+						etat := etat_apres_apostrophe
+					end
+				end
 			when '%"' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_guillemets
 			when '%%' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_pourcentage
 			when '.' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_point
 			when '/' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_barre_oblique
 			when '<' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_chevron_ouvrant
 			when '>' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_chevron_fermant
 			when ':' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_deux_points
 			when '*' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_etoile
 			when '-' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_tiret
 			when '=' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				etat := etat_apres_egal
 			when '&', '(', ')', '+', ',', ';', '|', '!' then
-				chaine.add_last( p_caractere )
+				chaine.add_last( caractere )
 				produire_code
 				etat := etat_initial
 			when ' ', '%F', '%R', '%T' then

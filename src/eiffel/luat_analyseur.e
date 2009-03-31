@@ -161,7 +161,8 @@ feature
 			if not fichier.est_ouvert then
 				std_error.put_string( traduire( once "*** Error: file %"" ) )
 				std_error.put_string( p_fichier )
-				std_error.put_string( traduire( once "%" is unreachable.%N" ) )
+				std_error.put_string( traduire( once "%" is unreachable." ) )
+				std_error.put_new_line
 				std_error.flush
 			else
 				create listage.fabriquer( p_fichier, langage )
@@ -198,10 +199,8 @@ feature {LUAT_ANALYSEUR}
 		do
 			if code_pris_en_compte then
 				ligne.add_last( fabrique.produire_code( chaine ) )
-				create chaine.make_empty
-			else
-				chaine.clear_count
 			end
+			create chaine.make_empty
 		ensure
 			code_pris_en_compte implies not ligne.is_empty
 			chaine.is_empty
@@ -214,10 +213,8 @@ feature {LUAT_ANALYSEUR}
 		do
 			if commentaire_pris_en_compte then
 				ligne.add_last( fabrique.produire_commentaire( chaine ) )
-				create chaine.make_empty
-			else
-				chaine.clear_count
 			end
+			create chaine.make_empty
 		ensure
 			commentaire_pris_en_compte implies not ligne.is_empty
 			chaine.is_empty
@@ -281,9 +278,9 @@ feature {}
 			-- précision textuelle sur la nature de l'erreur rencontrée
 
 	gerer_erreur( p_message : STRING ) is
-			-- affiche le message sur la sortie d'erreur standard (en
-			-- phase de déboguage uniquement) et positionne le drapeau
-			-- d'erreur
+			-- affecte à 'message_erreur' une traduction du message
+			-- d'erreur correspondant, accompagné de la position de
+			-- l'erreur
 		require
 			message_valide : p_message /= void
 		do

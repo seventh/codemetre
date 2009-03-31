@@ -62,9 +62,6 @@ feature {LUAT_ANALYSEUR}
 				fichier.avancer
 
 				inspect etat
-				when etat_final then
-					-- aucun traitement
-
 				when etat_initial then
 					traiter_etat_initial
 
@@ -487,7 +484,7 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						etat := etat_initial
 					else
-						gerer_erreur( once "incomplete %'%%:%%:%' separator" )
+						gerer_erreur( once "incomplete '%%:%%:' separator" )
 					end
 
 				when etat_apres_double_point_interrogation then

@@ -1,4 +1,4 @@
-# CodeMetre
+# codemetre
 # Copyright (C) 2005-2009
 # This file is distributed under the same license as the codemetre package.
 # Guillaume Lemaître <guillaume.lemaitre@gmail.com>, 2009.
@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.20.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-21 14:40+0100\n"
-"PO-Revision-Date: 2009-03-21 14:41+0100\n"
+"POT-Creation-Date: 2009-03-25 10:39+0100\n"
+"PO-Revision-Date: 2009-03-25 10:40+0100\n"
 "Last-Translator: Guillaume Lemaître <guillaume.lemaitre@gmail.com>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgid "forbidden character"
 msgstr "caractère non autorisé"
 
 #: luat_analyseur.e:162
-#: luat_analyseur.e:173
+#: luat_analyseur.e:174
 #: luat_commande_analyse.e:70
 #, c-format
 msgid "*** Error: file \""
@@ -134,15 +134,15 @@ msgstr "*** Erreur : le fichier \""
 
 #: luat_analyseur.e:164
 #, c-format
-msgid "\" is unreachable.\n"
-msgstr "\" n'est pas accessible.\n"
+msgid "\" is unreachable."
+msgstr "\" n'est pas accessible."
 
-#: luat_analyseur.e:175
+#: luat_analyseur.e:176
 #, c-format
 msgid "\" is not written in "
 msgstr "\" n'est pas du langage "
 
-#: luat_analyseur.e:290
+#: luat_analyseur.e:291
 #, c-format
 msgid "line "
 msgstr "ligne "

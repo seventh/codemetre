@@ -342,7 +342,7 @@ feature {DANG_ANALYSEUR}
 			when "analysis" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( "analysis:filter can only have a single value" )
+					traiter_erreur( once "analysis:filter can only have a single value" )
 				else
 					traiter_erreur( once "unknown parameter in analysis section" )
 				end
@@ -350,7 +350,7 @@ feature {DANG_ANALYSEUR}
 			when "diff" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( "diff:filter can only have a single value" )
+					traiter_erreur( once "diff:filter can only have a single value" )
 				when "model" then
 					traiter_erreur( once "analysis:model is not a list" )
 				when "short" then
@@ -482,7 +482,7 @@ feature {DANG_ANALYSEUR}
 			when "analysis" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( "analysis:filter can only have a single value" )
+					traiter_erreur( once "analysis:filter can only have a single value" )
 				else
 					traiter_erreur( once "unknown parameter in analysis section" )
 				end
@@ -490,7 +490,7 @@ feature {DANG_ANALYSEUR}
 			when "diff" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( "diff:filter can only have a single value" )
+					traiter_erreur( once "diff:filter can only have a single value" )
 				when "model" then
 					traiter_erreur( once "analysis:model is not a list" )
 				when "short" then

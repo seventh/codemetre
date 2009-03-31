@@ -1,3 +1,11 @@
+*** v0.20.2
+
+ - Ada : correction d'un bogue dans l'analyse (la chaîne "CHARACTER'('A')" était
+ mal analysée avant)
+ - Ada : correction d'un bogue de boucle infini en cas de commentaire en fin de
+ fin de fichier sans retour à la ligne.
+ - Correction de quelques points extrêmement mineurs de performance mémoire.
+
 *** v0.20.1
 
  - Mesure différentielle : mise en place d'un certain nombre d'optimisations
