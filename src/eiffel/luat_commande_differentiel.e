@@ -61,16 +61,18 @@ feature
 
 			analyseur.appliquer( filtre )
 
-			-- chargement des fichiers
+			-- chargement des fichiers : si théoriquement il ne sert à
+			-- rien de lire le second fichier si l'analyse du premier
+			-- sort en erreur, en pratique cette analyse est également
+			-- menée, pour pouvoir remonter un maximum d'information à
+			-- l'utilisateur quant à la conformité de ses entrées.
 
 			if nom_nid /= void then
 				nid := analyseur.lire( nom_nid )
 				erreur := nid = void
 			end
 
-			if not erreur
-				and nom_but /= void
-			 then
+			if nom_but /= void then
 				but := analyseur.lire( nom_but )
 				erreur := but = void
 			end

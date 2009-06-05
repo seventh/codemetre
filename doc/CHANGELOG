@@ -1,3 +1,10 @@
+*** v0.20.3
+
+ - Mesure différentielle : jusqu'alors, la version courante d'un fichier n'était
+ analysée que si sa version précédente avait pu être chargée sans problème.
+ Désormais, on analyse systématiquement les deux, pour pouvoir remonter un
+ message d'erreur complet à l'utilisateur.
+
 *** v0.20.2
 
  - Ada : correction d'un bogue dans l'analyse (la chaîne "CHARACTER'('A')" était
