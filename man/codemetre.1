@@ -1,7 +1,7 @@
 .\" Formater ce fichier par la commande :
-.\" groff -man -Tutf8 codemetre.1
+.\" groff -man -Tutf8 codemetre.fr.1
 .\"
-.TH CODEMETRE 1 "JANVIER 2009" Linux "Manuel utilisateur"
+.TH CODEMETRE 1 "JUIN 2009" Linux "Manuel utilisateur"
 .SH NOM
 codemetre \- comptage de ligne de fichiers source
 .SH SYNOPSIS
@@ -92,6 +92,13 @@ Si malgré le forçage d'un choix de langage, l'analyse d'un fichier venait à �
 théoriquement, seuls les caractères ASCII 7 bits sont autorisés pour les constantes littérales.
 .B codemetre
 tolère tous les caractères 8 bits.
+.SH FICHIER DE CONFIGURATION
+Chaque utilisateur peut surcharger les options par défaut de
+.I codemetre
+dans un fichier au format similaire à ce qui peut-être obtenu par le biais de la commande
+.B codemetre --config.
+La surcharge de la configuration par défaut doit être faite dans un fichier dénommé .codemetrerc et situé dans $(HOME). Nota : sous Windows, le fichier de configuration dénommé codemetre.ini est recherché dans %APPDATA%.
+En plus de l'opérateur ':=' pour modifier une variable, les opérateurs '+=' et '-=' peuvent également être utilisés, afin respectivement d'augmenter et de restreindre la liste des options par défaut.
 .SH BOGUES ET LIMITATIONS
 .B codemetre
 ne fait pas l'expansion des macro-commandes du C/C++, même si ceci ne modifierait pas les mesures produites. En effet, certaines macros-commandes peuvent être définies ailleurs que dans le fichier sous analyse, et

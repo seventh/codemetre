@@ -10,7 +10,7 @@ class
 		--
 		-- Regroupe l'ensemble des choix par défaut :
 		-- * soit ceux fait par l'utilisateur à travers son fichier
-		-- .codemetrerc ;
+		-- de configuration personnel ;
 		-- * soit ceux de l'application.
 		--
 		-- Ces choix incluent :
@@ -546,14 +546,33 @@ feature {LUAT_CONFIGURATION}
 	configuration_par_defaut : BOOLEAN
 
 	nom_fichier_configuration : STRING is
+			-- chemin absolu d'accès au fichier de configuration :
+			-- - sous UNIX : équivalent à $HOME/.codemetrerc
+			-- - sous WINDOWS : équivalent à %APPDATA%\codemetre.cnf
 		local
 			sys : SYSTEM
 		once
-			result := sys.get_environment_variable( once "HOME" )
+			-- l'implémentation à un biais : on détermine
+			-- l'environnement par rapport à la définition ou non de la
+			-- variable utilisée spécifiquement dans celui-ci
+
+			-- environnement UNIX
+
 			if result = void then
-				create result.make_empty
+				result := sys.get_environment_variable( once "HOME" )
+				if result /= void then
+					result.append_string( once "/.codemetrerc" )
+				end
 			end
-			result.append_string( once "/.codemetrerc" )
+
+			-- environnement WINDOWS
+
+			if result = void then
+				result := sys.get_environment_variable( once "APPDATA" )
+				if result /= void then
+					result.append_string( once "\codemetre.ini" )
+				end
+			end
 		ensure
 			definition : result /= void
 		end

@@ -2,6 +2,8 @@ Développements futurs :
  * Chercher un mécanisme plus élégant pour la traduction, car il y a du code dupliqué à cause de l'internationalisation.
  * Étudier la possibilité de coupler --tree à un SCM, et de donner des révisions plutôt que des noms de fichier par exemple.
  * Rendre l'application multi-tâche, afin de paralléliser les mesures (en fonction de l'architecture)
+ * Garantir que les résultats apparaissent par ordre alphabétique lors de l'analyse de répertoires complets.
+ * Repenser et réécrire la page de manuel UNIX, qui est actuellement un modèle de ce qu'il ne faut pas faire.
 
 Mode analytique :
  * produire un code filtré de tout commentaire qui compile encore

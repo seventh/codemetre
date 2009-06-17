@@ -1,3 +1,8 @@
+*** v0.21.0
+
+ - Windows : fourniture d'un bouchon pour gettext, ainsi que d'un descripteur de projet Code::Blocks.
+ - Windows : le fichier de configuration est recherché sous l'appelation "%APPDATA%\codemetre.ini" plutôt que "$(HOME)/.codemetrerc" dans le monde Unix.
+
 *** v0.20.3
 
  - Mesure différentielle : jusqu'alors, la version courante d'un fichier n'était

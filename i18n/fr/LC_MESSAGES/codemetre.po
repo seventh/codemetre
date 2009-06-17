@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.20.1\n"
+"Project-Id-Version: 0.21.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-25 10:39+0100\n"
-"PO-Revision-Date: 2009-03-25 10:40+0100\n"
+"POT-Creation-Date: 2009-06-17 21:26+0200\n"
+"PO-Revision-Date: 2009-06-17 21:29+0200\n"
 "Last-Translator: Guillaume Lemaître <guillaume.lemaitre@gmail.com>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -42,7 +42,7 @@ msgstr "variable sans valeur"
 #: dang_analyseur.e:179
 #: dang_analyseur.e:188
 #: dang_analyseur.e:197
-#: luat_analyseur_eiffel.e:680
+#: luat_analyseur_eiffel.e:677
 #, c-format
 msgid "unknown operator"
 msgstr "opérateur inconnu"
@@ -53,74 +53,84 @@ msgid "no value associated to variable"
 msgstr "aucune valeur n'est associée à la variable"
 
 #: dang_analyseur.e:232
-#: luat_analyseur_ada.e:427
-#: luat_analyseur_eiffel.e:753
-#: luat_analyseur_famille_c.e:734
+#: luat_analyseur_ada.e:434
+#: luat_analyseur_eiffel.e:750
+#: luat_analyseur_famille_c.e:731
 #, c-format
 msgid "lexer is buggy!"
 msgstr "bogue dans l'analyseur !"
 
-#: luat_analyseur_ada.e:81
+#: luat_analyseur_ada.e:98
 #, c-format
 msgid "incomplete identifier"
 msgstr "identifiant incomplet"
 
-#: luat_analyseur_ada.e:110
+#: luat_analyseur_ada.e:127
 #, c-format
 msgid "incomplete integer constant"
 msgstr "constante littérale entière incomplète"
 
-#: luat_analyseur_ada.e:119
+#: luat_analyseur_ada.e:136
 #, c-format
 msgid "forbidden character in based integer constant"
 msgstr "caractère interdit dans constante littérale entière basée"
 
-#: luat_analyseur_ada.e:139
+#: luat_analyseur_ada.e:156
 #, c-format
 msgid "wrong value in based integer constant"
 msgstr "valeur incorrecte dans constante littérale numérique basée"
 
-#: luat_analyseur_ada.e:150
 #: luat_analyseur_ada.e:167
+#: luat_analyseur_ada.e:184
 #, c-format
 msgid "forbidden character in decimal part of based integer constant"
 msgstr "caractère interdit dans partie décimale de constante littérale numérique basée"
 
-#: luat_analyseur_ada.e:193
+#: luat_analyseur_ada.e:210
 #, c-format
 msgid "incomplete exponent in integer constant"
 msgstr "exposant incomplet dans constante littérale numérique"
 
-#: luat_analyseur_ada.e:214
+#: luat_analyseur_ada.e:231
 #, c-format
 msgid "wrong exponent in integer constant"
 msgstr "exposant incorrect dans constante littérale numérique"
 
-#: luat_analyseur_ada.e:231
+#: luat_analyseur_ada.e:248
 #, c-format
 msgid "wrong decimal part in integer constant"
 msgstr "partie décimale incorrecte dans constante littérale numérique"
 
-#: luat_analyseur_ada.e:257
+#: luat_analyseur_ada.e:274
 #, c-format
 msgid "forbidden character in decimal part of integer constant"
 msgstr "caractère interdit dans partie décimale de constante littérale numérique"
 
-#: luat_analyseur_ada.e:295
-#: luat_analyseur_eiffel.e:222
-#: luat_analyseur_famille_c.e:296
-#: luat_analyseur_famille_c.e:949
+#: luat_analyseur_ada.e:280
+#: luat_analyseur_ada.e:293
+#: luat_analyseur_eiffel.e:196
+#: luat_analyseur_eiffel.e:203
+#: luat_analyseur_famille_c.e:506
+#: luat_analyseur_famille_c.e:925
+#, c-format
+msgid "incomplete character constant"
+msgstr "constante littérale caractère incomplète"
+
+#: luat_analyseur_ada.e:299
+#: luat_analyseur_eiffel.e:219
+#: luat_analyseur_famille_c.e:293
+#: luat_analyseur_famille_c.e:946
 #, c-format
 msgid "incomplete string constant"
 msgstr "constante littérale chaîne incomplète"
 
-#: luat_analyseur_ada.e:320
+#: luat_analyseur_ada.e:324
 #, c-format
 msgid "forbidden character in character constant"
 msgstr "caractère interdit dans constante littérale caractère"
 
-#: luat_analyseur_ada.e:552
-#: luat_analyseur_eiffel.e:892
+#: luat_analyseur_ada.e:599
+#: luat_analyseur_eiffel.e:889
 #, c-format
 msgid "forbidden character"
 msgstr "caractère non autorisé"
@@ -142,143 +152,135 @@ msgstr "\" n'est pas accessible."
 msgid "\" is not written in "
 msgstr "\" n'est pas du langage "
 
-#: luat_analyseur.e:291
+#: luat_analyseur.e:287
 #, c-format
 msgid "line "
 msgstr "ligne "
 
-#: luat_analyseur_eiffel.e:161
-#: luat_analyseur_eiffel.e:171
+#: luat_analyseur_eiffel.e:158
+#: luat_analyseur_eiffel.e:168
 #, c-format
 msgid "incomplete real constant"
 msgstr "nombre réel incomplet"
 
-#: luat_analyseur_eiffel.e:199
-#: luat_analyseur_eiffel.e:206
-#: luat_analyseur_famille_c.e:509
-#: luat_analyseur_famille_c.e:928
-#, c-format
-msgid "incomplete character constant"
-msgstr "constante littérale caractère incomplète"
-
-#: luat_analyseur_eiffel.e:258
-#: luat_analyseur_eiffel.e:395
+#: luat_analyseur_eiffel.e:255
+#: luat_analyseur_eiffel.e:392
 #, c-format
 msgid "unexpected end-of-line in string constant"
 msgstr "saut-de-ligne inattendu dans littéral chaîne"
 
-#: luat_analyseur_eiffel.e:372
+#: luat_analyseur_eiffel.e:369
 #, c-format
 msgid "unknown special character"
 msgstr "caractère spécial non reconnu"
 
-#: luat_analyseur_eiffel.e:384
-#: luat_analyseur_eiffel.e:397
+#: luat_analyseur_eiffel.e:381
+#: luat_analyseur_eiffel.e:394
 #, c-format
 msgid "unknown character after '%' mark"
 msgstr "caractère non reconnu après '%%'"
 
-#: luat_analyseur_eiffel.e:414
-#: luat_analyseur_eiffel.e:421
-#: luat_analyseur_eiffel.e:433
-#: luat_analyseur_eiffel.e:443
-#: luat_analyseur_eiffel.e:465
-#: luat_analyseur_eiffel.e:491
+#: luat_analyseur_eiffel.e:411
+#: luat_analyseur_eiffel.e:418
+#: luat_analyseur_eiffel.e:430
+#: luat_analyseur_eiffel.e:440
+#: luat_analyseur_eiffel.e:462
+#: luat_analyseur_eiffel.e:488
 #, c-format
 msgid "unexpected character in ASCII code"
 msgstr "caractère inattendu dans un code ASCII"
 
-#: luat_analyseur_eiffel.e:428
-#: luat_analyseur_eiffel.e:460
-#: luat_analyseur_eiffel.e:477
+#: luat_analyseur_eiffel.e:425
+#: luat_analyseur_eiffel.e:457
+#: luat_analyseur_eiffel.e:474
 #, c-format
 msgid "nul length ASCII code"
 msgstr "code ASCII de longueur nulle"
 
-#: luat_analyseur_eiffel.e:430
+#: luat_analyseur_eiffel.e:427
 #, c-format
 msgid "ASCII code is out of range"
 msgstr "code ASCII hors intervalle autorisé"
 
-#: luat_analyseur_eiffel.e:462
+#: luat_analyseur_eiffel.e:459
 #, c-format
 msgid "hexadecimal constant shall be made of an even number of digits"
 msgstr "les littéraux caractères hexadécimaux doivent être composés d'un nombre pair de chiffres"
 
-#: luat_analyseur_eiffel.e:479
+#: luat_analyseur_eiffel.e:476
 #, c-format
 msgid "hexadecimal code of unicode character is 8 digits max"
 msgstr "un code hexadécimal pour un caractère unicode ne peut dépasser 8 chiffres"
 
-#: luat_analyseur_eiffel.e:487
+#: luat_analyseur_eiffel.e:484
 #, c-format
 msgid "wrong unicode spelling"
 msgstr "notation unicode invalide"
 
-#: luat_analyseur_eiffel.e:497
-#: luat_analyseur_eiffel.e:521
-#: luat_analyseur_eiffel.e:561
+#: luat_analyseur_eiffel.e:494
+#: luat_analyseur_eiffel.e:518
+#: luat_analyseur_eiffel.e:558
 #, c-format
 msgid "unexpected end-of-file in multiline constant string"
 msgstr "fin de fichier inattendue dans chaîne caractère muli-ligne"
 
-#: luat_analyseur_eiffel.e:550
+#: luat_analyseur_eiffel.e:547
 #, c-format
 msgid "margins in string constant"
 msgstr "non respect des marges dans littéral chaîne"
 
-#: luat_analyseur_eiffel.e:726
+#: luat_analyseur_eiffel.e:723
 #, c-format
 msgid "unknown operator \"\\\""
 msgstr "opérateur inconnu \"\\\""
 
-#: luat_analyseur_famille_c.e:431
-#: luat_analyseur_famille_c.e:442
+#: luat_analyseur_famille_c.e:428
+#: luat_analyseur_famille_c.e:439
 #, c-format
 msgid "forgotten exponent in numerical constant"
 msgstr "oubli de l'exposant dans une constante littérale numérique"
 
-#: luat_analyseur_famille_c.e:490
+#: luat_analyseur_famille_c.e:487
 #, c-format
 msgid "incomplete '%:%:' separator"
 msgstr "séparateur '%:%:' incomplet"
 
-#: luat_analyseur_famille_c.e:500
+#: luat_analyseur_famille_c.e:497
 #, c-format
 msgid "incomplete triglyph"
 msgstr "triglyphe incomplet"
 
-#: luat_analyseur_famille_c.e:570
+#: luat_analyseur_famille_c.e:567
 #, c-format
 msgid "non respected end-of-line marker in split string"
 msgstr "marque de saut de ligne non respectée dans chaîne multi-ligne"
 
-#: luat_analyseur_famille_c.e:593
+#: luat_analyseur_famille_c.e:590
 #, c-format
 msgid "incomplete ellipsis"
 msgstr "ellipse incomplète"
 
-#: luat_analyseur_famille_c.e:604
+#: luat_analyseur_famille_c.e:601
 #, c-format
 msgid "non respected end-of-line marker"
 msgstr "marque de saut de ligne non respectée"
 
-#: luat_analyseur_famille_c.e:905
+#: luat_analyseur_famille_c.e:902
 #, c-format
 msgid "unknown prefix"
 msgstr "préfixe non reconnu"
 
-#: luat_analyseur_famille_c.e:937
+#: luat_analyseur_famille_c.e:934
 #, c-format
 msgid "end-of-line in character constant"
 msgstr "saut de ligne dans un caractère"
 
-#: luat_analyseur_famille_c.e:958
+#: luat_analyseur_famille_c.e:955
 #, c-format
 msgid "end-of-line in string constant"
 msgstr "saut de ligne dans une chaîne"
 
-#: luat_analyseur_famille_c.e:970
+#: luat_analyseur_famille_c.e:967
 #, c-format
 msgid "incomplete multiline comment"
 msgstr "commentaire multi-ligne incomplet"
@@ -402,14 +404,14 @@ msgstr "une telle association n'existe pas"
 msgid "Syntax error"
 msgstr "Syntaxe incorrecte"
 
-#: luat_configuration.e:686
-#: luat_configuration.e:704
-#: luat_configuration.e:726
+#: luat_configuration.e:705
+#: luat_configuration.e:723
+#: luat_configuration.e:745
 #, c-format
 msgid "unknown filter"
 msgstr "option de filtrage non reconnue"
 
-#: luat_configuration.e:731
+#: luat_configuration.e:750
 #, c-format
 msgid "removing filters leaves empty set"
 msgstr "supprimer ce filtre empêcherait toute analyse"
