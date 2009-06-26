@@ -13,6 +13,14 @@ deferred class
 
 feature {LUAT_GLOBAL}
 
+	bilan : LUAT_BILAN is
+			-- statut final affiché en fin d'exécution, si commandé
+		once
+			create result.fabriquer
+		end
+
+feature {LUAT_GLOBAL}
+
 	configuration : LUAT_CONFIGURATION is
 			-- ensemble des variables de configuration utilisateur
 		once
@@ -31,7 +39,7 @@ feature {LUAT_GLOBAL}
 
 feature {LUAT_GLOBAL}
 
-	version_majeure : STRING is "v0.21.0"
+	version_majeure : STRING is "v0.22.0"
 			-- identifiant de la branche officielle
 
 	version_mineure : STRING is ""

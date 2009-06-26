@@ -11,10 +11,8 @@
 				<Option object_output="obj\Debug\" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option projectIncludeDirsRelation="2" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="-I- -I..\..\src\c\bouchon" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -24,7 +22,6 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
-					<Add option="-I- -I..\..\src\c\bouchon" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -33,6 +30,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add directory="..\..\src\c\bouchon" />
 		</Compiler>
 		<Unit filename="..\..\src\c\bouchon\libintl.c">
 			<Option compilerVar="CC" />

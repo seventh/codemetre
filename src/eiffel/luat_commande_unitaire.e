@@ -41,6 +41,7 @@ feature
 	executer is
 		local
 			source : LUAT_LISTAGE
+			metrique : LUAT_METRIQUE_UNITAIRE
 		do
 			-- configuration de l'analyseur
 
@@ -57,23 +58,22 @@ feature
 			-- production des métriques
 
 			if source /= void then
+				-- mesure
+
+				create metrique.fabriquer
+				metrique.mesurer( source )
+
+				bilan.accumuler( metrique )
+
+				-- sortie
+
 				std_output.put_string( nom_fichier )
 				std_output.put_string( once " (" )
 				std_output.put_string( analyseur.langage )
-				std_output.put_string( once ")" )
+				std_output.put_string( once ") " )
 
-				if filtre.code then
-					std_output.put_string( once " code " )
-					std_output.put_integer( source.nb_ligne_code )
-				end
-				if filtre.commentaire then
-					std_output.put_string( once " comment " )
-					std_output.put_integer( source.nb_ligne_commentaire )
-				end
-				if filtre.total then
-					std_output.put_string( once " total " )
-					std_output.put_integer( source.nb_ligne )
-				end
+				metrique.afficher( std_output )
+
 				std_output.put_new_line
 				std_output.flush
 			end

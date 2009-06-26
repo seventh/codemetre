@@ -5,7 +5,7 @@ indexing
 
 class
 
-	LUAT_METRIQUE_NORMALE
+	LUAT_METRIQUE_NORMAL
 
 		--
 		-- Métrique dont le sens est directement interprétable
@@ -13,7 +13,7 @@ class
 
 inherit
 
-	LUAT_METRIQUE
+	LUAT_METRIQUE_DIFFERENTIEL
 
 creation
 
@@ -88,6 +88,17 @@ feature
 					c := nb_ligne_partage( p_ancien.contenu, p_nouvel.contenu )
 				end
 			end
+		end
+
+	accumuler( p_contribution : like current ) is
+		do
+			a := a + p_contribution.a
+			n := n + p_contribution.n
+			c := c + p_contribution.c
+		ensure
+			definition_1 : a = old a + p_contribution.a
+			definition_2 : n = old n + p_contribution.n
+			definition_3 : c = old c + p_contribution.c
 		end
 
 	afficher( p_flux : OUTPUT_STREAM ) is

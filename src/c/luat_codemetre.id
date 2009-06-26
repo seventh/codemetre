@@ -1,9 +1,9 @@
 |lib:storage/loadpath.se:dictionary/
-87 "HASHED_DICTIONARY" l
+88 "HASHED_DICTIONARY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/dictionary/hashed_dictionary.e"
 class-name: HASHED_DICTIONARY
 assertion-level: boost
-parent-count: 2 inherit: 88 insert: 90 
+parent-count: 2 inherit: 89 insert: 91 
 #
 |lib:string/loadpath.se:low_level/
 33 "STRING_HANDLER" l
@@ -13,23 +13,23 @@ assertion-level: boost
 parent-count: 1 insert: 13 
 #
 |lib:iterator/loadpath.se:
-78 "ITERATOR" l
+79 "ITERATOR" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/iterator/iterator.e"
 class-name: ITERATOR
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
 |lib:exec/loadpath.se:
-93 "SYSTEM" l
+94 "SYSTEM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/exec/system.e"
 class-name: SYSTEM
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T93 reference: no
+c-type: T94 reference: no
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	SYSTEM (93)
+	SYSTEM (94)
 #
 |lib:string/loadpath.se:
 3 "CHARACTER" l
@@ -44,70 +44,70 @@ class-name: STRING
 assertion-level: boost
 parent-count: 7 inherit: 13 37 36 35 34 insert: 38 30 
 #
-72 "UNICODE_STRING" l
+73 "UNICODE_STRING" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/string/unicode_string.e"
 class-name: UNICODE_STRING
 assertion-level: boost
 parent-count: 3 inherit: 37 36 34
-c-type: T72 reference: yes
+c-type: T73 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	UNICODE_STRING (72)
+	UNICODE_STRING (73)
 #
 |lib:time/loadpath.se:
-185 "TIME_FORMATTER" l
+189 "TIME_FORMATTER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/time/time_formatter.e"
 class-name: TIME_FORMATTER
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-153 "TIME" l
+156 "TIME" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/time/time.e"
 class-name: TIME
 assertion-level: boost
 parent-count: 2 insert: 37 36 
 #
-149 "MICROSECOND_TIME" l
+152 "MICROSECOND_TIME" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/time/microsecond_time.e"
 class-name: MICROSECOND_TIME
 assertion-level: boost
 parent-count: 2 insert: 37 36 
 #
 |lib:sorting/
-147 "ABSTRACT_SORTER" l
+150 "ABSTRACT_SORTER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/sorting/abstract_sorter.e"
 class-name: ABSTRACT_SORTER
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-199 "COLLECTION_SORTER[STRING]" l
+203 "COLLECTION_SORTER[STRING]" l
 #
-146 "COLLECTION_SORTER" l
+149 "COLLECTION_SORTER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/sorting/collection_sorter.e"
 class-name: COLLECTION_SORTER
 assertion-level: boost
-parent-count: 1 insert: 147 
+parent-count: 1 insert: 150 
 #
 |lib:sequencer/loadpath.se:events/
-161 "NETWORK_CONNECTION_OCCURRED" l
+164 "NETWORK_CONNECTION_OCCURRED" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/sequencer/events/network_connection_occurred.e"
 class-name: NETWORK_CONNECTION_OCCURRED
 assertion-level: boost
-parent-count: 1 inherit: 76
+parent-count: 1 inherit: 77
 #
-85 "CAN_READ_DATA_FROM_STREAM" l
+86 "CAN_READ_DATA_FROM_STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/sequencer/events/can_read_data_from_stream.e"
 class-name: CAN_READ_DATA_FROM_STREAM
 assertion-level: boost
-parent-count: 1 inherit: 76
+parent-count: 1 inherit: 77
 #
-77 "CAN_WRITE_DATA_TO_STREAM" l
+78 "CAN_WRITE_DATA_TO_STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/sequencer/events/can_write_data_to_stream.e"
 class-name: CAN_WRITE_DATA_TO_STREAM
 assertion-level: boost
-parent-count: 1 inherit: 76
+parent-count: 1 inherit: 77
 #
 |lib:get_text/loadpath.se:
 55 "NUMBER_GET_TEXT" l
@@ -122,7 +122,7 @@ class-name: GET_TEXT
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-91 "FILTER_GET_TEXT" l
+92 "FILTER_GET_TEXT" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/get_text/filter_get_text.e"
 class-name: FILTER_GET_TEXT
 assertion-level: boost
@@ -135,30 +135,30 @@ assertion-level: boost
 parent-count: 1 inherit: 54
 #
 |lib:net/loadpath.se:
-158 "ACCESS" l
+161 "ACCESS" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/net/access.e"
 class-name: ACCESS
 assertion-level: boost
-parent-count: 1 insert: 152 
+parent-count: 1 insert: 155 
 #
-160 "SOCKET_INPUT_OUTPUT_STREAM" l
+163 "SOCKET_INPUT_OUTPUT_STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/net/socket_input_output_stream.e"
 class-name: SOCKET_INPUT_OUTPUT_STREAM
 assertion-level: boost
-parent-count: 3 inherit: 43 insert: 152 33 
+parent-count: 3 inherit: 43 insert: 155 33 
 #
 |Local Loadpath:../Dang
-107 "DANG_ANALYSEUR" l
+109 "DANG_ANALYSEUR" l
 class-path: "/home/seventh/Prog/Eiffel/Dang/dang_analyseur.e"
 class-name: DANG_ANALYSEUR
 assertion-level: boost
 parent-count: 1 inherit: 13
-c-type: T107 reference: yes
+c-type: T109 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	DANG_ANALYSEUR (107)
+	DANG_ANALYSEUR (109)
 #
 58 "DANG_ADAPTATEUR" l
 class-path: "/home/seventh/Prog/Eiffel/Dang/dang_adaptateur.e"
@@ -179,18 +179,18 @@ class-name: TERMINAL_INPUT_STREAM
 assertion-level: boost
 parent-count: 1 inherit: 45
 #
-177 "PATH_NAME" l
+181 "PATH_NAME" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name.e"
 class-name: PATH_NAME
 assertion-level: boost
-parent-count: 1 inherit: 176
-c-type: T177 reference: yes
+parent-count: 1 inherit: 180
+c-type: T181 reference: yes
 ref-status: dead 
 destination-graph-nodes: empty
 run-time-set-count: 2
 run-time-set:
-	POSIX_PATH_NAME (178)
-	MICROSOFT_PATH_NAME (183)
+	POSIX_PATH_NAME (182)
+	MICROSOFT_PATH_NAME (187)
 #
 43 "TERMINAL_INPUT_OUTPUT_STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/terminal_input_output_stream.e"
@@ -198,29 +198,29 @@ class-name: TERMINAL_INPUT_OUTPUT_STREAM
 assertion-level: boost
 parent-count: 3 inherit: 44 40 31
 #
-75 "FILTER_OUTPUT_STREAM" l
+76 "FILTER_OUTPUT_STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/filter_output_stream.e"
 class-name: FILTER_OUTPUT_STREAM
 assertion-level: boost
-parent-count: 2 inherit: 28 insert: 67 
-c-type: T75 reference: yes
+parent-count: 2 inherit: 28 insert: 68 
+c-type: T76 reference: yes
 ref-status: dead 
 destination-graph-nodes: none
 run-time-set-count: 0
 #
-112 "DIRECTORY" l
+114 "DIRECTORY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/directory.e"
 class-name: DIRECTORY
 assertion-level: boost
-parent-count: 1 insert: 113 
-c-type: T112 reference: yes
+parent-count: 1 insert: 115 
+c-type: T114 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	DIRECTORY (112)
+	DIRECTORY (114)
 #
-67 "FILTER" l
+68 "FILTER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/filter.e"
 class-name: FILTER
 assertion-level: boost
@@ -232,11 +232,11 @@ class-name: TERMINAL_OUTPUT_STREAM
 assertion-level: boost
 parent-count: 1 inherit: 28
 #
-84 "FILTER_INPUT_STREAM" l
+85 "FILTER_INPUT_STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/filter_input_stream.e"
 class-name: FILTER_INPUT_STREAM
 assertion-level: boost
-parent-count: 2 inherit: 45 insert: 67 
+parent-count: 2 inherit: 45 insert: 68 
 #
 28 "OUTPUT_STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/output_stream.e"
@@ -249,24 +249,24 @@ destination-graph-nodes: empty
 run-time-set-count: 2
 run-time-set:
 	STD_OUTPUT (49)
-	TEXT_FILE_WRITE (144)
+	TEXT_FILE_WRITE (146)
 #
-134 "DIRECTORY_NOTATION" l
+136 "DIRECTORY_NOTATION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/directory_notation.e"
 class-name: DIRECTORY_NOTATION
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T134 reference: yes
+c-type: T136 reference: yes
 ref-status: dead 
 destination-graph-nodes: empty
 run-time-set-count: 6
 run-time-set:
-	MACINTOSH_DIRECTORY_NOTATION (173)
-	UNIX_DIRECTORY_NOTATION (174)
-	OPENVMS_DIRECTORY_NOTATION (180)
-	AMIGA_DIRECTORY_NOTATION (181)
-	WINDOWS_DIRECTORY_NOTATION (182)
-	CYGWIN_DIRECTORY_NOTATION (184)
+	MACINTOSH_DIRECTORY_NOTATION (177)
+	UNIX_DIRECTORY_NOTATION (178)
+	OPENVMS_DIRECTORY_NOTATION (184)
+	AMIGA_DIRECTORY_NOTATION (185)
+	WINDOWS_DIRECTORY_NOTATION (186)
+	CYGWIN_DIRECTORY_NOTATION (188)
 #
 29 "STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/stream.e"
@@ -274,7 +274,7 @@ class-name: STREAM
 assertion-level: boost
 parent-count: 1 insert: 30 
 #
-135 "FILE_TOOLS" l
+137 "FILE_TOOLS" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/file_tools.e"
 class-name: FILE_TOOLS
 assertion-level: boost
@@ -290,102 +290,102 @@ ref-status: dead
 destination-graph-nodes: empty
 run-time-set-count: 1
 run-time-set:
-	TEXT_FILE_READ (73)
+	TEXT_FILE_READ (74)
 #
 |lib:storage/loadpath.se:collection/
-226 "FAST_ARRAY[LUAT_LIGNE]" l
+230 "FAST_ARRAY[LUAT_LIGNE]" l
 #
-188 "FAST_ARRAY[LUAT_COMMANDE]" l
+192 "FAST_ARRAY[LUAT_COMMANDE]" l
 #
-198 "FAST_ARRAY[LUAT_ANALYSEUR]" l
+202 "FAST_ARRAY[LUAT_ANALYSEUR]" l
 #
-196 "FAST_ARRAY[LUAT_METRIQUE]" l
-#
-59 "FAST_ARRAY" l
+60 "FAST_ARRAY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/collection/fast_array.e"
 class-name: FAST_ARRAY
 assertion-level: boost
-parent-count: 3 inherit: 60 insert: 62 61 
+parent-count: 3 inherit: 61 insert: 63 62 
 #
-163 "RING_ARRAY" l
+166 "RING_ARRAY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/collection/ring_array.e"
 class-name: RING_ARRAY
 assertion-level: boost
-parent-count: 3 inherit: 60 insert: 62 61 
+parent-count: 3 inherit: 61 insert: 63 62 
 #
-233 "FAST_ARRAY[INTEGER_32]" l
+237 "FAST_ARRAY[INTEGER_32]" l
 #
-220 "ARRAY[ARN_ITERATEUR[LUAT_LIGNE]]" l
+224 "ARRAY[ARN_ITERATEUR[LUAT_LIGNE]]" l
 #
-217 "ARRAY[ARN_ITERATEUR[LUAT_SOURCE]]" l
+221 "ARRAY[ARN_ITERATEUR[LUAT_SOURCE]]" l
 #
-232 "FAST_ARRAY[INTEGER_16]" l
+200 "FAST_ARRAY[LUAT_METRIQUE_DIFFERENTIEL]" l
 #
-202 "ARRAY[ARN_ITERATEUR[LUAT_SUFFIXE]]" l
+236 "FAST_ARRAY[INTEGER_16]" l
 #
-208 "FAST_ARRAY[LUAT_SOURCE]" l
+206 "ARRAY[ARN_ITERATEUR[LUAT_SUFFIXE]]" l
 #
-230 "ARRAY[INTEGER_32]" l
+212 "FAST_ARRAY[LUAT_SOURCE]" l
 #
-81 "ARRAY" l
+234 "ARRAY[INTEGER_32]" l
+#
+82 "ARRAY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/collection/array.e"
 class-name: ARRAY
 assertion-level: boost
-parent-count: 3 inherit: 60 insert: 62 61 
+parent-count: 3 inherit: 61 insert: 63 62 
 #
-204 "FAST_ARRAY[TUPLE[STRING,STRING]]" l
+208 "FAST_ARRAY[TUPLE[STRING,STRING]]" l
 #
-191 "FAST_ARRAY[STRING]" l
+195 "FAST_ARRAY[STRING]" l
 #
 |Local Loadpath:../Cap
-194 "CAP_ORDRE[LUAT_SUFFIXE]" l
+198 "CAP_ORDRE[LUAT_SUFFIXE]" l
 #
-138 "CAP_ORDRE" l
+140 "CAP_ORDRE" l
 class-path: "/home/seventh/Prog/Eiffel/Cap/cap_ordre.e"
 class-name: CAP_ORDRE
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-214 "CAP_ORDRE[LUAT_SOURCE]" l
+218 "CAP_ORDRE[LUAT_SOURCE]" l
 #
-216 "CAP_ORDRE[LUAT_LIGNE]" l
+220 "CAP_ORDRE[LUAT_LIGNE]" l
 #
 |lib:net/loadpath.se:low_level/
-155 "SOCKET" l
+158 "SOCKET" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/net/low_level/socket.e"
 class-name: SOCKET
 assertion-level: boost
-parent-count: 5 insert: 33 152 151 30 145 
+parent-count: 5 insert: 33 155 154 30 147 
 #
-150 "SOCKET_SERVER" l
+153 "SOCKET_SERVER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/net/low_level/socket_server.e"
 class-name: SOCKET_SERVER
 assertion-level: boost
-parent-count: 2 insert: 152 151 
+parent-count: 2 insert: 155 154 
 #
-152 "SOCKET_HANDLER" l
+155 "SOCKET_HANDLER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/net/low_level/socket_handler.e"
 class-name: SOCKET_HANDLER
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-151 "SOCKET_PLUG_IN" l
+154 "SOCKET_PLUG_IN" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/net/low_level/socket_plug_in.e"
 class-name: SOCKET_PLUG_IN
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-164 "CLIENT_SOCKET_INPUT_OUTPUT_STREAM" l
+167 "CLIENT_SOCKET_INPUT_OUTPUT_STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/net/low_level/client_socket_input_output_stream.e"
 class-name: CLIENT_SOCKET_INPUT_OUTPUT_STREAM
 assertion-level: boost
-parent-count: 1 inherit: 160
+parent-count: 1 inherit: 163
 #
-159 "SERVER_SOCKET_INPUT_OUTPUT_STREAM" l
+162 "SERVER_SOCKET_INPUT_OUTPUT_STREAM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/net/low_level/server_socket_input_output_stream.e"
 class-name: SERVER_SOCKET_INPUT_OUTPUT_STREAM
 assertion-level: boost
-parent-count: 1 inherit: 160
+parent-count: 1 inherit: 163
 #
 |lib:get_text/loadpath.se:terminal_get_text/
 52 "GNU_GET_TEXT" l
@@ -395,158 +395,158 @@ assertion-level: boost
 parent-count: 3 inherit: 55 53 insert: 56 
 #
 |lib:io/loadpath.se:path_name/
-178 "POSIX_PATH_NAME" l
+182 "POSIX_PATH_NAME" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/posix_path_name.e"
 class-name: POSIX_PATH_NAME
 assertion-level: boost
-parent-count: 1 inherit: 179
-c-type: T178 reference: yes
+parent-count: 1 inherit: 183
+c-type: T182 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->PATH_NAME, ->PATH_JOINER
 run-time-set-count: 1
 run-time-set:
-	POSIX_PATH_NAME (178)
+	POSIX_PATH_NAME (182)
 #
-182 "WINDOWS_DIRECTORY_NOTATION" l
+186 "WINDOWS_DIRECTORY_NOTATION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/windows_directory_notation.e"
 class-name: WINDOWS_DIRECTORY_NOTATION
 assertion-level: boost
-parent-count: 1 inherit: 175
-c-type: T182 reference: yes
+parent-count: 1 inherit: 179
+c-type: T186 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->DIRECTORY_NOTATION
 run-time-set-count: 1
 run-time-set:
-	WINDOWS_DIRECTORY_NOTATION (182)
+	WINDOWS_DIRECTORY_NOTATION (186)
 #
-174 "UNIX_DIRECTORY_NOTATION" l
+178 "UNIX_DIRECTORY_NOTATION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/unix_directory_notation.e"
 class-name: UNIX_DIRECTORY_NOTATION
 assertion-level: boost
-parent-count: 1 inherit: 175
-c-type: T174 reference: yes
+parent-count: 1 inherit: 179
+c-type: T178 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->DIRECTORY_NOTATION
 run-time-set-count: 1
 run-time-set:
-	UNIX_DIRECTORY_NOTATION (174)
+	UNIX_DIRECTORY_NOTATION (178)
 #
-184 "CYGWIN_DIRECTORY_NOTATION" l
+188 "CYGWIN_DIRECTORY_NOTATION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/cygwin_directory_notation.e"
 class-name: CYGWIN_DIRECTORY_NOTATION
 assertion-level: boost
-parent-count: 1 inherit: 134
+parent-count: 1 inherit: 136
+c-type: T188 reference: yes
+ref-status: live id-field: yes 
+destination-graph-nodes: ->DIRECTORY_NOTATION
+run-time-set-count: 1
+run-time-set:
+	CYGWIN_DIRECTORY_NOTATION (188)
+#
+184 "OPENVMS_DIRECTORY_NOTATION" l
+class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/openvms_directory_notation.e"
+class-name: OPENVMS_DIRECTORY_NOTATION
+assertion-level: boost
+parent-count: 1 inherit: 136
 c-type: T184 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->DIRECTORY_NOTATION
 run-time-set-count: 1
 run-time-set:
-	CYGWIN_DIRECTORY_NOTATION (184)
+	OPENVMS_DIRECTORY_NOTATION (184)
 #
-180 "OPENVMS_DIRECTORY_NOTATION" l
-class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/openvms_directory_notation.e"
-class-name: OPENVMS_DIRECTORY_NOTATION
-assertion-level: boost
-parent-count: 1 inherit: 134
-c-type: T180 reference: yes
-ref-status: live id-field: yes 
-destination-graph-nodes: ->DIRECTORY_NOTATION
-run-time-set-count: 1
-run-time-set:
-	OPENVMS_DIRECTORY_NOTATION (180)
-#
-175 "PATH_NAME_NOTATION" l
+179 "PATH_NAME_NOTATION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/path_name_notation.e"
 class-name: PATH_NAME_NOTATION
 assertion-level: boost
-parent-count: 2 inherit: 134 176
+parent-count: 2 inherit: 136 180
 #
-173 "MACINTOSH_DIRECTORY_NOTATION" l
+177 "MACINTOSH_DIRECTORY_NOTATION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/macintosh_directory_notation.e"
 class-name: MACINTOSH_DIRECTORY_NOTATION
 assertion-level: boost
-parent-count: 1 inherit: 134
-c-type: T173 reference: yes
+parent-count: 1 inherit: 136
+c-type: T177 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->DIRECTORY_NOTATION
 run-time-set-count: 1
 run-time-set:
-	MACINTOSH_DIRECTORY_NOTATION (173)
+	MACINTOSH_DIRECTORY_NOTATION (177)
 #
-113 "DIRECTORY_NOTATION_HANDLER" l
+115 "DIRECTORY_NOTATION_HANDLER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/directory_notation_handler.e"
 class-name: DIRECTORY_NOTATION_HANDLER
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-183 "MICROSOFT_PATH_NAME" l
+187 "MICROSOFT_PATH_NAME" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/microsoft_path_name.e"
 class-name: MICROSOFT_PATH_NAME
 assertion-level: boost
-parent-count: 1 inherit: 179
-c-type: T183 reference: yes
+parent-count: 1 inherit: 183
+c-type: T187 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->PATH_NAME, ->PATH_JOINER
 run-time-set-count: 1
 run-time-set:
-	MICROSOFT_PATH_NAME (183)
+	MICROSOFT_PATH_NAME (187)
 #
-181 "AMIGA_DIRECTORY_NOTATION" l
+185 "AMIGA_DIRECTORY_NOTATION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/path_name/amiga_directory_notation.e"
 class-name: AMIGA_DIRECTORY_NOTATION
 assertion-level: boost
-parent-count: 1 inherit: 134
-c-type: T181 reference: yes
+parent-count: 1 inherit: 136
+c-type: T185 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->DIRECTORY_NOTATION
 run-time-set-count: 1
 run-time-set:
-	AMIGA_DIRECTORY_NOTATION (181)
+	AMIGA_DIRECTORY_NOTATION (185)
 #
 |lib:numeric/loadpath.se:
-82 "NUMBER_TOOLS" l
+83 "NUMBER_TOOLS" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/number_tools.e"
 class-name: NUMBER_TOOLS
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-64 "NUMERIC_GENERAL" l
+65 "NUMERIC_GENERAL" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/numeric_general.e"
 class-name: NUMERIC_GENERAL
 assertion-level: boost
-parent-count: 2 inherit: 65 36
+parent-count: 2 inherit: 66 36
 #
 4 "REAL_32" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/real_32.e"
 class-name: REAL_32
 assertion-level: boost
-parent-count: 1 insert: 70 
+parent-count: 1 insert: 71 
 #
 11 "INTEGER_64" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/integer_64.e"
 class-name: INTEGER_64
 assertion-level: boost
-parent-count: 1 insert: 63 
+parent-count: 1 insert: 64 
 #
-71 "NUMBER" l
+72 "NUMBER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/number.e"
 class-name: NUMBER
 assertion-level: boost
-parent-count: 4 inherit: 37 36 65 insert: 38 
+parent-count: 4 inherit: 37 36 66 insert: 38 
 #
 5 "REAL_64" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/real_64.e"
 class-name: REAL_64
 assertion-level: boost
-parent-count: 1 insert: 70 
+parent-count: 1 insert: 71 
 #
-63 "INTEGER_GENERAL" l
+64 "INTEGER_GENERAL" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/integer_general.e"
 class-name: INTEGER_GENERAL
 assertion-level: boost
-parent-count: 2 insert: 64 38 
+parent-count: 2 insert: 65 38 
 #
-65 "NUMERIC" l
+66 "NUMERIC" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/numeric.e"
 class-name: NUMERIC
 assertion-level: boost
@@ -556,7 +556,7 @@ parent-count: 1 inherit: 37
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/integer_8.e"
 class-name: INTEGER_8
 assertion-level: boost
-parent-count: 1 insert: 63 
+parent-count: 1 insert: 64 
 #
 5 "REAL" l
 #
@@ -566,21 +566,21 @@ parent-count: 1 insert: 63
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/real_extended.e"
 class-name: REAL_EXTENDED
 assertion-level: boost
-parent-count: 1 insert: 70 
+parent-count: 1 insert: 71 
 #
-70 "REAL_GENERAL" l
+71 "REAL_GENERAL" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/real_general.e"
 class-name: REAL_GENERAL
 assertion-level: boost
-parent-count: 1 insert: 64 
+parent-count: 1 insert: 65 
 #
 10 "INTEGER_16" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/integer_16.e"
 class-name: INTEGER_16
 assertion-level: boost
-parent-count: 1 insert: 63 
+parent-count: 1 insert: 64 
 #
-121 "MUTABLE_BIG_INTEGER" l
+123 "MUTABLE_BIG_INTEGER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/mutable_big_integer.e"
 class-name: MUTABLE_BIG_INTEGER
 assertion-level: boost
@@ -590,78 +590,78 @@ parent-count: 3 inherit: 37 36 insert: 38
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/integer_32.e"
 class-name: INTEGER_32
 assertion-level: boost
-parent-count: 1 insert: 63 
+parent-count: 1 insert: 64 
 #
 |lib:misc/
-126 "MINI_PARSER_BUFFER" l
+128 "MINI_PARSER_BUFFER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/misc/mini_parser_buffer.e"
 class-name: MINI_PARSER_BUFFER
 assertion-level: boost
 parent-count: 1 insert: 33 
 #
 |lib:storage/loadpath.se:low_level/
-210 "NATIVE_ARRAY[ARN_ITERATEUR[LUAT_SUFFIXE]]" l
+214 "NATIVE_ARRAY[ARN_ITERATEUR[LUAT_SUFFIXE]]" l
 #
-211 "NATIVE_ARRAY[TUPLE[STRING,STRING]]" l
+215 "NATIVE_ARRAY[TUPLE[STRING,STRING]]" l
 #
-224 "NATIVE_ARRAY[ARN_ITERATEUR[LUAT_LIGNE]]" l
+228 "NATIVE_ARRAY[ARN_ITERATEUR[LUAT_LIGNE]]" l
 #
-234 "NATIVE_ARRAY[INTEGER_16]" l
+238 "NATIVE_ARRAY[INTEGER_16]" l
 #
-223 "NATIVE_ARRAY[ARN_ITERATEUR[LUAT_SOURCE]]" l
+227 "NATIVE_ARRAY[ARN_ITERATEUR[LUAT_SOURCE]]" l
 #
-68 "NATIVE_ARRAY" l
+210 "NATIVE_ARRAY[LUAT_METRIQUE_DIFFERENTIEL]" l
+#
+69 "NATIVE_ARRAY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/low_level/native_array.e"
 class-name: NATIVE_ARRAY
 assertion-level: boost
-parent-count: 1 insert: 69 
+parent-count: 1 insert: 70 
 #
-156 "RECYCLING_POOL" l
+159 "RECYCLING_POOL" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/low_level/recycling_pool.e"
 class-name: RECYCLING_POOL
 assertion-level: boost
-parent-count: 1 insert: 157 
+parent-count: 1 insert: 160 
 #
 9 "NATIVE_ARRAY[CHARACTER]" l
 #
-212 "NATIVE_ARRAY[LUAT_SOURCE]" l
+216 "NATIVE_ARRAY[LUAT_SOURCE]" l
 #
-228 "NATIVE_ARRAY[LUAT_LIGNE]" l
+232 "NATIVE_ARRAY[LUAT_LIGNE]" l
 #
-206 "NATIVE_ARRAY[LUAT_METRIQUE]" l
+196 "NATIVE_ARRAY[LUAT_COMMANDE]" l
 #
-192 "NATIVE_ARRAY[LUAT_COMMANDE]" l
+205 "NATIVE_ARRAY[STRING]" l
 #
-201 "NATIVE_ARRAY[STRING]" l
+211 "NATIVE_ARRAY[LUAT_ANALYSEUR]" l
 #
-207 "NATIVE_ARRAY[LUAT_ANALYSEUR]" l
-#
-231 "NATIVE_ARRAY[INTEGER_32]" l
+235 "NATIVE_ARRAY[INTEGER_32]" l
 #
 |lib:io/loadpath.se:terminal/
-73 "TEXT_FILE_READ" l
+74 "TEXT_FILE_READ" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/terminal/text_file_read.e"
 class-name: TEXT_FILE_READ
 assertion-level: boost
-parent-count: 3 inherit: 74 44 insert: 33 
-c-type: T73 reference: yes
+parent-count: 3 inherit: 75 44 insert: 33 
+c-type: T74 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: ->INPUT_STREAM
 run-time-set-count: 1
 run-time-set:
-	TEXT_FILE_READ (73)
+	TEXT_FILE_READ (74)
 #
-144 "TEXT_FILE_WRITE" l
+146 "TEXT_FILE_WRITE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/terminal/text_file_write.e"
 class-name: TEXT_FILE_WRITE
 assertion-level: boost
-parent-count: 3 inherit: 74 40 145
-c-type: T144 reference: yes
+parent-count: 3 inherit: 75 40 147
+c-type: T146 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->OUTPUT_STREAM
 run-time-set-count: 1
 run-time-set:
-	TEXT_FILE_WRITE (144)
+	TEXT_FILE_WRITE (146)
 #
 39 "STD_ERROR" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/terminal/std_error.e"
@@ -687,7 +687,7 @@ run-time-set-count: 1
 run-time-set:
 	STD_OUTPUT (49)
 #
-74 "FILE" l
+75 "FILE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/terminal/file.e"
 class-name: FILE
 assertion-level: boost
@@ -712,7 +712,7 @@ class-name: TUPLE
 assertion-level: boost
 parent-count: 1 inherit: 13
 #
-205 "TUPLE[STRING,STRING]" l
+209 "TUPLE[STRING,STRING]" l
 #
 38 "PLATFORM" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/platform.e"
@@ -720,19 +720,19 @@ class-name: PLATFORM
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-209 "REFERENCE[DIRECTORY_NOTATION]" l
+213 "REFERENCE[DIRECTORY_NOTATION]" l
 #
-80 "ROUTINE" l
+81 "ROUTINE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/routine.e"
 class-name: ROUTINE
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-79 "FUNCTION" l
+80 "FUNCTION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/function.e"
 class-name: FUNCTION
 assertion-level: boost
-parent-count: 1 inherit: 80
+parent-count: 1 inherit: 81
 #
 27 "ARGUMENTS" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/arguments.e"
@@ -746,11 +746,11 @@ class-name: BOOLEAN
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-225 "ROUTINE[TUPLE[LUAT_COMMANDE]]" l
+229 "ROUTINE[TUPLE[LUAT_COMMANDE]]" l
 #
-189 "PROCEDURE[TUPLE[LUAT_COMMANDE]]" l
+193 "PROCEDURE[TUPLE[LUAT_COMMANDE]]" l
 #
-131 "WEAK_REFERENCE" l
+133 "WEAK_REFERENCE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/weak_reference.e"
 class-name: WEAK_REFERENCE
 assertion-level: boost
@@ -762,7 +762,7 @@ class-name: POINTER
 assertion-level: boost
 parent-count: 2 insert: 37 33 
 #
-190 "TUPLE[LUAT_COMMANDE]" l
+194 "TUPLE[LUAT_COMMANDE]" l
 #
 15 "TUPLE 1" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/tuple.e"
@@ -824,23 +824,23 @@ class-name: TUPLE 9
 assertion-level: boost
 parent-count: 1 inherit: 22
 #
-133 "REFERENCE" l
+135 "REFERENCE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/reference.e"
 class-name: REFERENCE
 assertion-level: boost
 parent-count: 1 inherit: 13
 #
-69 "SAFE_EQUAL" l
+70 "SAFE_EQUAL" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/safe_equal.e"
 class-name: SAFE_EQUAL
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-162 "PROCEDURE" l
+165 "PROCEDURE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/procedure.e"
 class-name: PROCEDURE
 assertion-level: boost
-parent-count: 1 inherit: 80
+parent-count: 1 inherit: 81
 #
 24 "TUPLE 10" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/tuple.e"
@@ -848,38 +848,38 @@ class-name: TUPLE 10
 assertion-level: boost
 parent-count: 1 inherit: 23
 #
-157 "MEMORY" l
+160 "MEMORY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/memory.e"
 class-name: MEMORY
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
 |lib:storage/loadpath.se:
-227 "COLLECTION[LUAT_SOURCE]" l
+231 "COLLECTION[LUAT_SOURCE]" l
 #
-89 "DICTIONARY" l
+90 "DICTIONARY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/dictionary.e"
 class-name: DICTIONARY
 assertion-level: boost
 parent-count: 1 inherit: 34
 #
-200 "COLLECTION[STRING]" l
+204 "COLLECTION[STRING]" l
 #
-88 "SIMPLE_DICTIONARY" l
+89 "SIMPLE_DICTIONARY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/simple_dictionary.e"
 class-name: SIMPLE_DICTIONARY
 assertion-level: boost
-parent-count: 1 inherit: 89
+parent-count: 1 inherit: 90
 #
-229 "COLLECTION[LUAT_LIGNE]" l
+233 "COLLECTION[LUAT_LIGNE]" l
 #
-60 "COLLECTION" l
+61 "COLLECTION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/collection.e"
 class-name: COLLECTION
 assertion-level: boost
 parent-count: 3 inherit: 13 35 34
 #
-197 "COLLECTION[LUAT_ELEMENT_CONFIGURABLE]" l
+201 "COLLECTION[LUAT_ELEMENT_CONFIGURABLE]" l
 #
 |lib:abilities/
 35 "STORABLE" l
@@ -906,7 +906,7 @@ class-name: TRAVERSABLE
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-145 "DISPOSABLE" l
+147 "DISPOSABLE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/abilities/disposable.e"
 class-name: DISPOSABLE
 assertion-level: boost
@@ -919,44 +919,44 @@ assertion-level: boost
 parent-count: 1 insert: 13 
 #
 |lib:storage/loadpath.se:internal/
-129 "HASHED_DICTIONARY_NODE" l
+131 "HASHED_DICTIONARY_NODE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/internal/hashed_dictionary_node.e"
 class-name: HASHED_DICTIONARY_NODE
 assertion-level: boost
-parent-count: 1 inherit: 130
+parent-count: 1 inherit: 132
 #
-62 "ARRAYED_COLLECTION" l
+63 "ARRAYED_COLLECTION" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/internal/arrayed_collection.e"
 class-name: ARRAYED_COLLECTION
 assertion-level: boost
-parent-count: 1 insert: 60 
+parent-count: 1 insert: 61 
 #
-130 "ANY_HASHED_DICTIONARY_NODE" l
+132 "ANY_HASHED_DICTIONARY_NODE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/internal/any_hashed_dictionary_node.e"
 class-name: ANY_HASHED_DICTIONARY_NODE
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-90 "HASH_TABLE_SIZE" l
+91 "HASH_TABLE_SIZE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/storage/internal/hash_table_size.e"
 class-name: HASH_TABLE_SIZE
 assertion-level: boost
 parent-count: 1 insert: 38 
 #
 |lib:kernel/internal/
-127 "NATIVE_ARRAY_INTERNALS" l
+129 "NATIVE_ARRAY_INTERNALS" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/internal/native_array_internals.e"
 class-name: NATIVE_ARRAY_INTERNALS
 assertion-level: boost
 parent-count: 1 inherit: 47
 #
-61 "NATIVE_ARRAY_COLLECTOR" l
+62 "NATIVE_ARRAY_COLLECTOR" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/internal/native_array_collector.e"
 class-name: NATIVE_ARRAY_COLLECTOR
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-86 "INTERNALS_HANDLER" l
+87 "INTERNALS_HANDLER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/kernel/internal/internals_handler.e"
 class-name: INTERNALS_HANDLER
 assertion-level: boost
@@ -975,127 +975,139 @@ assertion-level: boost
 parent-count: 1 insert: 13 
 #
 |lib:iterator/loadpath.se:internal/
-124 "ITERATOR_ON_UNICODE_STRING" l
+126 "ITERATOR_ON_UNICODE_STRING" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/iterator/internal/iterator_on_unicode_string.e"
 class-name: ITERATOR_ON_UNICODE_STRING
 assertion-level: boost
-parent-count: 1 inherit: 78
+parent-count: 1 inherit: 79
 #
-83 "ITERATOR_ON_STRING" l
+84 "ITERATOR_ON_STRING" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/iterator/internal/iterator_on_string.e"
 class-name: ITERATOR_ON_STRING
 assertion-level: boost
-parent-count: 1 inherit: 78
+parent-count: 1 inherit: 79
 #
-128 "ITERATOR_ON_DICTIONARY_ITEMS" l
+130 "ITERATOR_ON_DICTIONARY_ITEMS" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/iterator/internal/iterator_on_dictionary_items.e"
 class-name: ITERATOR_ON_DICTIONARY_ITEMS
 assertion-level: boost
-parent-count: 1 inherit: 78
+parent-count: 1 inherit: 79
 #
-108 "ITERATOR_ON_TRAVERSABLE" l
+110 "ITERATOR_ON_TRAVERSABLE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/iterator/internal/iterator_on_traversable.e"
 class-name: ITERATOR_ON_TRAVERSABLE
 assertion-level: boost
-parent-count: 1 inherit: 78
+parent-count: 1 inherit: 79
 #
-132 "ITERATOR_ON_DICTIONARY_KEYS" l
+134 "ITERATOR_ON_DICTIONARY_KEYS" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/iterator/internal/iterator_on_dictionary_keys.e"
 class-name: ITERATOR_ON_DICTIONARY_KEYS
 assertion-level: boost
-parent-count: 1 inherit: 78
+parent-count: 1 inherit: 79
 #
 |lib:numeric/loadpath.se:internal/
-120 "INTEGER_GENERAL_NUMBER" l
+122 "INTEGER_GENERAL_NUMBER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/internal/integer_general_number.e"
 class-name: INTEGER_GENERAL_NUMBER
 assertion-level: boost
-parent-count: 1 inherit: 71
+parent-count: 1 inherit: 72
 #
-119 "INTEGER_64_NUMBER" l
+121 "INTEGER_64_NUMBER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/internal/integer_64_number.e"
 class-name: INTEGER_64_NUMBER
 assertion-level: boost
-parent-count: 1 inherit: 120
+parent-count: 1 inherit: 122
 #
-122 "FRACTION_WITH_BIG_INTEGER_NUMBER" l
+124 "FRACTION_WITH_BIG_INTEGER_NUMBER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/internal/fraction_with_big_integer_number.e"
 class-name: FRACTION_WITH_BIG_INTEGER_NUMBER
 assertion-level: boost
-parent-count: 1 inherit: 123
+parent-count: 1 inherit: 125
 #
-123 "FRACTION_GENERAL_NUMBER" l
+125 "FRACTION_GENERAL_NUMBER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/internal/fraction_general_number.e"
 class-name: FRACTION_GENERAL_NUMBER
 assertion-level: boost
-parent-count: 1 inherit: 71
+parent-count: 1 inherit: 72
 #
-148 "BIG_INTEGER_NUMBER" l
+151 "BIG_INTEGER_NUMBER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/numeric/internal/big_integer_number.e"
 class-name: BIG_INTEGER_NUMBER
 assertion-level: boost
-parent-count: 1 inherit: 120
+parent-count: 1 inherit: 122
 #
 |Local Loadpath:.
-116 "LUAT_COMMANDE_UNITAIRE" l
+118 "LUAT_COMMANDE_UNITAIRE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_commande_unitaire.e"
 class-name: LUAT_COMMANDE_UNITAIRE
-assertion-level: boost
-parent-count: 1 inherit: 109
-c-type: T116 reference: yes
-ref-status: live id-field: yes 
-destination-graph-nodes: ->LUAT_COMMANDE
-run-time-set-count: 1
-run-time-set:
-	LUAT_COMMANDE_UNITAIRE (116)
-#
-118 "LUAT_LOT_ARBRE" l
-class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_lot_arbre.e"
-class-name: LUAT_LOT_ARBRE
 assertion-level: boost
 parent-count: 1 inherit: 111
 c-type: T118 reference: yes
 ref-status: live id-field: yes 
+destination-graph-nodes: ->LUAT_COMMANDE
+run-time-set-count: 1
+run-time-set:
+	LUAT_COMMANDE_UNITAIRE (118)
+#
+120 "LUAT_LOT_ARBRE" l
+class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_lot_arbre.e"
+class-name: LUAT_LOT_ARBRE
+assertion-level: boost
+parent-count: 1 inherit: 113
+c-type: T120 reference: yes
+ref-status: live id-field: yes 
 destination-graph-nodes: ->LUAT_LOT
 run-time-set-count: 1
 run-time-set:
-	LUAT_LOT_ARBRE (118)
+	LUAT_LOT_ARBRE (120)
 #
-140 "LUAT_SOURCE" l
+142 "LUAT_SOURCE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_source.e"
 class-name: LUAT_SOURCE
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T140 reference: yes
+c-type: T142 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	LUAT_SOURCE (140)
+	LUAT_SOURCE (142)
 #
-186 "LUAT_ORDRE_SOURCE" l
+59 "LUAT_BILAN" l
+class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_bilan.e"
+class-name: LUAT_BILAN
+assertion-level: boost
+parent-count: 1 insert: 13 
+c-type: T59 reference: yes
+ref-status: live id-field: no 
+destination-graph-nodes: none
+run-time-set-count: 1
+run-time-set:
+	LUAT_BILAN (59)
+#
+190 "LUAT_ORDRE_SOURCE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_ordre_source.e"
 class-name: LUAT_ORDRE_SOURCE
 assertion-level: boost
-parent-count: 1 inherit: 138
-c-type: T186 reference: yes
+parent-count: 1 inherit: 140
+c-type: T190 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: ->CAP_ORDRE[LUAT_SOURCE]
 run-time-set-count: 1
 run-time-set:
-	LUAT_ORDRE_SOURCE (186)
+	LUAT_ORDRE_SOURCE (190)
 #
-66 "LUAT_LIGNE_COMMANDE_ANALYSEUR" l
+67 "LUAT_LIGNE_COMMANDE_ANALYSEUR" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_ligne_commande_analyseur.e"
 class-name: LUAT_LIGNE_COMMANDE_ANALYSEUR
 assertion-level: boost
 parent-count: 2 inherit: 27 26
-c-type: T66 reference: yes
+c-type: T67 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	LUAT_LIGNE_COMMANDE_ANALYSEUR (66)
+	LUAT_LIGNE_COMMANDE_ANALYSEUR (67)
 #
 26 "LUAT_GLOBAL" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_global.e"
@@ -1103,181 +1115,193 @@ class-name: LUAT_GLOBAL
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-98 "LUAT_ELEMENT_CONFIGURABLE" l
+174 "LUAT_COMMANDE_BILAN" l
+class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_commande_bilan.e"
+class-name: LUAT_COMMANDE_BILAN
+assertion-level: boost
+parent-count: 1 inherit: 111
+c-type: T174 reference: yes
+ref-status: live id-field: yes 
+destination-graph-nodes: ->LUAT_COMMANDE
+run-time-set-count: 1
+run-time-set:
+	LUAT_COMMANDE_BILAN (174)
+#
+100 "LUAT_ELEMENT_CONFIGURABLE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_element_configurable.e"
 class-name: LUAT_ELEMENT_CONFIGURABLE
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T98 reference: yes
+c-type: T100 reference: yes
 ref-status: dead 
 destination-graph-nodes: empty
 run-time-set-count: 5
 run-time-set:
-	LUAT_METRIQUE_NORMALE (165)
-	LUAT_METRIQUE_EFFORT (166)
-	LUAT_ANALYSEUR_EIFFEL (167)
-	LUAT_ANALYSEUR_FAMILLE_C (168)
-	LUAT_ANALYSEUR_ADA (169)
+	LUAT_METRIQUE_NORMAL (168)
+	LUAT_METRIQUE_EFFORT (169)
+	LUAT_ANALYSEUR_EIFFEL (170)
+	LUAT_ANALYSEUR_FAMILLE_C (171)
+	LUAT_ANALYSEUR_ADA (172)
 #
-170 "LUAT_ORDRE_SUFFIXE" l
+173 "LUAT_ORDRE_SUFFIXE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_ordre_suffixe.e"
 class-name: LUAT_ORDRE_SUFFIXE
 assertion-level: boost
-parent-count: 1 inherit: 138
-c-type: T170 reference: yes
+parent-count: 1 inherit: 140
+c-type: T173 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: ->CAP_ORDRE[LUAT_SUFFIXE]
 run-time-set-count: 1
 run-time-set:
-	LUAT_ORDRE_SUFFIXE (170)
+	LUAT_ORDRE_SUFFIXE (173)
 #
-99 "LUAT_ANALYSEUR" l
+101 "LUAT_ANALYSEUR" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_analyseur.e"
 class-name: LUAT_ANALYSEUR
 assertion-level: boost
-parent-count: 2 inherit: 26 98
-c-type: T99 reference: yes
+parent-count: 2 inherit: 26 100
+c-type: T101 reference: yes
 ref-status: dead 
 destination-graph-nodes: ->LUAT_ELEMENT_CONFIGURABLE
 run-time-set-count: 3
 run-time-set:
-	LUAT_ANALYSEUR_EIFFEL (167)
-	LUAT_ANALYSEUR_FAMILLE_C (168)
-	LUAT_ANALYSEUR_ADA (169)
+	LUAT_ANALYSEUR_EIFFEL (170)
+	LUAT_ANALYSEUR_FAMILLE_C (171)
+	LUAT_ANALYSEUR_ADA (172)
 #
-114 "LUAT_LOT_BLANC" l
+116 "LUAT_LOT_BLANC" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_lot_blanc.e"
 class-name: LUAT_LOT_BLANC
 assertion-level: boost
-parent-count: 1 inherit: 111
-c-type: T114 reference: yes
+parent-count: 1 inherit: 113
+c-type: T116 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->LUAT_LOT
 run-time-set-count: 1
 run-time-set:
-	LUAT_LOT_BLANC (114)
+	LUAT_LOT_BLANC (116)
 #
-100 "LUAT_FILTRE" l
+102 "LUAT_FILTRE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_filtre.e"
 class-name: LUAT_FILTRE
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T100 reference: yes
+c-type: T102 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	LUAT_FILTRE (100)
+	LUAT_FILTRE (102)
 #
-141 "LUAT_LISTAGE" l
+143 "LUAT_LISTAGE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_listage.e"
 class-name: LUAT_LISTAGE
 assertion-level: boost
 parent-count: 1 inherit: 13
-c-type: T141 reference: yes
+c-type: T143 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	LUAT_LISTAGE (141)
+	LUAT_LISTAGE (143)
 #
-142 "LUAT_ENTREE" l
+144 "LUAT_ENTREE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_entree.e"
 class-name: LUAT_ENTREE
 assertion-level: boost
 parent-count: 1 inherit: 13
-c-type: T142 reference: yes
+c-type: T144 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	LUAT_ENTREE (142)
+	LUAT_ENTREE (144)
 #
-110 "LUAT_COMMANDE_ANALYSE" l
+112 "LUAT_COMMANDE_ANALYSE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_commande_analyse.e"
 class-name: LUAT_COMMANDE_ANALYSE
 assertion-level: boost
-parent-count: 1 inherit: 109
-c-type: T110 reference: yes
+parent-count: 1 inherit: 111
+c-type: T112 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->LUAT_COMMANDE
 run-time-set-count: 1
 run-time-set:
-	LUAT_COMMANDE_ANALYSE (110)
+	LUAT_COMMANDE_ANALYSE (112)
 #
-171 "LUAT_COMMANDE_CONFIGURATION" l
+175 "LUAT_COMMANDE_CONFIGURATION" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_commande_configuration.e"
 class-name: LUAT_COMMANDE_CONFIGURATION
 assertion-level: boost
-parent-count: 1 inherit: 109
-c-type: T171 reference: yes
+parent-count: 1 inherit: 111
+c-type: T175 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->LUAT_COMMANDE
 run-time-set-count: 1
 run-time-set:
-	LUAT_COMMANDE_CONFIGURATION (171)
+	LUAT_COMMANDE_CONFIGURATION (175)
 #
-166 "LUAT_METRIQUE_EFFORT" l
+169 "LUAT_METRIQUE_EFFORT" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_metrique_effort.e"
 class-name: LUAT_METRIQUE_EFFORT
 assertion-level: boost
-parent-count: 1 inherit: 97
-c-type: T166 reference: yes
+parent-count: 1 inherit: 98
+c-type: T169 reference: yes
 ref-status: live id-field: yes 
-destination-graph-nodes: ->LUAT_METRIQUE
+destination-graph-nodes: ->LUAT_METRIQUE, ->LUAT_METRIQUE_DIFFERENTIEL
 run-time-set-count: 1
 run-time-set:
-	LUAT_METRIQUE_EFFORT (166)
+	LUAT_METRIQUE_EFFORT (169)
 #
-117 "LUAT_COMMANDE_DIFFERENTIEL" l
+119 "LUAT_COMMANDE_DIFFERENTIEL" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_commande_differentiel.e"
 class-name: LUAT_COMMANDE_DIFFERENTIEL
 assertion-level: boost
-parent-count: 1 inherit: 109
-c-type: T117 reference: yes
+parent-count: 1 inherit: 111
+c-type: T119 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->LUAT_COMMANDE
 run-time-set-count: 1
 run-time-set:
-	LUAT_COMMANDE_DIFFERENTIEL (117)
+	LUAT_COMMANDE_DIFFERENTIEL (119)
 #
-111 "LUAT_LOT" l
+168 "LUAT_METRIQUE_NORMAL" l
+class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_metrique_normal.e"
+class-name: LUAT_METRIQUE_NORMAL
+assertion-level: boost
+parent-count: 1 inherit: 98
+c-type: T168 reference: yes
+ref-status: live id-field: yes 
+destination-graph-nodes: ->LUAT_METRIQUE, ->LUAT_METRIQUE_DIFFERENTIEL
+run-time-set-count: 1
+run-time-set:
+	LUAT_METRIQUE_NORMAL (168)
+#
+113 "LUAT_LOT" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_lot.e"
 class-name: LUAT_LOT
 assertion-level: boost
 parent-count: 1 inherit: 26
-c-type: T111 reference: yes
+c-type: T113 reference: yes
 ref-status: dead 
 destination-graph-nodes: empty
 run-time-set-count: 3
 run-time-set:
-	LUAT_LOT_BLANC (114)
-	LUAT_LOT_LISTE (115)
-	LUAT_LOT_ARBRE (118)
+	LUAT_LOT_BLANC (116)
+	LUAT_LOT_LISTE (117)
+	LUAT_LOT_ARBRE (120)
 #
-165 "LUAT_METRIQUE_NORMALE" l
-class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_metrique_normale.e"
-class-name: LUAT_METRIQUE_NORMALE
-assertion-level: boost
-parent-count: 1 inherit: 97
-c-type: T165 reference: yes
-ref-status: live id-field: yes 
-destination-graph-nodes: ->LUAT_METRIQUE
-run-time-set-count: 1
-run-time-set:
-	LUAT_METRIQUE_NORMALE (165)
-#
-167 "LUAT_ANALYSEUR_EIFFEL" l
+170 "LUAT_ANALYSEUR_EIFFEL" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_analyseur_eiffel.e"
 class-name: LUAT_ANALYSEUR_EIFFEL
 assertion-level: boost
-parent-count: 2 inherit: 99 insert: 38 
-c-type: T167 reference: yes
+parent-count: 2 inherit: 101 insert: 38 
+c-type: T170 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->LUAT_ANALYSEUR
 run-time-set-count: 1
 run-time-set:
-	LUAT_ANALYSEUR_EIFFEL (167)
+	LUAT_ANALYSEUR_EIFFEL (170)
 #
 51 "LUAT_TRADUCTEUR" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_traducteur.e"
@@ -1291,17 +1315,17 @@ run-time-set-count: 1
 run-time-set:
 	LUAT_TRADUCTEUR (51)
 #
-96 "LUAT_SUFFIXE" l
+97 "LUAT_SUFFIXE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_suffixe.e"
 class-name: LUAT_SUFFIXE
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T96 reference: yes
+c-type: T97 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	LUAT_SUFFIXE (96)
+	LUAT_SUFFIXE (97)
 #
 25 "LUAT_CODEMETRE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_codemetre.e"
@@ -1315,93 +1339,108 @@ run-time-set-count: 1
 run-time-set:
 	LUAT_CODEMETRE (25)
 #
-143 "LUAT_FABRIQUE" l
+145 "LUAT_FABRIQUE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_fabrique.e"
 class-name: LUAT_FABRIQUE
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T143 reference: yes
+c-type: T145 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	LUAT_FABRIQUE (143)
+	LUAT_FABRIQUE (145)
 #
-139 "LUAT_LIGNE" l
+141 "LUAT_LIGNE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_ligne.e"
 class-name: LUAT_LIGNE
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T139 reference: yes
+c-type: T141 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	LUAT_LIGNE (139)
+	LUAT_LIGNE (141)
 #
-169 "LUAT_ANALYSEUR_ADA" l
+172 "LUAT_ANALYSEUR_ADA" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_analyseur_ada.e"
 class-name: LUAT_ANALYSEUR_ADA
 assertion-level: boost
-parent-count: 1 inherit: 99
-c-type: T169 reference: yes
+parent-count: 1 inherit: 101
+c-type: T172 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->LUAT_ANALYSEUR
 run-time-set-count: 1
 run-time-set:
-	LUAT_ANALYSEUR_ADA (169)
+	LUAT_ANALYSEUR_ADA (172)
 #
-115 "LUAT_LOT_LISTE" l
+117 "LUAT_LOT_LISTE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_lot_liste.e"
 class-name: LUAT_LOT_LISTE
 assertion-level: boost
-parent-count: 1 inherit: 111
-c-type: T115 reference: yes
+parent-count: 1 inherit: 113
+c-type: T117 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->LUAT_LOT
 run-time-set-count: 1
 run-time-set:
-	LUAT_LOT_LISTE (115)
+	LUAT_LOT_LISTE (117)
 #
-187 "LUAT_ORDRE_LIGNE" l
+191 "LUAT_ORDRE_LIGNE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_ordre_ligne.e"
 class-name: LUAT_ORDRE_LIGNE
 assertion-level: boost
-parent-count: 1 inherit: 138
-c-type: T187 reference: yes
+parent-count: 1 inherit: 140
+c-type: T191 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: ->CAP_ORDRE[LUAT_LIGNE]
 run-time-set-count: 1
 run-time-set:
-	LUAT_ORDRE_LIGNE (187)
+	LUAT_ORDRE_LIGNE (191)
 #
-97 "LUAT_METRIQUE" l
+98 "LUAT_METRIQUE_DIFFERENTIEL" l
+class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_metrique_differentiel.e"
+class-name: LUAT_METRIQUE_DIFFERENTIEL
+assertion-level: boost
+parent-count: 1 inherit: 99
+c-type: T98 reference: yes
+ref-status: dead 
+destination-graph-nodes: ->LUAT_METRIQUE, ->LUAT_ELEMENT_CONFIGURABLE
+run-time-set-count: 2
+run-time-set:
+	LUAT_METRIQUE_NORMAL (168)
+	LUAT_METRIQUE_EFFORT (169)
+#
+99 "LUAT_METRIQUE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_metrique.e"
 class-name: LUAT_METRIQUE
 assertion-level: boost
-parent-count: 1 inherit: 98
-c-type: T97 reference: yes
+parent-count: 2 inherit: 100 26
+c-type: T99 reference: yes
 ref-status: dead 
-destination-graph-nodes: ->LUAT_ELEMENT_CONFIGURABLE
-run-time-set-count: 2
+destination-graph-nodes: ->LUAT_METRIQUE_UNITAIRE, ->LUAT_METRIQUE_NORMAL, ->LUAT_METRIQUE_EFFORT
+run-time-set-count: 3
 run-time-set:
-	LUAT_METRIQUE_NORMALE (165)
-	LUAT_METRIQUE_EFFORT (166)
+	LUAT_METRIQUE_UNITAIRE (148)
+	LUAT_METRIQUE_NORMAL (168)
+	LUAT_METRIQUE_EFFORT (169)
 #
-109 "LUAT_COMMANDE" l
+111 "LUAT_COMMANDE" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_commande.e"
 class-name: LUAT_COMMANDE
 assertion-level: boost
 parent-count: 1 inherit: 26
-c-type: T109 reference: yes
+c-type: T111 reference: yes
 ref-status: dead 
 destination-graph-nodes: empty
-run-time-set-count: 4
+run-time-set-count: 5
 run-time-set:
-	LUAT_COMMANDE_ANALYSE (110)
-	LUAT_COMMANDE_UNITAIRE (116)
-	LUAT_COMMANDE_DIFFERENTIEL (117)
-	LUAT_COMMANDE_CONFIGURATION (171)
+	LUAT_COMMANDE_ANALYSE (112)
+	LUAT_COMMANDE_UNITAIRE (118)
+	LUAT_COMMANDE_DIFFERENTIEL (119)
+	LUAT_COMMANDE_BILAN (174)
+	LUAT_COMMANDE_CONFIGURATION (175)
 #
 57 "LUAT_CONFIGURATION" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_configuration.e"
@@ -1415,29 +1454,41 @@ run-time-set-count: 1
 run-time-set:
 	LUAT_CONFIGURATION (57)
 #
-168 "LUAT_ANALYSEUR_FAMILLE_C" l
+171 "LUAT_ANALYSEUR_FAMILLE_C" l
 class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_analyseur_famille_c.e"
 class-name: LUAT_ANALYSEUR_FAMILLE_C
 assertion-level: boost
-parent-count: 1 inherit: 99
-c-type: T168 reference: yes
+parent-count: 1 inherit: 101
+c-type: T171 reference: yes
 ref-status: live id-field: yes 
 destination-graph-nodes: ->LUAT_ANALYSEUR
 run-time-set-count: 1
 run-time-set:
-	LUAT_ANALYSEUR_FAMILLE_C (168)
+	LUAT_ANALYSEUR_FAMILLE_C (171)
+#
+148 "LUAT_METRIQUE_UNITAIRE" l
+class-path: "/home/seventh/Prog/Eiffel/CodeMetre/luat_metrique_unitaire.e"
+class-name: LUAT_METRIQUE_UNITAIRE
+assertion-level: boost
+parent-count: 1 inherit: 99
+c-type: T148 reference: yes
+ref-status: live id-field: yes 
+destination-graph-nodes: ->LUAT_METRIQUE
+run-time-set-count: 1
+run-time-set:
+	LUAT_METRIQUE_UNITAIRE (148)
 #
 |lib:io/loadpath.se:low_level/
-92 "BASIC_DIRECTORY" l
+93 "BASIC_DIRECTORY" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/low_level/basic_directory.e"
 class-name: BASIC_DIRECTORY
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T92 reference: no
+c-type: T93 reference: no
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	BASIC_DIRECTORY (92)
+	BASIC_DIRECTORY (93)
 #
 41 "REDIRECTION_TOOLS" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/low_level/redirection_tools.e"
@@ -1458,116 +1509,116 @@ assertion-level: boost
 parent-count: 1 insert: 13 
 #
 |lib:sequencer/loadpath.se:
-76 "EVENT_DESCRIPTOR" l
+77 "EVENT_DESCRIPTOR" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/sequencer/event_descriptor.e"
 class-name: EVENT_DESCRIPTOR
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-125 "EVENTS_SET" l
+127 "EVENTS_SET" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/sequencer/events_set.e"
 class-name: EVENTS_SET
 assertion-level: boost
 parent-count: 2 insert: 13 38 
 #
 |Local Loadpath:../Bazar
-106 "ESCLAVE" l
+108 "ESCLAVE" l
 class-path: "/home/seventh/Prog/Eiffel/Bazar/esclave.e"
 class-name: ESCLAVE
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-105 "ITERATEUR_UNIDIRECTIONNEL_ESCLAVE" l
+107 "ITERATEUR_UNIDIRECTIONNEL_ESCLAVE" l
 class-path: "/home/seventh/Prog/Eiffel/Bazar/iterateur_unidirectionnel_esclave.e"
 class-name: ITERATEUR_UNIDIRECTIONNEL_ESCLAVE
 assertion-level: boost
-parent-count: 2 inherit: 106 104
+parent-count: 2 inherit: 108 106
 #
-104 "ITERATEUR_UNIDIRECTIONNEL" l
+106 "ITERATEUR_UNIDIRECTIONNEL" l
 class-path: "/home/seventh/Prog/Eiffel/Bazar/iterateur_unidirectionnel.e"
 class-name: ITERATEUR_UNIDIRECTIONNEL
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-102 "ITERATEUR_BIDIRECTIONNEL_ESCLAVE" l
+104 "ITERATEUR_BIDIRECTIONNEL_ESCLAVE" l
 class-path: "/home/seventh/Prog/Eiffel/Bazar/iterateur_bidirectionnel_esclave.e"
 class-name: ITERATEUR_BIDIRECTIONNEL_ESCLAVE
 assertion-level: boost
-parent-count: 2 inherit: 105 103
+parent-count: 2 inherit: 107 105
 #
-103 "ITERATEUR_BIDIRECTIONNEL" l
+105 "ITERATEUR_BIDIRECTIONNEL" l
 class-path: "/home/seventh/Prog/Eiffel/Bazar/iterateur_bidirectionnel.e"
 class-name: ITERATEUR_BIDIRECTIONNEL
 assertion-level: boost
-parent-count: 1 inherit: 104
+parent-count: 1 inherit: 106
 #
 |Local Loadpath:../ArbreRougeEtNoir
-219 "ARN_NOEUD[LUAT_SOURCE]" l
+223 "ARN_NOEUD[LUAT_SOURCE]" l
 #
-193 "ARN_ARBRE[LUAT_SUFFIXE]" l
+197 "ARN_ARBRE[LUAT_SUFFIXE]" l
 #
-137 "ARN_NOEUD" l
+139 "ARN_NOEUD" l
 class-path: "/home/seventh/Prog/Eiffel/ArbreRougeEtNoir/arn_noeud.e"
 class-name: ARN_NOEUD
 assertion-level: boost
-parent-count: 1 inherit: 95
+parent-count: 1 inherit: 96
 #
-154 "ARN_COULEUR" l
+157 "ARN_COULEUR" l
 class-path: "/home/seventh/Prog/Eiffel/ArbreRougeEtNoir/arn_couleur.e"
 class-name: ARN_COULEUR
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T154 reference: yes
+c-type: T157 reference: yes
 ref-status: live id-field: no 
 destination-graph-nodes: none
 run-time-set-count: 1
 run-time-set:
-	ARN_COULEUR (154)
+	ARN_COULEUR (157)
 #
-215 "ARN_ARBRE[LUAT_LIGNE]" l
+219 "ARN_ARBRE[LUAT_LIGNE]" l
 #
-101 "ARN_ITERATEUR" l
+103 "ARN_ITERATEUR" l
 class-path: "/home/seventh/Prog/Eiffel/ArbreRougeEtNoir/arn_iterateur.e"
 class-name: ARN_ITERATEUR
 assertion-level: boost
-parent-count: 2 inherit: 95 102
+parent-count: 2 inherit: 96 104
 #
-94 "ARN_ARBRE" l
+95 "ARN_ARBRE" l
 class-path: "/home/seventh/Prog/Eiffel/ArbreRougeEtNoir/arn_arbre.e"
 class-name: ARN_ARBRE
 assertion-level: boost
-parent-count: 1 inherit: 95
+parent-count: 1 inherit: 96
 #
-222 "ARN_NOEUD[LUAT_LIGNE]" l
+226 "ARN_NOEUD[LUAT_LIGNE]" l
 #
-221 "ARN_ITERATEUR[LUAT_LIGNE]" l
+225 "ARN_ITERATEUR[LUAT_LIGNE]" l
 #
-203 "ARN_NOEUD[LUAT_SUFFIXE]" l
+207 "ARN_NOEUD[LUAT_SUFFIXE]" l
 #
-195 "ARN_ITERATEUR[LUAT_SUFFIXE]" l
+199 "ARN_ITERATEUR[LUAT_SUFFIXE]" l
 #
-218 "ARN_ITERATEUR[LUAT_SOURCE]" l
+222 "ARN_ITERATEUR[LUAT_SOURCE]" l
 #
-213 "ARN_ARBRE[LUAT_SOURCE]" l
+217 "ARN_ARBRE[LUAT_SOURCE]" l
 #
-95 "ARN" l
+96 "ARN" l
 class-path: "/home/seventh/Prog/Eiffel/ArbreRougeEtNoir/arn.e"
 class-name: ARN
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-136 "ARN_ENSEMBLE_COULEUR" l
+138 "ARN_ENSEMBLE_COULEUR" l
 class-path: "/home/seventh/Prog/Eiffel/ArbreRougeEtNoir/arn_ensemble_couleur.e"
 class-name: ARN_ENSEMBLE_COULEUR
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T136 reference: yes
+c-type: T138 reference: yes
 ref-status: dead 
 destination-graph-nodes: none
 run-time-set-count: 0
 #
 |lib:unicode/
-172 "UNICODE_STRING_HANDLER" l
+176 "UNICODE_STRING_HANDLER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/unicode/unicode_string_handler.e"
 class-name: UNICODE_STRING_HANDLER
 assertion-level: boost
@@ -1581,11 +1632,11 @@ assertion-level: boost
 parent-count: 1 insert: 13 
 #
 |lib:io/loadpath.se:internal/
-179 "UNIXISH_PATH_NAME" l
+183 "UNIXISH_PATH_NAME" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/internal/unixish_path_name.e"
 class-name: UNIXISH_PATH_NAME
 assertion-level: boost
-parent-count: 1 inherit: 177
+parent-count: 1 inherit: 181
 #
 31 "FILTERABLE" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/internal/filterable.e"
@@ -1593,16 +1644,16 @@ class-name: FILTERABLE
 assertion-level: boost
 parent-count: 1 insert: 13 
 #
-176 "PATH_JOINER" l
+180 "PATH_JOINER" l
 class-path: "/home/seventh/Local/packages/eiffel/smartEiffel/lib/io/internal/path_joiner.e"
 class-name: PATH_JOINER
 assertion-level: boost
 parent-count: 1 insert: 13 
-c-type: T176 reference: yes
+c-type: T180 reference: yes
 ref-status: dead 
 destination-graph-nodes: empty
 run-time-set-count: 2
 run-time-set:
-	POSIX_PATH_NAME (178)
-	MICROSOFT_PATH_NAME (183)
+	POSIX_PATH_NAME (182)
+	MICROSOFT_PATH_NAME (187)
 #

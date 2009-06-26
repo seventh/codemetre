@@ -183,7 +183,7 @@ feature
 				and then contenu.is_equal( p_autre.contenu )
 		end
 
-feature {LUAT_LISTAGE, LUAT_METRIQUE}
+feature {LUAT_LISTAGE, LUAT_METRIQUE_DIFFERENTIEL}
 
 	contenu : FAST_ARRAY[ LUAT_LIGNE ]
 			-- ensemble des lignes du listage

@@ -4,6 +4,7 @@ Développements futurs :
  * Rendre l'application multi-tâche, afin de paralléliser les mesures (en fonction de l'architecture)
  * Garantir que les résultats apparaissent par ordre alphabétique lors de l'analyse de répertoires complets.
  * Repenser et réécrire la page de manuel UNIX, qui est actuellement un modèle de ce qu'il ne faut pas faire.
+ * Ajouter une commande de limitation de la récursivité de l'analyse.
 
 Mode analytique :
  * produire un code filtré de tout commentaire qui compile encore

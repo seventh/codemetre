@@ -1,7 +1,15 @@
+*** v0.22.0
+
+ - Ajout d'une commande supplémentaire "--status" pour obtenir un bilan de toute
+ l'analyse.
+ - Windows : correction d'une erreur sur le projet Code::Blocks
+
 *** v0.21.0
 
- - Windows : fourniture d'un bouchon pour gettext, ainsi que d'un descripteur de projet Code::Blocks.
- - Windows : le fichier de configuration est recherché sous l'appelation "%APPDATA%\codemetre.ini" plutôt que "$(HOME)/.codemetrerc" dans le monde Unix.
+ - Windows : fourniture d'un bouchon pour gettext, ainsi que d'un descripteur de
+ projet Code::Blocks.
+ - Windows : le fichier de configuration est recherché sous l'appelation
+ "%APPDATA%\codemetre.ini" plutôt que "$(HOME)/.codemetrerc" dans le monde Unix.
 
 *** v0.20.3
 

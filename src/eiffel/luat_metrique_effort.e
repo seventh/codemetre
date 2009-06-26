@@ -14,7 +14,7 @@ class
 
 inherit
 
-	LUAT_METRIQUE
+	LUAT_METRIQUE_DIFFERENTIEL
 
 creation
 
@@ -26,8 +26,24 @@ feature
 
 feature
 
-	effort : INTEGER
+	rajout : INTEGER
+			-- nombre de lignes ajoutées par rapport à la version commune
+
+	nouvel : INTEGER
+			-- nombre de lignes totales de la version courante
+
+	effort : INTEGER is
 			-- taux de modification, en pourcentage
+		do
+			if nouvel = 0 then
+				result := 0
+			else
+				result := ( 100 * rajout / nouvel ).rounded.force_to_integer_32
+			end
+		ensure
+			domaine : result.in_range( 0, 100 )
+		end
+
 
 feature
 
@@ -37,25 +53,36 @@ feature
 		do
 			-- définition : effort = ( N - C ) / N
 
-			if p_ancien = void then
-				effort := 100
-			elseif p_nouvel = void then
-				effort := 0
+			if p_nouvel = void then
+				rajout := 0
+				nouvel := 0
+			elseif p_ancien = void then
+				rajout := p_nouvel.nb_ligne
+				nouvel := p_nouvel.nb_ligne
+			elseif p_nouvel.est_equivalent( p_ancien ) then
+				rajout := 0
+				nouvel := p_nouvel.nb_ligne
 			else
-				if p_nouvel.est_equivalent( p_ancien ) then
-					effort := 0
-				else
-					commun := nb_ligne_partage( p_ancien.contenu, p_nouvel.contenu )
-					effort := ( 100 * ( p_nouvel.nb_ligne - commun ) / p_nouvel.nb_ligne ).rounded.force_to_integer_32
-				end
+				commun := nb_ligne_partage( p_ancien.contenu, p_nouvel.contenu )
+				rajout := p_nouvel.nb_ligne - commun
+				nouvel := p_nouvel.nb_ligne
 			end
 		ensure
-			domaine : effort.in_range( 0, 100 )
+			intervalle : rajout.in_range( 0, nouvel )
+		end
+
+	accumuler( p_contribution : like current ) is
+		do
+			rajout := rajout + p_contribution.rajout
+			nouvel := nouvel + p_contribution.nouvel
+		ensure
+			definition_1 : rajout = old rajout + p_contribution.rajout
+			definition_2 : nouvel = old nouvel + p_contribution.nouvel
 		end
 
 	afficher( p_flux : OUTPUT_STREAM ) is
 		do
-			p_flux.put_string( once "Effort " )
+			p_flux.put_string( once "effort " )
 			p_flux.put_integer( effort )
 			p_flux.put_character( '%%' )
 		end

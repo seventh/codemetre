@@ -38,6 +38,7 @@ feature {}
 	etat_commande_analyse : INTEGER is unique
 	etat_commande_comparaison : INTEGER is unique
 	etat_commande_unitaire : INTEGER is unique
+	etat_commande_bilan : INTEGER is unique
 	etat_final : INTEGER is unique
 
 	mode_indetermine : INTEGER is unique
@@ -54,11 +55,12 @@ feature
 			lexeme, etat, mode : INTEGER
 			filtre : LUAT_FILTRE
 			avant, apres : STRING
+			avant_est_repertoire, apres_est_repertoire : BOOLEAN
 			analyseur_precise : BOOLEAN
+			bilan_final_precise : BOOLEAN
 			modele_precise : BOOLEAN
 			sortie_compacte_precise : BOOLEAN
-			lot_active : BOOLEAN
-			avant_est_repertoire, apres_est_repertoire : BOOLEAN
+			lot_precise : BOOLEAN
 		do
 			create filtre.initialiser
 			mode := mode_indetermine
@@ -148,6 +150,15 @@ feature
 						end
 						lexeme := lexeme + 1
 
+					when "--status" then
+						if bilan_final_precise then
+							afficher_erreur( once "too many %"--status%" option" )
+							etat := etat_final
+						else
+							bilan_final_precise := true
+						end
+						lexeme := lexeme + 1
+
 						-- modèle différentiel
 
 					when "--model" then
@@ -163,8 +174,8 @@ feature
 						-- lot
 
 					when "--batch" then
-						if not lot_active then
-							lot_active := true
+						if not lot_precise then
+							lot_precise := true
 						else
 							afficher_erreur( once "too many %"--batch%" option" )
 							etat := etat_final
@@ -240,6 +251,9 @@ feature
 						elseif sortie_compacte_precise then
 							afficher_erreur( once "short output is available only for diff" )
 							etat := etat_final
+						elseif bilan_final_precise then
+							afficher_erreur( once "final status is not available during analysis" )
+							etat := etat_final
 						elseif not filtre.choix_est_effectue then
 							etat := etat_commande_analyse
 						elseif not filtre.choix_est_unique then
@@ -251,6 +265,11 @@ feature
 						end
 
 					when mode_comparaison then
+						bilan.forcer_metrique( configuration.metrique )
+						if bilan_final_precise then
+							configuration.forcer_bilan_final_differentiel( true )
+						end
+
 						if not filtre.choix_est_effectue then
 							etat := etat_commande_comparaison
 						elseif not filtre.choix_est_unique then
@@ -262,6 +281,11 @@ feature
 						end
 
 					when mode_unitaire then
+						bilan.forcer_metrique( create {LUAT_METRIQUE_UNITAIRE}.fabriquer )
+						if bilan_final_precise then
+							configuration.forcer_bilan_final_unitaire( true )
+						end
+
 						if modele_precise then
 							afficher_erreur( once "no diff model is required for measure" )
 							etat := etat_final
@@ -280,17 +304,24 @@ feature
 					-- commande de type analyse
 
 					if est_repertoire( argument( lexeme ) ) then
-						if lot_active then
+						if lot_precise then
 							afficher_erreur( once "batch mode is not compatible with directory as argument" )
 						else
 							produire_arbre_commande_analyse( argument( lexeme ) )
 						end
-					elseif lot_active then
+					elseif lot_precise then
 						produire_liste_commande_analyse( argument( lexeme ) )
 					else
 						produire_commande_analyse( argument( lexeme ) )
 					end
-					lexeme := lexeme + 1
+
+					if lexeme = argument_count
+						and bilan_final_precise
+					 then
+						etat := etat_commande_bilan
+					else
+						lexeme := lexeme + 1
+					end
 
 				when etat_commande_comparaison then
 					-- commande de type comparaison
@@ -317,35 +348,53 @@ feature
 							if avant_est_repertoire xor apres_est_repertoire then
 								afficher_erreur( once "directory cannot be compared to single file" )
 							elseif avant_est_repertoire then
-								if lot_active then
+								if lot_precise then
 									afficher_erreur( once "batch mode is not compatible with directory as argument" )
 								else
 									produire_arbre_commande_differentiel( avant, apres )
 								end
-							elseif lot_active then
+							elseif lot_precise then
 								produire_lot_commande_differentiel( avant, apres )
 							else
 								produire_commande_differentiel( avant, apres )
 							end
 						end
+
+						if configuration.bilan_final_differentiel then
+							etat := etat_commande_bilan
+						else
+							etat := etat_final
+						end
 					end
-					etat := etat_final
 
 				when etat_commande_unitaire then
 					-- commande de type mesure
 
 					if est_repertoire( argument( lexeme ) ) then
-						if lot_active then
+						if lot_precise then
 							afficher_erreur( once "batch mode is not compatible with directory as argument" )
 						else
 							produire_arbre_commande_unitaire( argument( lexeme ) )
 						end
-					elseif lot_active then
+					elseif lot_precise then
 						produire_liste_commande_unitaire( argument( lexeme ) )
 					else
 						produire_commande_unitaire( argument( lexeme ) )
 					end
-					lexeme := lexeme + 1
+
+					if lexeme = argument_count
+						and configuration.bilan_final_unitaire
+					 then
+						etat := etat_commande_bilan
+					else
+						lexeme := lexeme + 1
+					end
+
+				when etat_commande_bilan then
+					-- commande de type bilan
+
+					commandes.add_last( create {LUAT_COMMANDE_BILAN}.fabriquer )
+					etat := etat_final
 
 				else
 					debug
@@ -372,13 +421,19 @@ feature
 			std_error.put_string( traduire( once "usage:" ) )
 			std_error.put_string( once " codemetre --config" )
 			std_error.put_new_line
-			std_error.put_string( once "%Tcodemetre [--code] [--comment] [--total] [--lang <>] [--batch]%N%T[--anal|--diff [--short] [--model <>]] [--] " )
+			std_error.put_string( once "%Tcodemetre%N%T [--code] [--comment] [--total]%N%T [--batch] [--lang <>] [--status]%N%T [--anal|--diff [--model <>] [--short]]%N%T [--]%N%T " )
 			std_error.put_string( traduire( once "FILE|DIRECTORY" ) )
 			std_error.put_string( once "..." )
 			std_error.put_new_line
 			std_error.put_new_line
 
-			std_error.put_string( traduire( once "For further information, see %"man codemetre%"" ) )
+			std_error.put_string( traduire( once "For further information:" ) )
+			std_error.put_new_line
+			std_error.put_string( traduire( once " - see " ) )
+			std_error.put_string( once "%"man codemetre%"" )
+			std_error.put_new_line
+			std_error.put_string( traduire( once " - visit " ) )
+			std_error.put_string( once "http://wiki.github.com/seventh/codemetre" )
 			std_error.put_new_line
 			std_error.flush
 		end

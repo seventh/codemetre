@@ -49,7 +49,7 @@ feature
 
 	executer is
 		local
-			metrique : LUAT_METRIQUE
+			metrique : LUAT_METRIQUE_DIFFERENTIEL
 			nid, but : LUAT_LISTAGE
 			erreur : BOOLEAN
 		do
@@ -90,6 +90,8 @@ feature
 
 					metrique := configuration.metrique.twin
 					metrique.mesurer( nid, but )
+
+					bilan.accumuler( metrique )
 
 					-- sortie
 

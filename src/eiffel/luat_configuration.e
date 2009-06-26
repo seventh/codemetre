@@ -16,6 +16,7 @@ class
 		-- Ces choix incluent :
 		-- * les associations entre extension de fichier et langage ;
 		-- * le modèle de comparaison ;
+		-- * la production d'un bilan en fin d'analyse ;
 		-- * la sortie allégée lors des comparaisons ;
 		-- * les filtres à appliquer / les sorties à produire.
 		--
@@ -62,6 +63,7 @@ feature
 			-- section : 'diff'
 			--
 
+			bilan_final_differentiel := false
 			metrique := metrique_normal
 			filtre_differentiel.met_code( true )
 			filtre_differentiel.met_commentaire( false )
@@ -108,6 +110,7 @@ feature
 			-- section : 'unit'
 			--
 
+			bilan_final_unitaire := false
 			filtre_unitaire.met_code( true )
 			filtre_unitaire.met_commentaire( true )
 			filtre_unitaire.met_total( false )
@@ -134,6 +137,12 @@ feature
 			-- surcharge la configuration actuelle avec les éléments
 			-- précisés en ligne de commande
 		do
+			-- ici on devrait retrouver l'équivalent de :
+			--
+			--  {LUAT_LIGNE_COMMANDE_ANALYSEUR}.analyser
+			--
+			-- mais la question sera alors d'initaliser l'instance
+			-- globale de LUAT_CONFIGURATION
 		end
 
 feature
@@ -176,7 +185,15 @@ feature
 			end
 		end
 
-	metrique : LUAT_METRIQUE
+	bilan_final_differentiel : BOOLEAN
+			-- vrai si et seulement si un résumé doit être produit en
+			-- fin de comptage différentiel
+
+	bilan_final_unitaire : BOOLEAN
+			-- vrai si et seulement si un résumé doit être produit en
+			-- fin de comptage unitaire
+
+	metrique : LUAT_METRIQUE_DIFFERENTIEL
 			-- modèle de comparaison à utiliser
 
 	filtre_analyse : LUAT_FILTRE
@@ -239,6 +256,10 @@ feature
 			std_output.put_boolean( sortie_compacte )
 			std_output.put_new_line
 
+			std_output.put_string( once "%Tstatus := " )
+			std_output.put_boolean( bilan_final_differentiel )
+			std_output.put_new_line
+
 			--
 			-- section : 'language'
 			--
@@ -279,6 +300,10 @@ feature
 
 			std_output.put_string( once "[unit]%N" )
 			afficher_filtre( filtre_unitaire, std_output )
+
+			std_output.put_string( once "%Tstatus := " )
+			std_output.put_boolean( bilan_final_unitaire )
+			std_output.put_new_line
 		end
 
 feature
@@ -298,12 +323,28 @@ feature
 			end
 		end
 
+	forcer_bilan_final_differentiel( p_bilan_final : BOOLEAN ) is
+			-- met à jour la variable 'bilan_final_differentiel'
+		do
+			bilan_final_differentiel := p_bilan_final
+		ensure
+			bilan_final_ok : bilan_final_differentiel = p_bilan_final
+		end
+
+	forcer_bilan_final_unitaire( p_bilan_final : BOOLEAN ) is
+			-- met à jour la variable 'bilan_final_unitaire'
+		do
+			bilan_final_unitaire := p_bilan_final
+		ensure
+			bilan_final_ok : bilan_final_unitaire = p_bilan_final
+		end
+
 	forcer_metrique( p_metrique : STRING ) : BOOLEAN is
 			-- choisit une métrique par son nom
 		require
 			metrique_valide : not p_metrique.is_empty
 		local
-			m : LUAT_METRIQUE
+			m : LUAT_METRIQUE_DIFFERENTIEL
 		do
 			m := trouver_metrique( p_metrique )
 
@@ -352,9 +393,11 @@ feature {DANG_ANALYSEUR}
 				when "filter" then
 					traiter_erreur( once "diff:filter can only have a single value" )
 				when "model" then
-					traiter_erreur( once "analysis:model is not a list" )
+					traiter_erreur( once "diff:model is not a list" )
 				when "short" then
-					traiter_erreur( once "analysis:short is not a list" )
+					traiter_erreur( once "diff:short is not a list" )
+				when "status" then
+					traiter_erreur( once "diff:status is not a list" )
 				else
 					traiter_erreur( once "unknown parameter in diff section" )
 				end
@@ -384,6 +427,8 @@ feature {DANG_ANALYSEUR}
 				inspect p_variable
 				when "filter" then
 					ajouter_filtre( filtre_unitaire, p_valeur )
+				when "status" then
+					traiter_erreur( once "unit:status is not a list" )
 				else
 					traiter_erreur( once "unknown parameter in unit section" )
 				end
@@ -400,7 +445,7 @@ feature {DANG_ANALYSEUR}
 		local
 			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
 			a : LUAT_ANALYSEUR
-			m : LUAT_METRIQUE
+			m : LUAT_METRIQUE_DIFFERENTIEL
 		do
 			inspect p_section
 
@@ -426,6 +471,12 @@ feature {DANG_ANALYSEUR}
 				when "short" then
 					if p_valeur.is_boolean then
 						sortie_compacte := p_valeur.to_boolean
+					else
+						traiter_erreur( once "invalid boolean value" )
+					end
+				when "status" then
+					if p_valeur.is_boolean then
+						bilan_final_differentiel := p_valeur.to_boolean
 					else
 						traiter_erreur( once "invalid boolean value" )
 					end
@@ -459,6 +510,12 @@ feature {DANG_ANALYSEUR}
 				inspect p_variable
 				when "filter" then
 					imposer_filtre( filtre_unitaire, p_valeur )
+				when "status" then
+					if p_valeur.is_boolean then
+						bilan_final_unitaire := p_valeur.to_boolean
+					else
+						traiter_erreur( once "invalid boolean value" )
+					end
 				else
 					traiter_erreur( once "unknown parameter in unit section" )
 				end
@@ -492,9 +549,11 @@ feature {DANG_ANALYSEUR}
 				when "filter" then
 					traiter_erreur( once "diff:filter can only have a single value" )
 				when "model" then
-					traiter_erreur( once "analysis:model is not a list" )
+					traiter_erreur( once "diff:model is not a list" )
 				when "short" then
-					traiter_erreur( once "analysis:short is not a list" )
+					traiter_erreur( once "diff:short is not a list" )
+				when "status" then
+					traiter_erreur( once "diff:status is not a list" )
 				else
 					traiter_erreur( once "unknown parameter in diff section" )
 				end
@@ -520,6 +579,8 @@ feature {DANG_ANALYSEUR}
 				inspect p_variable
 				when "filter" then
 					retirer_filtre( filtre_unitaire, p_valeur )
+				when "status" then
+					traiter_erreur( once "unit:status is not a list" )
 				else
 					traiter_erreur( once "unknown parameter in unit section" )
 				end
@@ -548,11 +609,11 @@ feature {LUAT_CONFIGURATION}
 	nom_fichier_configuration : STRING is
 			-- chemin absolu d'accès au fichier de configuration :
 			-- - sous UNIX : équivalent à $HOME/.codemetrerc
-			-- - sous WINDOWS : équivalent à %APPDATA%\codemetre.cnf
+			-- - sous WINDOWS : équivalent à %APPDATA%\codemetre.ini
 		local
 			sys : SYSTEM
 		once
-			-- l'implémentation à un biais : on détermine
+			-- l'implémentation a un biais : on détermine
 			-- l'environnement par rapport à la définition ou non de la
 			-- variable utilisée spécifiquement dans celui-ci
 
@@ -624,24 +685,24 @@ feature {}
 
 feature {}
 
-	metrique_effort : LUAT_METRIQUE is
+	metrique_effort : LUAT_METRIQUE_DIFFERENTIEL is
 		once
 			result := metriques.item( 0 )
 		end
 
-	metrique_normal : LUAT_METRIQUE is
+	metrique_normal : LUAT_METRIQUE_DIFFERENTIEL is
 		once
 			result := metriques.item( 1 )
 		end
 
-	metriques : FAST_ARRAY[ LUAT_METRIQUE ] is
+	metriques : FAST_ARRAY[ LUAT_METRIQUE_DIFFERENTIEL ] is
 		once
 			create result.with_capacity( 2 )
 			result.add_last( create {LUAT_METRIQUE_EFFORT}.fabriquer )
-			result.add_last( create {LUAT_METRIQUE_NORMALE}.fabriquer )
+			result.add_last( create {LUAT_METRIQUE_NORMAL}.fabriquer )
 		end
 
-	trouver_metrique( p_clef : STRING ) : LUAT_METRIQUE is
+	trouver_metrique( p_clef : STRING ) : LUAT_METRIQUE_DIFFERENTIEL is
 		require
 			clef_valide : not p_clef.is_empty
 		local
