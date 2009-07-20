@@ -306,6 +306,7 @@ feature
 					if est_repertoire( argument( lexeme ) ) then
 						if lot_precise then
 							afficher_erreur( once "batch mode is not compatible with directory as argument" )
+							etat := etat_final
 						else
 							produire_arbre_commande_analyse( argument( lexeme ) )
 						end
@@ -328,6 +329,7 @@ feature
 
 					if lexeme + 1 /= argument_count then
 						afficher_erreur( once "two files are required in diff mode" )
+						etat := etat_final
 					else
 						avant := argument( lexeme )
 						apres := argument( lexeme + 1 )
@@ -341,15 +343,18 @@ feature
 
 						if avant = void and apres = void then
 							afficher_erreur( once "at least one of the two arguments shall exists" )
+							etat := etat_final
 						else
 							avant_est_repertoire := avant /= void and then est_repertoire( avant )
 							apres_est_repertoire := apres /= void and then est_repertoire( apres )
 
 							if avant_est_repertoire xor apres_est_repertoire then
 								afficher_erreur( once "directory cannot be compared to single file" )
+								etat := etat_final
 							elseif avant_est_repertoire then
 								if lot_precise then
 									afficher_erreur( once "batch mode is not compatible with directory as argument" )
+									etat := etat_final
 								else
 									produire_arbre_commande_differentiel( avant, apres )
 								end
@@ -360,7 +365,12 @@ feature
 							end
 						end
 
-						if configuration.bilan_final_differentiel then
+						-- s'il n'y a pas eu d'erreur grossière sur la
+						-- ligne de commande, on produit le bilan si demandé
+
+						if etat /= etat_final
+							and configuration.bilan_final_differentiel
+						 then
 							etat := etat_commande_bilan
 						else
 							etat := etat_final
