@@ -5,6 +5,7 @@ Développements futurs :
  * Garantir que les résultats apparaissent par ordre alphabétique lors de l'analyse de répertoires complets.
  * Repenser et réécrire la page de manuel UNIX, qui est actuellement un modèle de ce qu'il ne faut pas faire.
  * Ajouter une commande de limitation de la récursivité de l'analyse.
+ * Offrir la possibilité de lister des répertoires lors du traitement par lot en mode différentiel.
 
 Mode analytique :
  * produire un code filtré de tout commentaire qui compile encore

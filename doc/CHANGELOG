@@ -1,3 +1,7 @@
+*** v0.22.2
+
+ - Le bilan, lorsque demandé, est désormais également détaillé par langage.
+
 *** v0.22.1
 
  - Correction du bogue n°1 : boucle infinie si un seul argument est précisé en

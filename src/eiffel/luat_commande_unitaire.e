@@ -63,7 +63,7 @@ feature
 				create metrique.fabriquer
 				metrique.mesurer( source )
 
-				bilan.accumuler( metrique )
+				bilan.accumuler( analyseur.langage, metrique )
 
 				-- sortie
 

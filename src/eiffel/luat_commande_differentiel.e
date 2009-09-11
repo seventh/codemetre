@@ -91,7 +91,7 @@ feature
 					metrique := configuration.metrique.twin
 					metrique.mesurer( nid, but )
 
-					bilan.accumuler( metrique )
+					bilan.accumuler( analyseur.langage, metrique )
 
 					-- sortie
 
