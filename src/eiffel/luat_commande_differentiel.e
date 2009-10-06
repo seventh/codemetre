@@ -83,12 +83,12 @@ feature
 				-- l'ordre des tests et l'utilisation de 'or else' est
 				-- ici très important pour les performances de
 				-- l'application
-				if not configuration.sortie_compacte
+				if not configuration.differentiel.abrege
 					or else not sont_equivalents( nid, but )
 				 then
 					-- mesure
 
-					metrique := configuration.metrique.twin
+					metrique := configuration.differentiel.modele.twin
 					metrique.mesurer( nid, but )
 
 					bilan.accumuler( analyseur.langage, metrique )
@@ -140,7 +140,7 @@ feature {}
 	filtre : LUAT_FILTRE is
 			-- filtres de l'analyse
 		do
-			result := configuration.filtre_differentiel
+			result := configuration.differentiel.filtre
 		ensure
 			contrat : result.choix_est_unique
 		end

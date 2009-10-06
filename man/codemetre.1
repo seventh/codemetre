@@ -6,26 +6,29 @@
 codemetre \- comptage de ligne de fichiers source
 .SH SYNOPSIS
 .B codemetre
-[--code] [--comment] [--total] [--batch] [--lang <>] [--status] [--anal|--diff [--short] [--model <>]] [--] FICHIER|RÉPERTOIRE...
+[--code] [--comment] [--total] [--lang <>] [--status] [--anal|--diff [--short] [--model <>]] [--] FICHIER|RÉPERTOIRE|LOT...
 .SH DESCRIPTION
 .B codemetre
 mesure la taille de fichiers sources en nombre de lignes physiques de code et de commentaires. Il permet également d'évaluer l'effort réalisé entre deux versions d'un même fichier, toujours en nombre de lignes physiques.
 .SH OPTIONS PARTICULIÈRES
 L'option "--" permet de signifier que les arguments restants ne sont pas des options. Ceci peut s'avérer utile lorsqu'un fichier à analyser porte le nom d'une option.
 
-L'option "--batch" permet de spécifier un traitement par lots, c'est-à-dire que les entrées sont considérées comme des liste de fichiers sur lesquels mener la métrologie.
 .SH LANGAGES RECONNUS
 Si aucun langage n'est choisi grâce à l'option --lang, alors
 .B codemetre
 essaiera de déterminer celui-ci à partir de l'extension du fichier. Sinon, ce choix prévaut quelque soit l'extension du ou des fichiers à mesurer. La section "language" du fichier de configuration ${HOME}/.codemetrerc permet d'associer des suffixes supplémentaires aux langages déjà reconnus, voire de remplacer la configuration par défaut. Les langages reconnus actuellement sont :
 .IP ada
 Respecte le standard Ada95. Extensions ".ads" et ".adb".
+.IP batch
+Ce type correspond aux lots codemetre (cf section TRAITEMENT PAR LOT). Extension ".cmb".
 .IP c
 Respecte la norme C ISO/IEC 9899:1999. Extensions ".h" et ".c".
 .IP c++
 Respecte la norme C++ ISO/IEC 14882:2003. Extensions ".hh", ".hpp", ".C", ".cc" et ".cpp".
 .IP eiffel
 Respecte le standard Eiffel tel que définit dans le livre "Eiffel, le langage" de B. Meyer paru chez InterEditions en 1994. Extension ".e".
+.SH TRAITEMENT PAR LOT
+Les lots sont constitués de noms de fichiers à analyser (qui ne sont pas d'autres lots), ou des lignes vides. Lors de l'analyse différentielle avec deux lots, ceux-ci sont comparés ligne à ligne : le premier fichier du premier lot avec le premier fichier du second lot, puis le deuxième fichier du premier lot avec le deuxième fichier du second lot, et ainsi de suite. Si les deux lots ne font pas le même nombre de ligne, le plus court est considéré comme se poursuivant avec autant de lignes vides que nécessaire.
 .SH SPECTRE DE L'ANALYSE
 .B codemetre
 sait différencier le code des commentaires, et peut ne prendre en compte que l'un ou l'autre. Attention, une seule des options suivantes est autorisée lors d'une demande d'analyse lexicale ou de comparaison différentielle. Dans le cas d'un simple comptage de ligne sans comparaison, ces options peuvent être combinées.
@@ -99,11 +102,14 @@ dans un fichier au format similaire à ce qui peut-être obtenu par le biais de 
 .B codemetre --config.
 La surcharge de la configuration par défaut doit être faite dans un fichier dénommé .codemetrerc et situé dans $(HOME). Nota : sous Windows, le fichier de configuration dénommé codemetre.ini est recherché dans %APPDATA%.
 En plus de l'opérateur ':=' pour modifier une variable, les opérateurs '+=' et '-=' peuvent également être utilisés, afin respectivement d'augmenter et de restreindre la liste des options par défaut.
+Pour certaines variables, notamment celles de la section 'language', on peut utiliser l'opérateur ':=' sans préciser d'extension de fichier à la suite ; cela revient à dire qu'aucune extension de fichier ne sera associée au dit langage.
 .SH BOGUES ET LIMITATIONS
 .B codemetre
 ne fait pas l'expansion des macro-commandes du C/C++, même si ceci ne modifierait pas les mesures produites. En effet, certaines macros-commandes peuvent être définies ailleurs que dans le fichier sous analyse, et
 .B codemetre
 n'a pas connaissance de l'organisation du projet et des règles de visibilités entre répertoires.
+
+La double association d'une même extension à la fois pour les lots et un langage particulier n'est pas détectée. Néanmoins, l'association au lot prévaut.
 
 Lors d'une mesure différentielle, tout bloc déplacé n'est a priori pas considéré commun aux deux versions de fichier, parce que l'impact de ce mouvement ne peut être évalué.
 

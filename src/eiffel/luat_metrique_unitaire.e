@@ -63,13 +63,13 @@ feature
 		local
 			affichage : BOOLEAN
 		do
-			if configuration.filtre_unitaire.code then
+			if configuration.unitaire.filtre.code then
 				p_flux.put_string( once "code " )
 				p_flux.put_integer( instruction )
 				affichage := true
 			end
 
-			if configuration.filtre_unitaire.commentaire then
+			if configuration.unitaire.filtre.commentaire then
 				if affichage then
 					p_flux.put_spaces( 1 )
 				end
@@ -78,7 +78,7 @@ feature
 				affichage := true
 			end
 
-			if configuration.filtre_unitaire.total then
+			if configuration.unitaire.filtre.total then
 				if affichage then
 					p_flux.put_spaces( 1 )
 				end

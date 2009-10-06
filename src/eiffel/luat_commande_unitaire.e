@@ -84,7 +84,7 @@ feature {}
 	filtre : LUAT_FILTRE is
 			-- filtres de l'analyse
 		do
-			result := configuration.filtre_unitaire
+			result := configuration.unitaire.filtre
 		ensure
 			contrat : result.choix_est_effectue
 		end

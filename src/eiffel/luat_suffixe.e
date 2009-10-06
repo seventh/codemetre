@@ -8,8 +8,8 @@ class
 	LUAT_SUFFIXE
 
 		--
-		-- Association entre un suffixe de fichier et un analyseur de
-		-- langage de programmation
+		-- Association d'un suffixe avec un type de fichier, que ce
+		-- soit un lot ou un langage de programmation
 		--
 
 creation
@@ -19,7 +19,7 @@ creation
 feature {}
 
 	fabriquer( p_suffixe : STRING
-				  p_langage : LUAT_ANALYSEUR ) is
+				  p_langage : STRING ) is
 			-- constructeur
 		require
 			suffixe_valide : not p_suffixe.is_empty
@@ -34,10 +34,9 @@ feature {}
 feature
 
 	suffixe : STRING
-			-- clef utilisée pour vérifier l'appartenance d'un fichier
-			-- au langage associé
+			-- extension de nom de fichier
 
-	langage : LUAT_ANALYSEUR
-			-- analyseur syntaxique du langage de programmation associé
+	langage : STRING
+			-- nom du langage
 
 end

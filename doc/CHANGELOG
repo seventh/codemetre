@@ -1,3 +1,11 @@
+*** v0.23.0
+
+ - L'option '--batch' disparaît au profit d'une association entre des extensions
+ de fichier et le type 'batch'.
+ - On peut dans le fichier de configuration ne vouloir associer aucune extension
+ particulière à un langage L donné. Pour cela, on peut désormais écrire "L :="
+ dans la section 'language' du dit fichier.
+
 *** v0.22.2
 
  - Le bilan, lorsque demandé, est désormais également détaillé par langage.

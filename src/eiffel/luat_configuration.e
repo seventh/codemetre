@@ -37,9 +37,9 @@ feature {}
 			-- constructeur
 		do
 			create associations.fabriquer( create {LUAT_ORDRE_SUFFIXE} )
-			create filtre_analyse.initialiser
-			create filtre_differentiel.initialiser
-			create filtre_unitaire.initialiser
+			create analyse.fabriquer
+			create differentiel.fabriquer
+			create unitaire.fabriquer
 		end
 
 feature
@@ -52,23 +52,16 @@ feature
 			configuration_par_defaut := true
 
 			--
-			-- section : 'anal'
+			-- section : 'analysis'
 			--
 
-			filtre_analyse.met_code( false )
-			filtre_analyse.met_commentaire( false )
-			filtre_analyse.met_total( true )
+			analyse.initialiser
 
 			--
 			-- section : 'diff'
 			--
 
-			bilan_final_differentiel := false
-			metrique := metrique_normal
-			filtre_differentiel.met_code( true )
-			filtre_differentiel.met_commentaire( false )
-			filtre_differentiel.met_total( false )
-			sortie_compacte := false
+			differentiel.initialiser
 
 			--
 			-- section : 'language'
@@ -76,44 +69,46 @@ feature
 
 			-- Ada
 
-			create suffixe.fabriquer( once ".adb", analyseur_ada )
+			create suffixe.fabriquer( once ".adb", analyseur_ada.langage )
 			associations.ajouter( suffixe )
-			create suffixe.fabriquer( once ".ads", analyseur_ada )
+			create suffixe.fabriquer( once ".ads", analyseur_ada.langage )
 			associations.ajouter( suffixe )
 
 			-- C
 
-			create suffixe.fabriquer( once ".c", analyseur_c )
+			create suffixe.fabriquer( once ".c", analyseur_c.langage )
 			associations.ajouter( suffixe )
-			create suffixe.fabriquer( once ".h", analyseur_c )
+			create suffixe.fabriquer( once ".h", analyseur_c.langage )
 			associations.ajouter( suffixe )
 
 			-- C++
 
-			create suffixe.fabriquer( once ".C", analyseur_c_plus_plus )
+			create suffixe.fabriquer( once ".C", analyseur_c_plus_plus.langage )
 			associations.ajouter( suffixe )
-			create suffixe.fabriquer( once ".cc", analyseur_c_plus_plus )
+			create suffixe.fabriquer( once ".cc", analyseur_c_plus_plus.langage )
 			associations.ajouter( suffixe )
-			create suffixe.fabriquer( once ".cpp", analyseur_c_plus_plus )
+			create suffixe.fabriquer( once ".cpp", analyseur_c_plus_plus.langage )
 			associations.ajouter( suffixe )
-			create suffixe.fabriquer( once ".hh", analyseur_c_plus_plus )
+			create suffixe.fabriquer( once ".hh", analyseur_c_plus_plus.langage )
 			associations.ajouter( suffixe )
-			create suffixe.fabriquer( once ".hpp", analyseur_c_plus_plus )
+			create suffixe.fabriquer( once ".hpp", analyseur_c_plus_plus.langage )
 			associations.ajouter( suffixe )
 
 			-- Eiffel
 
-			create suffixe.fabriquer( once ".e", analyseur_eiffel )
+			create suffixe.fabriquer( once ".e", analyseur_eiffel.langage )
+			associations.ajouter( suffixe )
+
+			-- Lot codemètre
+
+			create suffixe.fabriquer( once ".cmb", analyseur_lot )
 			associations.ajouter( suffixe )
 
 			--
 			-- section : 'unit'
 			--
 
-			bilan_final_unitaire := false
-			filtre_unitaire.met_code( true )
-			filtre_unitaire.met_commentaire( true )
-			filtre_unitaire.met_total( false )
+			unitaire.initialiser
 		end
 
 	appliquer_choix_fichier is
@@ -172,7 +167,7 @@ feature
 					create it.attacher( associations )
 					associations.trouver( suffixe, it )
 					if not it.est_hors_borne then
-						result := it.dereferencer.langage
+						result := trouver_analyseur( it.dereferencer.langage )
 					else
 						std_error.put_string( traduire( once "Error: extension of file %"" ) )
 						std_error.put_string( p_nom_fichier )
@@ -185,32 +180,45 @@ feature
 			end
 		end
 
-	bilan_final_differentiel : BOOLEAN
-			-- vrai si et seulement si un résumé doit être produit en
-			-- fin de comptage différentiel
+	est_lot( p_nom_fichier : STRING ) : BOOLEAN is
+			-- vrai si et seulement si l'extension du nom passé en
+			-- argument est celle d'un lot codemetre
+		require
+			nom_valide : not p_nom_fichier.is_empty
+		local
+			i : INTEGER
+			suffixe : LUAT_SUFFIXE
+			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
+		do
+			-- vu l'utilisation qui est faite de cette méthode, on ne
+			-- remonte aucun message sur la sortie d'erreur. Ceci sera
+			-- logiquement fait par la méthode 'analyseur'.
 
-	bilan_final_unitaire : BOOLEAN
-			-- vrai si et seulement si un résumé doit être produit en
-			-- fin de comptage unitaire
+			i := p_nom_fichier.last_index_of( '.' )
+			if p_nom_fichier.valid_index( i ) then
+				create suffixe.fabriquer( p_nom_fichier.substring( i, p_nom_fichier.upper ),
+												  void )
+				create it.attacher( associations )
+				associations.trouver( suffixe, it )
+				if not it.est_hors_borne then
+					result := trouver_langage( it.dereferencer.langage ) = analyseur_lot
+				end
+				it.detacher
+			end
+		end
 
-	metrique : LUAT_METRIQUE_DIFFERENTIEL
-			-- modèle de comparaison à utiliser
+feature
 
-	filtre_analyse : LUAT_FILTRE
-			-- ensemble des filtres à utiliser sur les fichiers en
-			-- entrée par une commande d'analyse
+	analyse : LUAT_OPTION_ANALYSE
+			-- ensemble des options associées aux commandes d'analyse
 
-	filtre_differentiel : LUAT_FILTRE
-			-- ensemble des filtres à utiliser sur les fichiers en
-			-- entrée par une commande de comptage différentiel
+	differentiel : LUAT_OPTION_DIFFERENTIEL
+			-- ensemble des options associées aux commandes de comptage
+			-- différentiel
 
-	filtre_unitaire : LUAT_FILTRE
-			-- ensemble des filtres à utiliser sur les fichiers en
-			-- entrée par une commande de comptage unitaire
-
-	sortie_compacte : BOOLEAN
-			-- vrai si et seulement le résultat des comparaisons doit
-			-- être filtré
+	unitaire : LUAT_OPTION_UNITAIRE
+			-- ensemble des options associées aux commandes de comptage
+			-- unitaire
 
 feature
 
@@ -239,25 +247,25 @@ feature
 			--
 
 			std_output.put_string( once "[analysis]%N" )
-			afficher_filtre( filtre_analyse, std_output )
+			afficher_filtre( analyse.filtre, std_output )
 
 			--
 			-- section : 'diff'
 			--
 
 			std_output.put_string( once "[diff]%N" )
-			afficher_filtre( filtre_differentiel, std_output )
+			afficher_filtre( differentiel.filtre, std_output )
 
 			std_output.put_string( once "%Tmodel := " )
-			std_output.put_string( metrique.nom )
+			std_output.put_string( differentiel.modele.nom )
 			std_output.put_new_line
 
 			std_output.put_string( once "%Tshort := " )
-			std_output.put_boolean( sortie_compacte )
+			std_output.put_boolean( differentiel.abrege )
 			std_output.put_new_line
 
 			std_output.put_string( once "%Tstatus := " )
-			std_output.put_boolean( bilan_final_differentiel )
+			std_output.put_boolean( differentiel.statut )
 			std_output.put_new_line
 
 			--
@@ -267,12 +275,12 @@ feature
 			std_output.put_string( once "[language]%N" )
 
 			create it.attacher( associations )
-			from l := analyseurs.lower
-			variant analyseurs.upper - l
-			until l > analyseurs.upper
+			from l := langages.lower
+			variant langages.upper - l
+			until l > langages.upper
 			loop
 				std_output.put_character( '%T' )
-				langage := analyseurs.item( l ).langage
+				langage := langages.item( l )
 				langage.to_lower
 				std_output.put_string( langage )
 				std_output.put_string( once " := " )
@@ -280,7 +288,7 @@ feature
 				from it.pointer_premier
 				until it.est_hors_borne
 				loop
-					if it.dereferencer.langage = analyseurs.item( l ) then
+					if it.dereferencer.langage = langages.item( l ) then
 						if not aucune_entree then
 							std_output.put_string( once ", " )
 						end
@@ -299,10 +307,10 @@ feature
 			--
 
 			std_output.put_string( once "[unit]%N" )
-			afficher_filtre( filtre_unitaire, std_output )
+			afficher_filtre( unitaire.filtre, std_output )
 
 			std_output.put_string( once "%Tstatus := " )
-			std_output.put_boolean( bilan_final_unitaire )
+			std_output.put_boolean( unitaire.statut )
 			std_output.put_new_line
 		end
 
@@ -323,42 +331,19 @@ feature
 			end
 		end
 
-	forcer_bilan_final_differentiel( p_bilan_final : BOOLEAN ) is
-			-- met à jour la variable 'bilan_final_differentiel'
-		do
-			bilan_final_differentiel := p_bilan_final
-		ensure
-			bilan_final_ok : bilan_final_differentiel = p_bilan_final
-		end
-
-	forcer_bilan_final_unitaire( p_bilan_final : BOOLEAN ) is
-			-- met à jour la variable 'bilan_final_unitaire'
-		do
-			bilan_final_unitaire := p_bilan_final
-		ensure
-			bilan_final_ok : bilan_final_unitaire = p_bilan_final
-		end
-
 	forcer_metrique( p_metrique : STRING ) : BOOLEAN is
 			-- choisit une métrique par son nom
 		require
 			metrique_valide : not p_metrique.is_empty
 		local
-			m : LUAT_METRIQUE_DIFFERENTIEL
+			modele : LUAT_METRIQUE_DIFFERENTIEL
 		do
-			m := trouver_metrique( p_metrique )
+			modele := trouver_metrique( p_metrique )
 
-			if m /= void then
-				metrique := m
+			if modele /= void then
+				differentiel.met_modele( modele )
 				result := true
 			end
-		end
-
-	forcer_sortie_compacte( p_sortie_compacte : BOOLEAN ) is
-		do
-			sortie_compacte := p_sortie_compacte
-		ensure
-			sortie_compacte_ok : sortie_compacte = p_sortie_compacte
 		end
 
 feature {LUAT_CONFIGURATION}
@@ -376,7 +361,7 @@ feature {DANG_ANALYSEUR}
 		local
 			suffixe : LUAT_SUFFIXE
 			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
-			a : LUAT_ANALYSEUR
+			l : STRING
 		do
 			inspect p_section
 
@@ -403,22 +388,20 @@ feature {DANG_ANALYSEUR}
 				end
 
 			when "language" then
-				a := trouver_analyseur( p_variable )
+				l := trouver_langage( p_variable )
 
-				if a = void then
+				if l = void then
 					traiter_erreur( once "language not yet supported" )
 				else
-					create suffixe.fabriquer( p_valeur.twin, a )
+					create suffixe.fabriquer( p_valeur.twin, l )
 					create it.attacher( associations )
 					associations.trouver( suffixe, it )
-					if not it.est_hors_borne then
-						if it.dereferencer.langage /= suffixe.langage then
-							traiter_erreur( once "suffix is already associated with another language" )
-						else
-							traiter_erreur( once "redundant association" )
-						end
-					else
+					if it.est_hors_borne then
 						associations.ajouter( suffixe )
+					elseif it.dereferencer.langage /= suffixe.langage then
+						traiter_erreur( once "suffix is already associated with another language" )
+					else
+						traiter_erreur( once "redundant association" )
 					end
 					it.detacher
 				end
@@ -426,9 +409,75 @@ feature {DANG_ANALYSEUR}
 			when "unit" then
 				inspect p_variable
 				when "filter" then
-					ajouter_filtre( filtre_unitaire, p_valeur )
+					ajouter_filtre( unitaire.filtre, p_valeur )
 				when "status" then
 					traiter_erreur( once "unit:status is not a list" )
+				else
+					traiter_erreur( once "unknown parameter in unit section" )
+				end
+
+			else
+				-- section inconnue
+				traiter_erreur( once "unknown section" )
+			end
+		end
+
+	effacer( p_section : STRING
+				p_variable : STRING ) is
+		local
+			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
+			l : STRING
+		do
+			inspect p_section
+
+			when "analysis" then
+				inspect p_variable
+				when "filter" then
+					traiter_erreur( once "analysis:filter is mandatory" )
+				else
+					traiter_erreur( once "unknown parameter in analysis section" )
+				end
+
+			when "diff" then
+				inspect p_variable
+				when "filter" then
+					traiter_erreur( once "diff:filter is mandatory" )
+				when "model" then
+					traiter_erreur( once "diff:model is mandatory" )
+				when "short" then
+					traiter_erreur( once "diff:short is not clearable" )
+				when "status" then
+					traiter_erreur( once "diff:status is not clearable" )
+				else
+					traiter_erreur( once "unknown parameter in diff section" )
+				end
+
+			when "language" then
+				l := trouver_langage( p_variable )
+
+				if l = void then
+					traiter_erreur( once "language not yet supported" )
+				else
+					create it.attacher( associations )
+					from it.pointer_premier
+					until it.est_hors_borne
+					loop
+						if it.dereferencer.langage = l then
+							associations.retirer( it )
+							it.pointer_premier
+						else
+							it.avancer
+						end
+					end
+					it.detacher
+				end
+
+			when "unit" then
+				inspect p_variable
+				when "filter" then
+					traiter_erreur( once "unit:filter is mandatory" )
+				when "status" then
+					traiter_erreur( once "unit:status is not clearable" )
 				else
 					traiter_erreur( once "unknown parameter in unit section" )
 				end
@@ -444,15 +493,14 @@ feature {DANG_ANALYSEUR}
 				p_valeur : STRING ) is
 		local
 			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
-			a : LUAT_ANALYSEUR
-			m : LUAT_METRIQUE_DIFFERENTIEL
+			l : STRING
 		do
 			inspect p_section
 
 			when "analysis" then
 				inspect p_variable
 				when "filter" then
-					imposer_filtre( filtre_analyse, p_valeur )
+					imposer_filtre( analyse.filtre, p_valeur )
 				else
 					traiter_erreur( once "unknown parameter in analysis section" )
 				end
@@ -460,23 +508,20 @@ feature {DANG_ANALYSEUR}
 			when "diff" then
 				inspect p_variable
 				when "filter" then
-					imposer_filtre( filtre_differentiel, p_valeur )
+					imposer_filtre( differentiel.filtre, p_valeur )
 				when "model" then
-					m := trouver_metrique( p_valeur )
-					if m = void then
+					if not forcer_metrique( p_valeur ) then
 						traiter_erreur( once "unknown diff model" )
-					else
-						metrique := m
 					end
 				when "short" then
 					if p_valeur.is_boolean then
-						sortie_compacte := p_valeur.to_boolean
+						differentiel.met_abrege( p_valeur.to_boolean )
 					else
 						traiter_erreur( once "invalid boolean value" )
 					end
 				when "status" then
 					if p_valeur.is_boolean then
-						bilan_final_differentiel := p_valeur.to_boolean
+						differentiel.met_statut( p_valeur.to_boolean )
 					else
 						traiter_erreur( once "invalid boolean value" )
 					end
@@ -485,16 +530,16 @@ feature {DANG_ANALYSEUR}
 				end
 
 			when "language" then
-				a := trouver_analyseur( p_variable )
+				l := trouver_langage( p_variable )
 
-				if a = void then
+				if l = void then
 					traiter_erreur( once "language not yet supported" )
 				else
 					create it.attacher( associations )
 					from it.pointer_premier
 					until it.est_hors_borne
 					loop
-						if it.dereferencer.langage = a then
+						if it.dereferencer.langage = l then
 							associations.retirer( it )
 							it.pointer_premier
 						else
@@ -509,10 +554,10 @@ feature {DANG_ANALYSEUR}
 			when "unit" then
 				inspect p_variable
 				when "filter" then
-					imposer_filtre( filtre_unitaire, p_valeur )
+					imposer_filtre( unitaire.filtre, p_valeur )
 				when "status" then
 					if p_valeur.is_boolean then
-						bilan_final_unitaire := p_valeur.to_boolean
+						unitaire.met_statut( p_valeur.to_boolean )
 					else
 						traiter_erreur( once "invalid boolean value" )
 					end
@@ -532,7 +577,7 @@ feature {DANG_ANALYSEUR}
 		local
 			suffixe : LUAT_SUFFIXE
 			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
-			a : LUAT_ANALYSEUR
+			l : STRING
 		do
 			inspect p_section
 
@@ -559,12 +604,12 @@ feature {DANG_ANALYSEUR}
 				end
 
 			when "language" then
-				a := trouver_analyseur( p_variable )
+				l := trouver_langage( p_variable )
 
-				if a = void then
+				if l = void then
 					traiter_erreur( once "language not yet supported" )
 				else
-					create suffixe.fabriquer( p_valeur.twin, a )
+					create suffixe.fabriquer( p_valeur.twin, l )
 					create it.attacher( associations )
 					associations.trouver( suffixe, it )
 					if it.est_hors_borne then
@@ -578,7 +623,7 @@ feature {DANG_ANALYSEUR}
 			when "unit" then
 				inspect p_variable
 				when "filter" then
-					retirer_filtre( filtre_unitaire, p_valeur )
+					retirer_filtre( unitaire.filtre, p_valeur )
 				when "status" then
 					traiter_erreur( once "unit:status is not a list" )
 				else
@@ -660,6 +705,8 @@ feature {}
 			result := analyseurs.item( 3 )
 		end
 
+	analyseur_lot : STRING is "batch"
+
 	analyseurs : FAST_ARRAY[ LUAT_ANALYSEUR ] is
 			-- ensemble des analyseurs lexicaux
 		once
@@ -668,6 +715,26 @@ feature {}
 			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c" ) )
 			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c++" ) )
 			result.add_last( create {LUAT_ANALYSEUR_EIFFEL}.fabriquer )
+		end
+
+	langages : FAST_ARRAY[ STRING ] is
+			-- ensemble des langages reconnus (y compris le langage de
+			-- lot de codemetre)
+		local
+			tri : COLLECTION_SORTER[ STRING ]
+			i : INTEGER
+		once
+			create result.with_capacity( analyseurs.count + 1 )
+			from i := analyseurs.lower
+			variant analyseurs.upper - i
+			until i > analyseurs.upper
+			loop
+				result.add_last( analyseurs.item( i ).langage )
+				i := i + 1
+			end
+			result.add_last( analyseur_lot )
+
+			tri.sort( result )
 		end
 
 	trouver_analyseur( p_clef : STRING ) : LUAT_ANALYSEUR is
@@ -682,6 +749,34 @@ feature {}
 				result := analyseurs.item( i )
 			end
 		end
+
+	trouver_langage( p_langage : STRING ) : STRING is
+			-- permet de retrouver l'instance utilisée en interne d'une
+			-- chaîne de valeur équivalente
+		require
+			clef_valide : not p_langage.is_empty
+		local
+			i : INTEGER
+		do
+			from i := langages.lower
+			variant langages.upper - i
+			until i > langages.upper
+				or else langages.item( i ).is_equal( p_langage )
+			loop
+				i := i + 1
+			end
+
+			if langages.valid_index( i ) then
+				result := langages.item( i )
+			end
+		ensure
+			definition : result /= void implies result.is_equal( p_langage )
+		end
+
+feature {}
+
+	extensions_lot : FAST_ARRAY[ STRING ]
+			-- liste des extensions associées aux lots codemetre
 
 feature {}
 

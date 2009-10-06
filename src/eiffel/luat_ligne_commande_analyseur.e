@@ -55,12 +55,12 @@ feature
 			lexeme, etat, mode : INTEGER
 			filtre : LUAT_FILTRE
 			avant, apres : STRING
-			avant_est_repertoire, apres_est_repertoire : BOOLEAN
+			avant_est_lot, avant_est_repertoire : BOOLEAN
+			apres_est_lot, apres_est_repertoire : BOOLEAN
 			analyseur_precise : BOOLEAN
 			bilan_final_precise : BOOLEAN
 			modele_precise : BOOLEAN
 			sortie_compacte_precise : BOOLEAN
-			lot_precise : BOOLEAN
 		do
 			create filtre.initialiser
 			mode := mode_indetermine
@@ -146,7 +146,6 @@ feature
 							etat := etat_final
 						else
 							sortie_compacte_precise := true
-							configuration.forcer_sortie_compacte( true )
 						end
 						lexeme := lexeme + 1
 
@@ -168,17 +167,6 @@ feature
 						else
 							modele_precise := true
 							etat := etat_choix_modele
-						end
-						lexeme := lexeme + 1
-
-						-- lot
-
-					when "--batch" then
-						if not lot_precise then
-							lot_precise := true
-						else
-							afficher_erreur( once "too many %"--batch%" option" )
-							etat := etat_final
 						end
 						lexeme := lexeme + 1
 
@@ -260,14 +248,17 @@ feature
 							afficher_erreur( once "one filter only for analysis" )
 							etat := etat_final
 						else
-							configuration.filtre_analyse.copy( filtre )
+							configuration.analyse.filtre.copy( filtre )
 							etat := etat_commande_analyse
 						end
 
 					when mode_comparaison then
-						bilan.forcer_metrique( configuration.metrique )
+						bilan.forcer_metrique( configuration.differentiel.modele )
 						if bilan_final_precise then
-							configuration.forcer_bilan_final_differentiel( true )
+							configuration.differentiel.met_statut( true )
+						end
+						if sortie_compacte_precise then
+							configuration.differentiel.met_abrege( true )
 						end
 
 						if not filtre.choix_est_effectue then
@@ -276,14 +267,14 @@ feature
 							afficher_erreur( once "one filter only for diff" )
 							etat := etat_final
 						else
-							configuration.filtre_differentiel.copy( filtre )
+							configuration.differentiel.filtre.copy( filtre )
 							etat := etat_commande_comparaison
 						end
 
 					when mode_unitaire then
 						bilan.forcer_metrique( create {LUAT_METRIQUE_UNITAIRE}.fabriquer )
 						if bilan_final_precise then
-							configuration.forcer_bilan_final_unitaire( true )
+							configuration.unitaire.met_statut( true )
 						end
 
 						if modele_precise then
@@ -293,7 +284,7 @@ feature
 							afficher_erreur( once "short output is available only for diff" )
 							etat := etat_final
 						elseif filtre.choix_est_effectue then
-							configuration.filtre_unitaire.copy( filtre )
+							configuration.unitaire.filtre.copy( filtre )
 							etat := etat_commande_unitaire
 						else
 							etat := etat_commande_unitaire
@@ -303,15 +294,10 @@ feature
 				when etat_commande_analyse then
 					-- commande de type analyse
 
-					if est_repertoire( argument( lexeme ) ) then
-						if lot_precise then
-							afficher_erreur( once "batch mode is not compatible with directory as argument" )
-							etat := etat_final
-						else
-							produire_arbre_commande_analyse( argument( lexeme ) )
-						end
-					elseif lot_precise then
+					if configuration.est_lot( argument( lexeme ) ) then
 						produire_liste_commande_analyse( argument( lexeme ) )
+					elseif est_repertoire( argument( lexeme ) ) then
+						produire_arbre_commande_analyse( argument( lexeme ) )
 					else
 						produire_commande_analyse( argument( lexeme ) )
 					end
@@ -345,21 +331,36 @@ feature
 							afficher_erreur( once "at least one of the two arguments shall exists" )
 							etat := etat_final
 						else
-							avant_est_repertoire := avant /= void and then est_repertoire( avant )
-							apres_est_repertoire := apres /= void and then est_repertoire( apres )
+							if avant = void then
+								avant_est_lot := false
+								avant_est_repertoire := false
+							else
+								avant_est_lot := configuration.est_lot( avant )
+								avant_est_repertoire := est_repertoire( avant )
+							end
+							if apres = void then
+								apres_est_lot := false
+								apres_est_repertoire := false
+							else
+								apres_est_lot := configuration.est_lot( apres )
+								apres_est_repertoire := est_repertoire( apres )
+							end
 
-							if avant_est_repertoire xor apres_est_repertoire then
-								afficher_erreur( once "directory cannot be compared to single file" )
+							-- l'un des deux au moins est un lot
+							if avant_est_lot xor apres_est_lot then
+								afficher_erreur( once "batch file cannot be compared to single file or directory" )
+								etat := etat_final
+							elseif avant_est_lot then
+								produire_lot_commande_differentiel( avant, apres )
+
+							-- l'un des deux au moins est un répertoire
+							elseif avant_est_repertoire xor apres_est_repertoire then
+								afficher_erreur( once "directory cannot be compared to single or batch file" )
 								etat := etat_final
 							elseif avant_est_repertoire then
-								if lot_precise then
-									afficher_erreur( once "batch mode is not compatible with directory as argument" )
-									etat := etat_final
-								else
-									produire_arbre_commande_differentiel( avant, apres )
-								end
-							elseif lot_precise then
-								produire_lot_commande_differentiel( avant, apres )
+								produire_arbre_commande_differentiel( avant, apres )
+
+							-- les deux ne sont ni des lots ni des répertoires
 							else
 								produire_commande_differentiel( avant, apres )
 							end
@@ -369,7 +370,7 @@ feature
 						-- ligne de commande, on produit le bilan si demandé
 
 						if etat /= etat_final
-							and configuration.bilan_final_differentiel
+							and configuration.differentiel.statut
 						 then
 							etat := etat_commande_bilan
 						else
@@ -380,20 +381,16 @@ feature
 				when etat_commande_unitaire then
 					-- commande de type mesure
 
-					if est_repertoire( argument( lexeme ) ) then
-						if lot_precise then
-							afficher_erreur( once "batch mode is not compatible with directory as argument" )
-						else
-							produire_arbre_commande_unitaire( argument( lexeme ) )
-						end
-					elseif lot_precise then
+					if configuration.est_lot( argument( lexeme ) ) then
 						produire_liste_commande_unitaire( argument( lexeme ) )
+					elseif est_repertoire( argument( lexeme ) ) then
+						produire_arbre_commande_unitaire( argument( lexeme ) )
 					else
 						produire_commande_unitaire( argument( lexeme ) )
 					end
 
 					if lexeme = argument_count
-						and configuration.bilan_final_unitaire
+						and configuration.unitaire.statut
 					 then
 						etat := etat_commande_bilan
 					else
@@ -431,8 +428,8 @@ feature
 			std_error.put_string( traduire( once "usage:" ) )
 			std_error.put_string( once " codemetre --config" )
 			std_error.put_new_line
-			std_error.put_string( once "%Tcodemetre%N%T [--code] [--comment] [--total]%N%T [--batch] [--lang <>] [--status]%N%T [--anal|--diff [--model <>] [--short]]%N%T [--]%N%T " )
-			std_error.put_string( traduire( once "FILE|DIRECTORY" ) )
+			std_error.put_string( once "%Tcodemetre%N%T [--code] [--comment] [--total]%N%T [--lang <>] [--status]%N%T [--anal|--diff [--model <>] [--short]]%N%T [--]%N%T " )
+			std_error.put_string( traduire( once "FILE|DIRECTORY|BATCH" ) )
 			std_error.put_string( once "..." )
 			std_error.put_new_line
 			std_error.put_new_line

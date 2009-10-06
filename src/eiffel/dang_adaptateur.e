@@ -27,6 +27,16 @@ feature {DANG_ANALYSEUR}
 		deferred
 		end
 
+	effacer( p_section : STRING
+				p_variable : STRING ) is
+			-- supprime toute association de valeur à la variable de la
+			-- section correspondante
+		require
+			section_valide : not p_section.is_empty
+			variable_valide : not p_variable.is_empty
+		deferred
+		end
+
 	imposer( p_section : STRING
 				p_variable : STRING
 				p_valeur : STRING ) is

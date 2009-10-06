@@ -207,8 +207,17 @@ feature
 						valeur.append_character( caractere )
 						etat := etat_valeur
 					when '%N' then
-						p_adaptateur.traiter_erreur( once "no value associated to variable" )
-						etat := etat_final
+						inspect mode
+						when mode_forcage then
+							p_adaptateur.effacer( section, variable )
+							ligne := ligne + 1
+							colonne := 0
+							mode := mode_inconnu
+							etat := etat_initial
+						else
+							p_adaptateur.traiter_erreur( once "no value associated to variable" )
+							etat := etat_final
+						end
 					else
 						p_adaptateur.traiter_erreur( once "unauthorized character" )
 						etat := etat_final
