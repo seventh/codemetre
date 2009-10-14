@@ -61,7 +61,7 @@ feature
 
 			if source /= void then
 				nom_sortie := nom_fichier.twin
-				nom_sortie.append( once ".codemetre" )
+				nom_sortie.append( once ".cma" )
 				create sortie.connect_to( nom_sortie )
 				if sortie.is_connected then
 					source.afficher( sortie )

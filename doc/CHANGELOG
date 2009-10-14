@@ -1,3 +1,12 @@
+*** v0.24.0
+
+ - Désormais, la comparaison de lots ne provoque plus d'erreur intempestive
+ lorsque deux lignes vides sont confrontées.
+ - Analyse : les fichiers produits sont désormais suffixés ".cma"
+ - Lots : possibilité de rajouter des commentaires (début de ligne par '#') et
+ des directives "#dirname:=" pour factoriser la racine à partir de laquelle sont
+ listées les entrées.
+
 *** v0.23.0
 
  - L'option '--batch' disparaît au profit d'une association entre des extensions

@@ -7,7 +7,6 @@ Développements futurs :
  * Ajouter une commande de limitation de la récursivité de l'analyse.
  * Offrir la possibilité de lister des répertoires lors du traitement par lot en mode différentiel.
  * Envisager d'avoir plusieurs formes de bilan final, particulièrement en fonction de l'option '--short'.
- * Trouver une syntaxe pour n'affecter aucune valeur à un paramète dans le fichier de configuration.
 
 Mode analytique :
  * produire un code filtré de tout commentaire qui compile encore

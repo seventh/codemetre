@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.23.0\n"
+"Project-Id-Version: 0.24.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-06 18:19+0200\n"
-"PO-Revision-Date: 2009-10-06 18:27+0200\n"
+"POT-Creation-Date: 2009-10-14 21:05+0200\n"
+"PO-Revision-Date: 2009-10-14 21:08+0200\n"
 "Last-Translator: Guillaume Lemaître <guillaume.lemaitre@gmail.com>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -558,7 +558,7 @@ msgid "two files are required in diff mode"
 msgstr "il faut deux fichiers en mode différentiel"
 
 #: luat_ligne_commande_analyseur.e:331
-#: luat_ligne_commande_analyseur.e:684
+#: luat_ligne_commande_analyseur.e:691
 #, c-format
 msgid "at least one of the two arguments shall exists"
 msgstr "on ne peut comparer ce qui n'existait pas et ce qui n'existe plus"
@@ -617,3 +617,13 @@ msgstr "Erreur : \""
 #, c-format
 msgid "\" is not a valid directory name"
 msgstr "\" n'est pas un nom de répertoire valide"
+
+#: luat_lot_liste.e:120
+#, c-format
+msgid "Syntax error in batch file: "
+msgstr "Erreur dans un lot : \""
+
+#: luat_lot_liste.e:121
+#, c-format
+msgid "\"dirname\" directive shall end with a directory separator"
+msgstr "toute directive \"dirname\" doit se terminer par un séparateur de répertoire"

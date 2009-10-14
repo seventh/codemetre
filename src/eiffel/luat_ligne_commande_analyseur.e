@@ -658,9 +658,16 @@ feature {}
 				avant := lot_avant.entree
 				apres := lot_apres.entree
 
-				-- les fichiers sont comparés un à un
+				-- les fichiers sont comparés ligne à ligne
 
-				produire_commande_differentiel( avant, apres )
+				-- afin d'éviter toute erreur intempestive, on s'assure
+				-- de ne demander que des commandes qui ont un sens
+
+				if avant /= void
+					or apres /= void
+				 then
+					produire_commande_differentiel( avant, apres )
+				end
 
 				lot_avant.lire
 				lot_apres.lire
