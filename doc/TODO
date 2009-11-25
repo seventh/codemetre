@@ -1,12 +1,18 @@
-Développements futurs :
- * Chercher un mécanisme plus élégant pour la traduction, car il y a du code dupliqué à cause de l'internationalisation.
- * Étudier la possibilité de coupler --tree à un SCM, et de donner des révisions plutôt que des noms de fichier par exemple.
- * Rendre l'application multi-tâche, afin de paralléliser les mesures (en fonction de l'architecture)
- * Garantir que les résultats apparaissent par ordre alphabétique lors de l'analyse de répertoires complets.
- * Repenser et réécrire la page de manuel UNIX, qui est actuellement un modèle de ce qu'il ne faut pas faire.
+oOo Développements futurs oOo
  * Ajouter une commande de limitation de la récursivité de l'analyse.
- * Offrir la possibilité de lister des répertoires lors du traitement par lot en mode différentiel.
+ * Chercher un mécanisme plus élégant pour la traduction, car il y a du code dupliqué à cause de l'internationalisation.
  * Envisager d'avoir plusieurs formes de bilan final, particulièrement en fonction de l'option '--short'.
+ * Garantir que les résultats apparaissent par ordre alphabétique lors de l'analyse de répertoires complets.
+ * Offrir la possibilité de lister des répertoires lors du traitement par lot en mode différentiel.
+ * Permettre d'obtenir les résultats différentiels en appliquant plus d'un modèle.
+ * Permettre de trier les résultats différentiels par impact décroissant.
+ * Produire le .cmb équivalent aux entrées fournies. Ceci doit par exemple permettre de bâtir un .cmb en l'absence de commande de type 'find'.
+ * Produire un code filtré de tout commentaire qui compile encore grâce au mode analytique.
+ * Rendre l'application multi-tâche, afin de paralléliser les mesures (en fonction de l'architecture)
+ * Repenser et réécrire la page de manuel UNIX, qui est actuellement un modèle de ce qu'il ne faut pas faire.
+ * Étudier la possibilité de coupler --tree à un SCM, et de donner des révisions plutôt que des noms de fichier par exemple.
 
-Mode analytique :
- * produire un code filtré de tout commentaire qui compile encore
+oOo Développement refusés oOo
+
+ * Ajouter une directive "auto/manual" qui permet de comptabiliser différemment le code automatique et manuel (avec une métrique associée bien entendu)
+  - La notion code automatique/manuelle étant uniquement disponible par lot, mais l'impact portant sur le type de métrique utilisée, cela impliquerait que des métriques ne seraient utilisables qu'en traitement par lot, ce qui est déroutant.

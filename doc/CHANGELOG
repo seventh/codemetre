@@ -1,3 +1,7 @@
+*** v0.24.1
+
+ - Livraison d'utilitaires python pour gérer les lots.
+
 *** v0.24.0
 
  - Désormais, la comparaison de lots ne provoque plus d'erreur intempestive
