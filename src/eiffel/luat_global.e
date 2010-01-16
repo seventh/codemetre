@@ -26,7 +26,6 @@ feature {LUAT_GLOBAL}
 		once
 			create result.fabriquer
 			result.appliquer_choix_initial
-			result.appliquer_choix_fichier
 		end
 
 feature {LUAT_GLOBAL}
@@ -39,7 +38,7 @@ feature {LUAT_GLOBAL}
 
 feature {LUAT_GLOBAL}
 
-	version_majeure : STRING is "v0.24.1"
+	version_majeure : STRING is "v0.25.0"
 			-- identifiant de la branche officielle
 
 	version_mineure : STRING is ""

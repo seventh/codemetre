@@ -11,6 +11,8 @@ oOo Développements futurs oOo
  * Rendre l'application multi-tâche, afin de paralléliser les mesures (en fonction de l'architecture)
  * Repenser et réécrire la page de manuel UNIX, qui est actuellement un modèle de ce qu'il ne faut pas faire.
  * Étudier la possibilité de coupler --tree à un SCM, et de donner des révisions plutôt que des noms de fichier par exemple.
+ * Intégrer le support du langage Python.
+ * Permettre d'avoir plusieurs fois le même variable dans une section du fichier de configuration, du moment que les valeurs restent cohérentes globalement. Ceci permettra plus de souplesse dans la maintenance de ce fichier.
 
 oOo Développement refusés oOo
 

@@ -1,3 +1,13 @@
+*** v0.25.0
+
+ - Support rudimentaire de la syntaxe SQL. Il reste au moins un conflit entre
+ commentaires multi-lignes et les constantes chaîne. De plus, les flottants ne
+ sont pas reconnus comme tel.
+ - Ajout d'une directive "-noconfig" qui permet de ne pas prendre en compte la
+ configuration utilisateur lors de l'exécution de la commande.
+ - Outils python : détermination automatique de la racine d'un lot, et prise en
+ compte de cette nouveauté dans 'factorisation.py'.
+
 *** v0.24.1
 
  - Livraison d'utilitaires python pour gérer les lots.

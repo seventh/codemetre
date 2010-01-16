@@ -61,6 +61,7 @@ feature
 			bilan_final_precise : BOOLEAN
 			modele_precise : BOOLEAN
 			sortie_compacte_precise : BOOLEAN
+			fichier_configuration_est_inhibe : BOOLEAN
 		do
 			create filtre.initialiser
 			mode := mode_indetermine
@@ -98,6 +99,10 @@ feature
 							afficher_erreur( once "cannot both show config and measure files" )
 						end
 						etat := etat_final
+
+					when "--noconfig" then
+						fichier_configuration_est_inhibe := true
+						lexeme := lexeme + 1
 
 						-- langage
 
@@ -224,6 +229,13 @@ feature
 					lexeme := lexeme + 1
 
 				when etat_coherence_options then
+					-- la configuration utilisateur n'est chargée que s'il
+					-- n'y a pas de contre-indication
+
+					if not fichier_configuration_est_inhibe then
+						configuration.appliquer_choix_fichier
+					end
+
 					-- sélection du spectre de l'analyse en fonction du
 					-- type de commandes à effectuer
 

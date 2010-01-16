@@ -39,6 +39,39 @@ class Lot:
         flux.close()
 
 
+    def racine(self):
+        """
+        Détermine le plus long répertoire commun entre toutes les entrées du lot
+        """
+        retour = ""
+
+        for i in range(len(self.lignes)):
+            retour = self._prefixe_commun(retour, self.lignes[i])
+
+        # on remonte jusqu'au séparateur
+        i = len(retour)
+        while i >= 0 and retour[i - 1] != '/':
+            i = i - 1
+        return retour[:i]
+
+
+    def _prefixe_commun(self, p_a, p_b):
+        """Préfixe commun aux deux chaînes a et b le plus long"""
+
+        if p_a == "":
+            return p_b
+        elif p_b == "":
+            return p_a
+        else:
+            l = min(len(p_a), len(p_b))
+
+            i = 0
+            while i < l and p_a[i] == p_b[i]:
+                i = i + 1
+
+            return p_a[:i]
+
+
     def _extraire_valeur(self, p_ligne):
         """Supprime les marques de fin de ligne d'une chaîne de caractère"""
         retour = p_ligne

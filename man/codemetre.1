@@ -1,7 +1,7 @@
 .\" Formater ce fichier par la commande :
 .\" groff -man -Tutf8 codemetre.fr.1
 .\"
-.TH CODEMETRE 1 "JUIN 2009" Linux "Manuel utilisateur"
+.TH CODEMETRE 1 "JANVIER 2010" Linux "Manuel utilisateur"
 .SH NOM
 codemetre \- comptage de ligne de fichiers source
 .SH SYNOPSIS
@@ -27,6 +27,8 @@ Respecte la norme C ISO/IEC 9899:1999. Extensions ".h" et ".c".
 Respecte la norme C++ ISO/IEC 14882:2003. Extensions ".hh", ".hpp", ".C", ".cc" et ".cpp".
 .IP eiffel
 Respecte le standard Eiffel tel que définit dans le livre "Eiffel, le langage" de B. Meyer paru chez InterEditions en 1994. Extension ".e".
+.IP sql
+Respecte le standard MySQL 5.1. Extension ".sql".
 .SH TRAITEMENT PAR LOT
 Les lots sont constitués de noms de fichiers à analyser (qui ne sont pas d'autres lots), ou des lignes vides. Lors de l'analyse différentielle avec deux lots, ceux-ci sont comparés ligne à ligne : le premier fichier du premier lot avec le premier fichier du second lot, puis le deuxième fichier du premier lot avec le deuxième fichier du second lot, et ainsi de suite. Si les deux lots ne font pas le même nombre de ligne, le plus court est considéré comme se poursuivant avec autant de lignes vides que nécessaire.
 .SH SPECTRE DE L'ANALYSE

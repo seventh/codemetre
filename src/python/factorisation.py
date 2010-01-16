@@ -4,15 +4,15 @@
 import sys
 from codemetre.lot import *
 
-if len(sys.argv) != 3:
-    print "Erreur !"
-    exit(1)
-
-longueur_racine = len(sys.argv[1])
-
 lot = Lot()
-lot.charger(sys.argv[2])
 
-print "#dirname:=" + sys.argv[1]
-for l in lot.lignes:
-    print l[longueur_racine:]
+for i in range(1,len(sys.argv)):
+    lot.charger(sys.argv[i])
+    racine = lot.racine()
+    longueur_racine = len(racine)
+
+    flux = open(sys.argv[i], "w")
+
+    print >> flux, "#dirname:=" + racine
+    for l in lot.lignes:
+        print >> flux, l[longueur_racine:]

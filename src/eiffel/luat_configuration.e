@@ -99,6 +99,11 @@ feature
 			create suffixe.fabriquer( once ".e", analyseur_eiffel.langage )
 			associations.ajouter( suffixe )
 
+			-- SQL
+
+			create suffixe.fabriquer( once ".sql", analyseur_sql.langage )
+			associations.ajouter( suffixe )
+
 			-- Lot codemètre
 
 			create suffixe.fabriquer( once ".cmb", analyseur_lot )
@@ -705,16 +710,22 @@ feature {}
 			result := analyseurs.item( 3 )
 		end
 
+	analyseur_sql : LUAT_ANALYSEUR is
+		once
+			result := analyseurs.item( 4 )
+		end
+
 	analyseur_lot : STRING is "batch"
 
 	analyseurs : FAST_ARRAY[ LUAT_ANALYSEUR ] is
 			-- ensemble des analyseurs lexicaux
 		once
-			create result.with_capacity( 4 )
+			create result.with_capacity( 5 )
 			result.add_last( create {LUAT_ANALYSEUR_ADA}.fabriquer )
 			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c" ) )
 			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c++" ) )
 			result.add_last( create {LUAT_ANALYSEUR_EIFFEL}.fabriquer )
+			result.add_last( create {LUAT_ANALYSEUR_SQL}.fabriquer )
 		end
 
 	langages : FAST_ARRAY[ STRING ] is
