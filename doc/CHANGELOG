@@ -1,3 +1,15 @@
+*** v0.26.0
+
+ - Support rudimentaire de la syntaxe HTML.
+ - Correction d'un bogue : l'option '--config' n'affichait plus uniquement que
+ la configuraiton par défaut (ce qui en limitait l'intérêt)
+ - Meilleur message d'erreur dans le cas où l'argument est un répertoire vide.
+ - L'analyse de fichiers est désormais systématiquement couplée à la mesure
+ unitaire correspondante. La section 'analysis' disparaît en conséquence, au
+ profit du champ 'unit.analysis'.
+ - Allègement des contraintes sur le fichier de configuration. Une section peut
+ désormais apparaître plus d'une fois, une valeur d'une même section également.
+
 *** v0.25.0
 
  - Support rudimentaire de la syntaxe SQL. Il reste au moins un conflit entre

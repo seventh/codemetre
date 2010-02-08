@@ -16,7 +16,7 @@ inherit
 
 	LUAT_ANALYSEUR
 		redefine
-			gerer_erreur
+			retenir_erreur
 		end
 
 creation
@@ -212,7 +212,7 @@ feature {LUAT_ANALYSEUR}
 						produire_commentaire
 						produire_ligne
 					when '%U' then
-						gerer_erreur( once "incomplete multiline comment" )
+						retenir_erreur( once "incomplete multiline comment" )
 					else
 						chaine.add_last( caractere )
 					end
@@ -228,7 +228,7 @@ feature {LUAT_ANALYSEUR}
 						produire_ligne
 						etat := etat_dans_commentaire_multiligne
 					when '%U' then
-						gerer_erreur( once "incomplete multiline comment" )
+						retenir_erreur( once "incomplete multiline comment" )
 					when '*' then
 						chaine.add_last( caractere )
 					else
@@ -248,7 +248,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_dans_chaine_apres_barre_oblique
 					elseif caractere = '%U' then
-						gerer_erreur( once "incomplete string constant" )
+						retenir_erreur( once "incomplete string constant" )
 					else
 						chaine.add_last( caractere )
 					end
@@ -256,7 +256,7 @@ feature {LUAT_ANALYSEUR}
 				when etat_dans_chaine_apres_barre_oblique then
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "incomplete string constant" )
+						retenir_erreur( once "incomplete string constant" )
 					else
 						chaine.add_last( caractere )
 						etat := etat_dans_chaine
@@ -274,7 +274,7 @@ feature {LUAT_ANALYSEUR}
 				else
 					-- cas non géré
 
-					gerer_erreur( once "lexer is buggy!" )
+					retenir_erreur( once "lexer is buggy!" )
 				end
 			end
 
@@ -394,13 +394,13 @@ feature {}
 				produire_ligne
 				etat := etat_final
 			else
-				gerer_erreur( once "unauthorized character" )
+				retenir_erreur( once "unauthorized character" )
 			end
 		end
 
 feature {}
 
-	gerer_erreur( p_message : STRING ) is
+	retenir_erreur( p_message : STRING ) is
 		do
 			precursor( p_message )
 			etat := etat_final

@@ -31,20 +31,21 @@ feature {}
 			-- récupération des fichiers
 
 			lister_fichier( p_racine )
-			if p_est_trie then
-				tri.sort( fichiers )
-			end
-
 			ligne := fichiers.lower - 1
 
-			-- fin de la commande système
+			-- remontée d'erreur
 
 			if fichiers.is_empty then
 				std_error.put_string( traduire( once "Error: %"" ) )
 				std_error.put_string( p_racine )
-				std_error.put_string( traduire( once "%" is not a valid directory name" ) )
+				std_error.put_string( traduire( once "%" is empty" ) )
 				std_error.put_new_line
 				std_error.flush
+
+			-- tri si requis
+
+			elseif p_est_trie then
+				tri.sort( fichiers )
 			end
 		end
 
@@ -94,16 +95,17 @@ feature {}
 			-- détermination de la correspondance entre racines
 
 			repertoire.scan( p_racine )
-			if repertoire.last_scan_status
-				and then p_racine.last /= repertoire.path.last
-			 then
-				p_racine.add_last( repertoire.path.last )
-			end
 			lg_racine := p_racine.count
 
-			-- recherche de tous les fichiers de la sous-arborescence
+			if repertoire.last_scan_status then
+				if p_racine.last /= repertoire.path.last then
+					p_racine.add_last( repertoire.path.last )
+					lg_racine := lg_racine + 1
+				end
+				fichiers.add_last( p_racine )
+			end
 
-			fichiers.add_last( p_racine )
+			-- recherche de tous les fichiers de la sous-arborescence
 
 			from i := fichiers.lower
 			until i > fichiers.upper

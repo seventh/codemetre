@@ -18,7 +18,7 @@ inherit
 	LUAT_ANALYSEUR
 		redefine
 			fabriquer,
-			gerer_erreur,
+			retenir_erreur,
 			produire_code
 		end
 
@@ -95,7 +95,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_lettre
 					else
-						gerer_erreur( once "incomplete identifier" )
+						retenir_erreur( once "incomplete identifier" )
 					end
 
 				when etat_apres_chiffre then
@@ -124,7 +124,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_chiffre
 					else
-						gerer_erreur( once "incomplete integer constant" )
+						retenir_erreur( once "incomplete integer constant" )
 					end
 
 				when etat_apres_base_dans_litteral_numerique then
@@ -133,7 +133,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_chiffre_dans_litteral_numerique_base
 					else
-						gerer_erreur( once "forbidden character in based integer constant" )
+						retenir_erreur( once "forbidden character in based integer constant" )
 					end
 
 				when etat_apres_chiffre_dans_litteral_numerique_base then
@@ -153,7 +153,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_valeur_dans_litteral_numerique_base
 					else
-						gerer_erreur( once "wrong value in based integer constant" )
+						retenir_erreur( once "wrong value in based integer constant" )
 					end
 
 				when etat_apres_separateur_dans_litteral_numerique_base then
@@ -164,7 +164,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_chiffre_decimal_dans_litteral_numerique_base
 					else
-						gerer_erreur( once "forbidden character in decimal part of based integer constant" )
+						retenir_erreur( once "forbidden character in decimal part of based integer constant" )
 					end
 
 				when etat_apres_chiffre_decimal_dans_litteral_numerique_base then
@@ -181,7 +181,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_valeur_dans_litteral_numerique_base
 					else
-						gerer_erreur( once "forbidden character in decimal part of based integer constant" )
+						retenir_erreur( once "forbidden character in decimal part of based integer constant" )
 					end
 
 				when etat_apres_valeur_dans_litteral_numerique_base then
@@ -207,7 +207,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_separateur_dans_exposant
 					else
-						gerer_erreur( once "incomplete exponent in integer constant" )
+						retenir_erreur( once "incomplete exponent in integer constant" )
 					end
 
 				when etat_apres_chiffre_dans_exposant then
@@ -228,7 +228,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_chiffre_dans_exposant
 					else
-						gerer_erreur( once "wrong exponent in integer constant" )
+						retenir_erreur( once "wrong exponent in integer constant" )
 					end
 
 				when etat_apres_separateur_dans_litteral_numerique then
@@ -245,7 +245,7 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						etat := etat_initial
 					else
-						gerer_erreur( once "wrong decimal part in integer constant" )
+						retenir_erreur( once "wrong decimal part in integer constant" )
 					end
 
 				when etat_apres_valeur_entiere_dans_litteral_numerique then
@@ -271,13 +271,13 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_valeur_entiere_dans_litteral_numerique
 					else
-						gerer_erreur( once "forbidden character in decimal part of integer constant" )
+						retenir_erreur( once "forbidden character in decimal part of integer constant" )
 					end
 
 				when etat_apres_apostrophe then
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "incomplete character constant" )
+						retenir_erreur( once "incomplete character constant" )
 					else
 						chaine.add_last( caractere )
 						etat := etat_apres_apostrophe_caractere
@@ -290,13 +290,13 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						etat := etat_initial
 					else
-						gerer_erreur( once "incomplete character constant" )
+						retenir_erreur( once "incomplete character constant" )
 					end
 
 				when etat_apres_guillemets then
 					inspect caractere
 					when '%U' then
-						gerer_erreur( once "incomplete string constant" )
+						retenir_erreur( once "incomplete string constant" )
 					when '%"' then
 						chaine.add_last( caractere )
 						etat := etat_apres_guillemets_dans_litteral_chaine
@@ -321,7 +321,7 @@ feature {LUAT_ANALYSEUR}
 						chaine.add_last( caractere )
 						etat := etat_apres_pourcentage_dans_litteral_chaine
 					else
-						gerer_erreur( once "forbidden character in character constant" )
+						retenir_erreur( once "forbidden character in character constant" )
 					end
 
 				when etat_apres_pourcentage_dans_litteral_chaine then
@@ -431,7 +431,7 @@ feature {LUAT_ANALYSEUR}
 				else
 					-- cas non géré
 
-					gerer_erreur( once "lexer is buggy!" )
+					retenir_erreur( once "lexer is buggy!" )
 				end
 			end
 
@@ -596,13 +596,13 @@ feature {}
 				-- fin de fichier
 				etat := etat_final
 			else
-				gerer_erreur( once "forbidden character" )
+				retenir_erreur( once "forbidden character" )
 			end
 		end
 
 feature {}
 
-	gerer_erreur( p_message : STRING ) is
+	retenir_erreur( p_message : STRING ) is
 		do
 			precursor( p_message )
 			etat := etat_final

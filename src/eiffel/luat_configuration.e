@@ -37,7 +37,6 @@ feature {}
 			-- constructeur
 		do
 			create associations.fabriquer( create {LUAT_ORDRE_SUFFIXE} )
-			create analyse.fabriquer
 			create differentiel.fabriquer
 			create unitaire.fabriquer
 		end
@@ -50,12 +49,6 @@ feature
 			suffixe : LUAT_SUFFIXE
 		do
 			configuration_par_defaut := true
-
-			--
-			-- section : 'analysis'
-			--
-
-			analyse.initialiser
 
 			--
 			-- section : 'diff'
@@ -97,6 +90,11 @@ feature
 			-- Eiffel
 
 			create suffixe.fabriquer( once ".e", analyseur_eiffel.langage )
+			associations.ajouter( suffixe )
+
+			-- HTML
+
+			create suffixe.fabriquer( once ".html", analyseur_html.langage )
 			associations.ajouter( suffixe )
 
 			-- SQL
@@ -214,9 +212,6 @@ feature
 
 feature
 
-	analyse : LUAT_OPTION_ANALYSE
-			-- ensemble des options associées aux commandes d'analyse
-
 	differentiel : LUAT_OPTION_DIFFERENTIEL
 			-- ensemble des options associées aux commandes de comptage
 			-- différentiel
@@ -246,13 +241,6 @@ feature
 				std_output.put_string( nom_fichier_configuration )
 			end
 			std_output.put_new_line
-
-			--
-			-- section 'analysis'
-			--
-
-			std_output.put_string( once "[analysis]%N" )
-			afficher_filtre( analyse.filtre, std_output )
 
 			--
 			-- section : 'diff'
@@ -312,11 +300,17 @@ feature
 			--
 
 			std_output.put_string( once "[unit]%N" )
+
+			std_output.put_string( once "%Tanalysis := " )
+			std_output.put_boolean( unitaire.analyse )
+			std_output.put_new_line
+
 			afficher_filtre( unitaire.filtre, std_output )
 
 			std_output.put_string( once "%Tstatus := " )
 			std_output.put_boolean( unitaire.statut )
 			std_output.put_new_line
+
 		end
 
 feature
@@ -373,30 +367,30 @@ feature {DANG_ANALYSEUR}
 			when "analysis" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( once "analysis:filter can only have a single value" )
+					avertir( once "analysis:filter can only have a single value" )
 				else
-					traiter_erreur( once "unknown parameter in analysis section" )
+					avertir( once "unknown parameter in analysis section" )
 				end
 
 			when "diff" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( once "diff:filter can only have a single value" )
+					avertir( once "diff:filter can only have a single value" )
 				when "model" then
-					traiter_erreur( once "diff:model is not a list" )
+					avertir( once "diff:model is not a list" )
 				when "short" then
-					traiter_erreur( once "diff:short is not a list" )
+					avertir( once "diff:short is not a list" )
 				when "status" then
-					traiter_erreur( once "diff:status is not a list" )
+					avertir( once "diff:status is not a list" )
 				else
-					traiter_erreur( once "unknown parameter in diff section" )
+					avertir( once "unknown parameter in diff section" )
 				end
 
 			when "language" then
 				l := trouver_langage( p_variable )
 
 				if l = void then
-					traiter_erreur( once "language not yet supported" )
+					avertir( once "language not yet supported" )
 				else
 					create suffixe.fabriquer( p_valeur.twin, l )
 					create it.attacher( associations )
@@ -404,9 +398,9 @@ feature {DANG_ANALYSEUR}
 					if it.est_hors_borne then
 						associations.ajouter( suffixe )
 					elseif it.dereferencer.langage /= suffixe.langage then
-						traiter_erreur( once "suffix is already associated with another language" )
+						avertir( once "suffix is already associated with another language" )
 					else
-						traiter_erreur( once "redundant association" )
+						avertir( once "redundant association" )
 					end
 					it.detacher
 				end
@@ -416,14 +410,14 @@ feature {DANG_ANALYSEUR}
 				when "filter" then
 					ajouter_filtre( unitaire.filtre, p_valeur )
 				when "status" then
-					traiter_erreur( once "unit:status is not a list" )
+					avertir( once "unit:status is not a list" )
 				else
-					traiter_erreur( once "unknown parameter in unit section" )
+					avertir( once "unknown parameter in unit section" )
 				end
 
 			else
 				-- section inconnue
-				traiter_erreur( once "unknown section" )
+				avertir( once "unknown section" )
 			end
 		end
 
@@ -438,30 +432,30 @@ feature {DANG_ANALYSEUR}
 			when "analysis" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( once "analysis:filter is mandatory" )
+					avertir( once "analysis:filter is mandatory" )
 				else
-					traiter_erreur( once "unknown parameter in analysis section" )
+					avertir( once "unknown parameter in analysis section" )
 				end
 
 			when "diff" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( once "diff:filter is mandatory" )
+					avertir( once "diff:filter is mandatory" )
 				when "model" then
-					traiter_erreur( once "diff:model is mandatory" )
+					avertir( once "diff:model is mandatory" )
 				when "short" then
-					traiter_erreur( once "diff:short is not clearable" )
+					avertir( once "diff:short is not clearable" )
 				when "status" then
-					traiter_erreur( once "diff:status is not clearable" )
+					avertir( once "diff:status is not clearable" )
 				else
-					traiter_erreur( once "unknown parameter in diff section" )
+					avertir( once "unknown parameter in diff section" )
 				end
 
 			when "language" then
 				l := trouver_langage( p_variable )
 
 				if l = void then
-					traiter_erreur( once "language not yet supported" )
+					avertir( once "language not yet supported" )
 				else
 					create it.attacher( associations )
 					from it.pointer_premier
@@ -480,16 +474,16 @@ feature {DANG_ANALYSEUR}
 			when "unit" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( once "unit:filter is mandatory" )
+					avertir( once "unit:filter is mandatory" )
 				when "status" then
-					traiter_erreur( once "unit:status is not clearable" )
+					avertir( once "unit:status is not clearable" )
 				else
-					traiter_erreur( once "unknown parameter in unit section" )
+					avertir( once "unknown parameter in unit section" )
 				end
 
 			else
 				-- section inconnue
-				traiter_erreur( once "unknown section" )
+				avertir( once "unknown section" )
 			end
 		end
 
@@ -503,12 +497,7 @@ feature {DANG_ANALYSEUR}
 			inspect p_section
 
 			when "analysis" then
-				inspect p_variable
-				when "filter" then
-					imposer_filtre( analyse.filtre, p_valeur )
-				else
-					traiter_erreur( once "unknown parameter in analysis section" )
-				end
+				avertir( once "obsolete section. Have a look at 'unit' section" )
 
 			when "diff" then
 				inspect p_variable
@@ -516,29 +505,29 @@ feature {DANG_ANALYSEUR}
 					imposer_filtre( differentiel.filtre, p_valeur )
 				when "model" then
 					if not forcer_metrique( p_valeur ) then
-						traiter_erreur( once "unknown diff model" )
+						avertir( once "unknown diff model" )
 					end
 				when "short" then
 					if p_valeur.is_boolean then
 						differentiel.met_abrege( p_valeur.to_boolean )
 					else
-						traiter_erreur( once "invalid boolean value" )
+						avertir( once "invalid boolean value" )
 					end
 				when "status" then
 					if p_valeur.is_boolean then
 						differentiel.met_statut( p_valeur.to_boolean )
 					else
-						traiter_erreur( once "invalid boolean value" )
+						avertir( once "invalid boolean value" )
 					end
 				else
-					traiter_erreur( once "unknown parameter in diff section" )
+					avertir( once "unknown parameter in diff section" )
 				end
 
 			when "language" then
 				l := trouver_langage( p_variable )
 
 				if l = void then
-					traiter_erreur( once "language not yet supported" )
+					avertir( once "language not yet supported" )
 				else
 					create it.attacher( associations )
 					from it.pointer_premier
@@ -564,15 +553,15 @@ feature {DANG_ANALYSEUR}
 					if p_valeur.is_boolean then
 						unitaire.met_statut( p_valeur.to_boolean )
 					else
-						traiter_erreur( once "invalid boolean value" )
+						avertir( once "invalid boolean value" )
 					end
 				else
-					traiter_erreur( once "unknown parameter in unit section" )
+					avertir( once "unknown parameter in unit section" )
 				end
 
 			else
 				-- section inconnue
-				traiter_erreur( once "unknown section" )
+				avertir( once "unknown section" )
 			end
 		end
 
@@ -589,36 +578,36 @@ feature {DANG_ANALYSEUR}
 			when "analysis" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( once "analysis:filter can only have a single value" )
+					avertir( once "analysis:filter can only have a single value" )
 				else
-					traiter_erreur( once "unknown parameter in analysis section" )
+					avertir( once "unknown parameter in analysis section" )
 				end
 
 			when "diff" then
 				inspect p_variable
 				when "filter" then
-					traiter_erreur( once "diff:filter can only have a single value" )
+					avertir( once "diff:filter can only have a single value" )
 				when "model" then
-					traiter_erreur( once "diff:model is not a list" )
+					avertir( once "diff:model is not a list" )
 				when "short" then
-					traiter_erreur( once "diff:short is not a list" )
+					avertir( once "diff:short is not a list" )
 				when "status" then
-					traiter_erreur( once "diff:status is not a list" )
+					avertir( once "diff:status is not a list" )
 				else
-					traiter_erreur( once "unknown parameter in diff section" )
+					avertir( once "unknown parameter in diff section" )
 				end
 
 			when "language" then
 				l := trouver_langage( p_variable )
 
 				if l = void then
-					traiter_erreur( once "language not yet supported" )
+					avertir( once "language not yet supported" )
 				else
 					create suffixe.fabriquer( p_valeur.twin, l )
 					create it.attacher( associations )
 					associations.trouver( suffixe, it )
 					if it.est_hors_borne then
-						traiter_erreur( once "no such association exists" )
+						avertir( once "no such association exists" )
 					else
 						associations.retirer( it )
 					end
@@ -630,18 +619,18 @@ feature {DANG_ANALYSEUR}
 				when "filter" then
 					retirer_filtre( unitaire.filtre, p_valeur )
 				when "status" then
-					traiter_erreur( once "unit:status is not a list" )
+					avertir( once "unit:status is not a list" )
 				else
-					traiter_erreur( once "unknown parameter in unit section" )
+					avertir( once "unknown parameter in unit section" )
 				end
 
 			else
 				-- section inconnue
-				traiter_erreur( once "unknown section" )
+				avertir( once "unknown section" )
 			end
 		end
 
-	traiter_erreur( p_message : STRING ) is
+	avertir( p_message : STRING ) is
 		do
 			std_error.put_string( traduire( once "Syntax error" ) )
 			std_error.put_string( once " (" )
@@ -710,9 +699,14 @@ feature {}
 			result := analyseurs.item( 3 )
 		end
 
-	analyseur_sql : LUAT_ANALYSEUR is
+	analyseur_html : LUAT_ANALYSEUR is
 		once
 			result := analyseurs.item( 4 )
+		end
+
+	analyseur_sql : LUAT_ANALYSEUR is
+		once
+			result := analyseurs.item( 5 )
 		end
 
 	analyseur_lot : STRING is "batch"
@@ -725,6 +719,7 @@ feature {}
 			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c" ) )
 			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c++" ) )
 			result.add_last( create {LUAT_ANALYSEUR_EIFFEL}.fabriquer )
+			result.add_last( create {LUAT_ANALYSEUR_HTML}.fabriquer )
 			result.add_last( create {LUAT_ANALYSEUR_SQL}.fabriquer )
 		end
 
@@ -869,7 +864,7 @@ feature {}
 			when "total" then
 				p_filtre.met_total( true )
 			else
-				traiter_erreur( once "unknown filter" )
+				avertir( once "unknown filter" )
 			end
 		end
 
@@ -887,7 +882,7 @@ feature {}
 			when "total" then
 				p_filtre.met( false, false, true )
 			else
-				traiter_erreur( once "unknown filter" )
+				avertir( once "unknown filter" )
 			end
 		end
 
@@ -909,12 +904,12 @@ feature {}
 			when "total" then
 				p_filtre.met_total( false )
 			else
-				traiter_erreur( once "unknown filter" )
+				avertir( once "unknown filter" )
 			end
 
 			if not p_filtre.choix_est_effectue then
 				p_filtre.copy( old_filtre )
-				traiter_erreur( once "removing filters leaves empty set" )
+				avertir( once "removing filters leaves empty set" )
 			end
 		ensure
 			filtre_ok : p_filtre.choix_est_effectue

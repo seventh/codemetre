@@ -277,7 +277,7 @@ feature {}
 	message_erreur : STRING
 			-- précision textuelle sur la nature de l'erreur rencontrée
 
-	gerer_erreur( p_message : STRING ) is
+	retenir_erreur( p_message : STRING ) is
 			-- affecte à 'message_erreur' une traduction du message
 			-- d'erreur correspondant, accompagné de la position de
 			-- l'erreur

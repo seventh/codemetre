@@ -57,7 +57,7 @@ feature
 			std_error.put_string( once "oOo CodeMetre " )
 			std_error.put_string( version_majeure )
 			std_error.put_string( version_mineure )
-			std_error.put_string( once " (c) 2005-2009 seventh oOo%N" )
+			std_error.put_string( once " (c) 2005-2010 seventh oOo%N" )
 
 			std_error.put_string( traduire( once "[
 This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you

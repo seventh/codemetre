@@ -63,8 +63,9 @@ feature {DANG_ANALYSEUR}
 
 feature {DANG_ANALYSEUR}
 
-	traiter_erreur( p_message : STRING ) is
-			-- gère le message d'erreur remonté par l'analyseur
+	avertir( p_message : STRING ) is
+			-- gère le message remonté par l'analyseur en cas d'erreur
+			-- d'analyse irrécupérable
 		require
 			message_valide : not p_message.is_empty
 		deferred

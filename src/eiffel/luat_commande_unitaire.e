@@ -42,6 +42,8 @@ feature
 		local
 			source : LUAT_LISTAGE
 			metrique : LUAT_METRIQUE_UNITAIRE
+			nom_sortie : STRING
+			sortie : TEXT_FILE_WRITE
 		do
 			-- configuration de l'analyseur
 
@@ -76,6 +78,23 @@ feature
 
 				std_output.put_new_line
 				std_output.flush
+
+				-- production du fichier d'analyse
+
+				if configuration.unitaire.analyse then
+					nom_sortie := nom_fichier.twin
+					nom_sortie.append( once ".cma" )
+					create sortie.connect_to( nom_sortie )
+					if sortie.is_connected then
+						source.afficher( sortie )
+						sortie.disconnect
+					else
+						std_error.put_string( traduire( once "*** Error: file %"" ) )
+						std_error.put_string( nom_sortie )
+						std_error.put_string( traduire( once "%" cannot be written" ) )
+						std_error.put_new_line
+					end
+				end
 			end
 		end
 

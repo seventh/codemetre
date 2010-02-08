@@ -35,14 +35,12 @@ feature {}
 	etat_choix_langage : INTEGER is unique
 	etat_choix_modele : INTEGER is unique
 	etat_coherence_options : INTEGER is unique
-	etat_commande_analyse : INTEGER is unique
 	etat_commande_comparaison : INTEGER is unique
 	etat_commande_unitaire : INTEGER is unique
 	etat_commande_bilan : INTEGER is unique
 	etat_final : INTEGER is unique
 
 	mode_indetermine : INTEGER is unique
-	mode_analyse : INTEGER is unique
 	mode_comparaison : INTEGER is unique
 	mode_unitaire : INTEGER is unique
 
@@ -52,16 +50,17 @@ feature
 			-- analyse les arguments de la ligne de commande et produit
 			-- les commandes en conséquences
 		local
-			lexeme, etat, mode : INTEGER
-			filtre : LUAT_FILTRE
+			analyse_demande : BOOLEAN
+			analyseur_precise : BOOLEAN
+			apres_est_lot, apres_est_repertoire : BOOLEAN
 			avant, apres : STRING
 			avant_est_lot, avant_est_repertoire : BOOLEAN
-			apres_est_lot, apres_est_repertoire : BOOLEAN
-			analyseur_precise : BOOLEAN
 			bilan_final_precise : BOOLEAN
+			fichier_configuration_est_inhibe : BOOLEAN
+			filtre : LUAT_FILTRE
+			lexeme, etat, mode : INTEGER
 			modele_precise : BOOLEAN
 			sortie_compacte_precise : BOOLEAN
-			fichier_configuration_est_inhibe : BOOLEAN
 		do
 			create filtre.initialiser
 			mode := mode_indetermine
@@ -88,15 +87,39 @@ feature
 
 					inspect argument( lexeme )
 
+						-- analyse lexicale
+
+					when "--anal" then
+						if mode = mode_indetermine then
+							mode := mode_unitaire
+							analyse_demande := true
+						elseif mode = mode_unitaire then
+							avertir( once "mode is enforced more than once" )
+							etat := etat_final
+						end
+						lexeme := lexeme + 1
+
+						-- commande
+
+					when "--diff" then
+						if mode = mode_indetermine then
+							mode := mode_comparaison
+						else
+							avertir( once "mode is enforced more than once" )
+							etat := etat_final
+						end
+						lexeme := lexeme + 1
+
 						-- configuration
 
 					when "--config" then
 						if lexeme = 1
 							and argument_count = 1
 						 then
+							configuration.appliquer_choix_fichier
 							commandes.add_last( create {LUAT_COMMANDE_CONFIGURATION}.fabriquer )
 						else
-							afficher_erreur( once "cannot both show config and measure files" )
+							avertir( once "cannot both show config and measure files" )
 						end
 						etat := etat_final
 
@@ -104,23 +127,11 @@ feature
 						fichier_configuration_est_inhibe := true
 						lexeme := lexeme + 1
 
-						-- langage
-
-					when "--lang" then
-						if analyseur_precise then
-							afficher_erreur( once "language is enforced more than once" )
-							etat := etat_final
-						else
-							analyseur_precise := true
-							etat := etat_choix_langage
-						end
-						lexeme := lexeme + 1
-
-						-- filtre
+						-- filtres
 
 					when "--code" then
 						if filtre.code then
-							afficher_erreur( once "too many %"--code%" option" )
+							avertir( once "too many %"--code%" option" )
 							etat := etat_final
 						else
 							filtre.met_code( true )
@@ -129,7 +140,7 @@ feature
 
 					when "--comment" then
 						if filtre.commentaire then
-							afficher_erreur( once "too many %"--comment%" option" )
+							avertir( once "too many %"--comment%" option" )
 							etat := etat_final
 						else
 							filtre.met_commentaire( true )
@@ -138,28 +149,22 @@ feature
 
 					when "--total" then
 						if filtre.total then
-							afficher_erreur( once "too many %"--total%" option" )
+							avertir( once "too many %"--total%" option" )
 							etat := etat_final
 						else
 							filtre.met_total( true )
 						end
 						lexeme := lexeme + 1
 
-					when "--short" then
-						if sortie_compacte_precise then
-							afficher_erreur( once "too many %"--short%" option" )
-							etat := etat_final
-						else
-							sortie_compacte_precise := true
-						end
-						lexeme := lexeme + 1
+						-- langage
 
-					when "--status" then
-						if bilan_final_precise then
-							afficher_erreur( once "too many %"--status%" option" )
+					when "--lang" then
+						if analyseur_precise then
+							avertir( once "language is enforced more than once" )
 							etat := etat_final
 						else
-							bilan_final_precise := true
+							analyseur_precise := true
+							etat := etat_choix_langage
 						end
 						lexeme := lexeme + 1
 
@@ -167,7 +172,7 @@ feature
 
 					when "--model" then
 						if modele_precise then
-							afficher_erreur( once "too many diff models" )
+							avertir( once "too many diff models" )
 							etat := etat_final
 						else
 							modele_precise := true
@@ -175,25 +180,29 @@ feature
 						end
 						lexeme := lexeme + 1
 
-						-- commande
+						-- résumé final
 
-					when "--anal" then
-						if mode = mode_indetermine then
-							mode := mode_analyse
-						else
-							afficher_erreur( once "mode is enforced more than once" )
+					when "--status" then
+						if bilan_final_precise then
+							avertir( once "too many %"--status%" option" )
 							etat := etat_final
+						else
+							bilan_final_precise := true
 						end
 						lexeme := lexeme + 1
 
-					when "--diff" then
-						if mode = mode_indetermine then
-							mode := mode_comparaison
-						else
-							afficher_erreur( once "mode is enforced more than once" )
+						-- sortie compacte
+
+					when "--short" then
+						if sortie_compacte_precise then
+							avertir( once "too many %"--short%" option" )
 							etat := etat_final
+						else
+							sortie_compacte_precise := true
 						end
 						lexeme := lexeme + 1
+
+						-- forçage de la fin des options
 
 					when "--" then
 						etat := etat_coherence_options
@@ -211,7 +220,7 @@ feature
 					if configuration.forcer_analyseur( argument( lexeme ) ) then
 						etat := etat_lecture_options
 					else
-						afficher_erreur( once "unknown language" )
+						avertir( once "unknown language" )
 						etat := etat_final
 					end
 					lexeme := lexeme + 1
@@ -223,7 +232,7 @@ feature
 					if configuration.forcer_metrique( argument( lexeme ) ) then
 						etat := etat_lecture_options
 					else
-						afficher_erreur( once "unknown diff model" )
+						avertir( once "unknown diff model" )
 						etat := etat_final
 					end
 					lexeme := lexeme + 1
@@ -244,26 +253,6 @@ feature
 					end
 
 					inspect mode
-					when mode_analyse then
-						if modele_precise then
-							afficher_erreur( once "no diff model is required for analysis" )
-							etat := etat_final
-						elseif sortie_compacte_precise then
-							afficher_erreur( once "short output is available only for diff" )
-							etat := etat_final
-						elseif bilan_final_precise then
-							afficher_erreur( once "final status is not available during analysis" )
-							etat := etat_final
-						elseif not filtre.choix_est_effectue then
-							etat := etat_commande_analyse
-						elseif not filtre.choix_est_unique then
-							afficher_erreur( once "one filter only for analysis" )
-							etat := etat_final
-						else
-							configuration.analyse.filtre.copy( filtre )
-							etat := etat_commande_analyse
-						end
-
 					when mode_comparaison then
 						bilan.forcer_metrique( configuration.differentiel.modele )
 						if bilan_final_precise then
@@ -276,7 +265,7 @@ feature
 						if not filtre.choix_est_effectue then
 							etat := etat_commande_comparaison
 						elseif not filtre.choix_est_unique then
-							afficher_erreur( once "one filter only for diff" )
+							avertir( once "one filter only for diff" )
 							etat := etat_final
 						else
 							configuration.differentiel.filtre.copy( filtre )
@@ -288,12 +277,15 @@ feature
 						if bilan_final_precise then
 							configuration.unitaire.met_statut( true )
 						end
+						if analyse_demande then
+							configuration.unitaire.met_analyse( true )
+						end
 
 						if modele_precise then
-							afficher_erreur( once "no diff model is required for measure" )
+							avertir( once "no diff model is required for measure" )
 							etat := etat_final
 						elseif sortie_compacte_precise then
-							afficher_erreur( once "short output is available only for diff" )
+							avertir( once "short output is available only for diff" )
 							etat := etat_final
 						elseif filtre.choix_est_effectue then
 							configuration.unitaire.filtre.copy( filtre )
@@ -303,30 +295,11 @@ feature
 						end
 					end
 
-				when etat_commande_analyse then
-					-- commande de type analyse
-
-					if configuration.est_lot( argument( lexeme ) ) then
-						produire_liste_commande_analyse( argument( lexeme ) )
-					elseif est_repertoire( argument( lexeme ) ) then
-						produire_arbre_commande_analyse( argument( lexeme ) )
-					else
-						produire_commande_analyse( argument( lexeme ) )
-					end
-
-					if lexeme = argument_count
-						and bilan_final_precise
-					 then
-						etat := etat_commande_bilan
-					else
-						lexeme := lexeme + 1
-					end
-
 				when etat_commande_comparaison then
 					-- commande de type comparaison
 
 					if lexeme + 1 /= argument_count then
-						afficher_erreur( once "two files are required in diff mode" )
+						avertir( once "two files are required in diff mode" )
 						etat := etat_final
 					else
 						avant := argument( lexeme )
@@ -340,7 +313,7 @@ feature
 						end
 
 						if avant = void and apres = void then
-							afficher_erreur( once "at least one of the two arguments shall exists" )
+							avertir( once "at least one of the two arguments shall exists" )
 							etat := etat_final
 						else
 							if avant = void then
@@ -360,14 +333,14 @@ feature
 
 							-- l'un des deux au moins est un lot
 							if avant_est_lot xor apres_est_lot then
-								afficher_erreur( once "batch file cannot be compared to single file or directory" )
+								avertir( once "batch file cannot be compared to single file or directory" )
 								etat := etat_final
 							elseif avant_est_lot then
 								produire_lot_commande_differentiel( avant, apres )
 
 							-- l'un des deux au moins est un répertoire
 							elseif avant_est_repertoire xor apres_est_repertoire then
-								afficher_erreur( once "directory cannot be compared to single or batch file" )
+								avertir( once "directory cannot be compared to single or batch file" )
 								etat := etat_final
 							elseif avant_est_repertoire then
 								produire_arbre_commande_differentiel( avant, apres )
@@ -438,12 +411,15 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once " codemetre --config" )
+			std_error.put_string( once "%Tcodemetre%N%T [--code] [--comment] [--total]%N%T [--lang <>] [--status]%N%T [--anal|--diff [--model <>] [--short]]%N%T [--noconfig]%N%T [--]%N%T " )
+			std_error.put_string( traduire( once "FILE|DIRECTORY|BATCH..." ) )
 			std_error.put_new_line
-			std_error.put_string( once "%Tcodemetre%N%T [--code] [--comment] [--total]%N%T [--lang <>] [--status]%N%T [--anal|--diff [--model <>] [--short]]%N%T [--]%N%T " )
-			std_error.put_string( traduire( once "FILE|DIRECTORY|BATCH" ) )
-			std_error.put_string( once "..." )
 			std_error.put_new_line
+
+			std_error.put_string( once "%Tcodemetre --config" )
+			std_error.put_new_line
+			std_error.put_new_line
+
 			std_error.put_new_line
 
 			std_error.put_string( traduire( once "For further information:" ) )
@@ -454,16 +430,18 @@ feature
 			std_error.put_string( traduire( once " - visit " ) )
 			std_error.put_string( once "http://wiki.github.com/seventh/codemetre" )
 			std_error.put_new_line
+
+			std_error.put_new_line
+
 			std_error.flush
 		end
 
 feature {}
 
-	afficher_erreur( p_message : STRING ) is
-			-- produit sur la sortie d'erreur le message correspondant
+	avertir( p_message : STRING ) is
+			-- traduit le message attendu sur la sortie d'erreur
 		do
-			std_error.put_string( traduire( once "Syntax error" ) )
-			std_error.put_string( once ": " )
+			std_error.put_string( traduire( once "Syntax error: " ) )
 			std_error.put_string( traduire( p_message ) )
 			std_error.put_new_line
 			std_error.put_new_line
@@ -519,73 +497,6 @@ feature {}
 
 					create {LUAT_LOT_BLANC} result.fabriquer
 				end
-			end
-		end
-
-feature {}
-
-	produire_arbre_commande_analyse( p_racine : STRING ) is
-			-- ajoute autant de commandes d'analyse à la liste de
-			-- commandes qu'il n'y a de fichiers sous la racine, sauf
-			-- pour ceux dont le langage ne peut être déterminé
-		require
-			racine_valide : not p_racine.is_empty
-		local
-			lot : LUAT_LOT
-		do
-			lot := ouvrir_arbre( p_racine, false )
-			produire_lot_commande_analyse( lot )
-			lot.clore
-		end
-
-	produire_liste_commande_analyse( p_liste : STRING ) is
-			-- ajoute autant de commandes d'analyse à la liste de
-			-- commandes qu'il n'y a de fichiers énumérés dans la liste,
-			-- sauf pour ceux dont le langage ne peut être déterminé
-		require
-			liste_valide : p_liste /= void
-		local
-			lot : LUAT_LOT
-		do
-			lot := ouvrir_liste( p_liste )
-			produire_lot_commande_analyse( lot )
-			lot.clore
-		end
-
-	produire_lot_commande_analyse( p_lot : LUAT_LOT ) is
-			-- ajoute autant de commandes d'analyse à la liste de
-			-- commandes qu'il n'y a de fichiers énumérés dans le lot,
-			-- sauf pour ceux dont le langage ne peut être déterminé
-		require
-			lot_valide : p_lot /= void
-		local
-			nom_fichier : STRING
-		do
-			from p_lot.lire
-			until p_lot.est_epuise
-			loop
-				nom_fichier := p_lot.entree
-				if nom_fichier /= void then
-					produire_commande_analyse( nom_fichier )
-				end
-				p_lot.lire
-			end
-		end
-
-	produire_commande_analyse( p_nom_fichier : STRING ) is
-			-- ajoute une commande d'analyse à la liste des commandes, à
-			-- moins que le langage ne puisse être déterminé
-		require
-			nom_valide : p_nom_fichier /= void
-		local
-			analyseur : LUAT_ANALYSEUR
-			commande : LUAT_COMMANDE_ANALYSE
-		do
-			analyseur := configuration.analyseur( p_nom_fichier )
-
-			if analyseur /= void then
-				create commande.fabriquer( analyseur, p_nom_fichier )
-				commandes.add_last( commande )
 			end
 		end
 
@@ -700,7 +611,7 @@ feature {}
 			if p_avant = void
 				and p_apres = void
 			 then
-				afficher_erreur( once "at least one of the two arguments shall exists" )
+				avertir( once "at least one of the two arguments shall exists" )
 			else
 				-- détermination du langage si nécessaire
 
