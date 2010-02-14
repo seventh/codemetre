@@ -107,4 +107,35 @@ feature
 			total_ok : total = p_total
 		end
 
+feature
+
+	afficher( p_flux : OUTPUT_STREAM ) is
+			-- produit une forme lisible sur le flux correspondant
+		local
+			separateur_doit_etre_ajoute : BOOLEAN
+		do
+			p_flux.put_string( once "%Tfilter := " )
+
+			if code then
+				separateur_doit_etre_ajoute := true
+				p_flux.put_string( once "code" )
+			end
+			if commentaire then
+				if separateur_doit_etre_ajoute then
+					p_flux.put_string( once ", " )
+				end
+				separateur_doit_etre_ajoute := true
+				p_flux.put_string( once "comment" )
+			end
+			if total then
+				if separateur_doit_etre_ajoute then
+					p_flux.put_string( once ", " )
+				end
+				separateur_doit_etre_ajoute := true
+				p_flux.put_string( once "total" )
+			end
+
+			p_flux.put_new_line
+		end
+
 end

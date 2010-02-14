@@ -1,7 +1,14 @@
+*** v0.26.1
+
+ - HTML : les commentaires qui ne sont pas séparés de ce qui les précède par un
+ espace n'étaient pas détectés.
+ - Renommage de l'option '--anal' en '--dump'.
+ - Possibilité de coupler mesure différentielle et analyse.
+
 *** v0.26.0
 
  - Support rudimentaire de la syntaxe HTML.
- - Correction d'un bogue : l'option '--config' n'affichait plus uniquement que
+ - Correction du bogue n°2 : l'option '--config' n'affichait plus uniquement que
  la configuraiton par défaut (ce qui en limitait l'intérêt)
  - Meilleur message d'erreur dans le cas où l'argument est un répertoire vide.
  - L'analyse de fichiers est désormais systématiquement couplée à la mesure

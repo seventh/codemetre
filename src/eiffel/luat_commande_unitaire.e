@@ -81,7 +81,7 @@ feature
 
 				-- production du fichier d'analyse
 
-				if configuration.unitaire.analyse then
+				if configuration.unitaire.examen then
 					nom_sortie := nom_fichier.twin
 					nom_sortie.append( once ".cma" )
 					create sortie.connect_to( nom_sortie )

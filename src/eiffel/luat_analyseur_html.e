@@ -63,6 +63,10 @@ feature {LUAT_ANALYSEUR}
 						produire_code
 						produire_ligne
 						etat := etat_final
+					when '<' then
+						produire_code
+						chaine.add_last( caractere )
+						etat := etat_apres_chevron_ouvrant
 					else
 						chaine.add_last( caractere )
 					end

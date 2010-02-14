@@ -247,19 +247,7 @@ feature
 			--
 
 			std_output.put_string( once "[diff]%N" )
-			afficher_filtre( differentiel.filtre, std_output )
-
-			std_output.put_string( once "%Tmodel := " )
-			std_output.put_string( differentiel.modele.nom )
-			std_output.put_new_line
-
-			std_output.put_string( once "%Tshort := " )
-			std_output.put_boolean( differentiel.abrege )
-			std_output.put_new_line
-
-			std_output.put_string( once "%Tstatus := " )
-			std_output.put_boolean( differentiel.statut )
-			std_output.put_new_line
+			differentiel.afficher( std_output )
 
 			--
 			-- section : 'language'
@@ -300,17 +288,7 @@ feature
 			--
 
 			std_output.put_string( once "[unit]%N" )
-
-			std_output.put_string( once "%Tanalysis := " )
-			std_output.put_boolean( unitaire.analyse )
-			std_output.put_new_line
-
-			afficher_filtre( unitaire.filtre, std_output )
-
-			std_output.put_string( once "%Tstatus := " )
-			std_output.put_boolean( unitaire.statut )
-			std_output.put_new_line
-
+			unitaire.afficher( std_output )
 		end
 
 feature
@@ -817,38 +795,6 @@ feature {}
 		end
 
 feature {}
-
-	afficher_filtre( p_filtre : LUAT_FILTRE
-						  p_flux : OUTPUT_STREAM ) is
-		require
-			filtre_valide : p_filtre.choix_est_effectue
-			flux_valide : p_flux /= void
-		local
-			separateur_doit_etre_ajoute : BOOLEAN
-		do
-			p_flux.put_string( once "%Tfilter := " )
-
-			if p_filtre.code then
-				separateur_doit_etre_ajoute := true
-				p_flux.put_string( once "code" )
-			end
-			if p_filtre.commentaire then
-				if separateur_doit_etre_ajoute then
-					p_flux.put_string( once ", " )
-				end
-				separateur_doit_etre_ajoute := true
-				p_flux.put_string( once "comment" )
-			end
-			if p_filtre.total then
-				if separateur_doit_etre_ajoute then
-					p_flux.put_string( once ", " )
-				end
-				separateur_doit_etre_ajoute := true
-				p_flux.put_string( once "total" )
-			end
-
-			p_flux.put_new_line
-		end
 
 	ajouter_filtre( p_filtre : LUAT_FILTRE
 						 p_variable : STRING ) is

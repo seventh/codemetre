@@ -52,6 +52,8 @@ feature
 			metrique : LUAT_METRIQUE_DIFFERENTIEL
 			nid, but : LUAT_LISTAGE
 			erreur : BOOLEAN
+			nom_sortie : STRING
+			sortie : TEXT_FILE_WRITE
 		do
 			-- configuration de l'analyseur
 
@@ -124,6 +126,23 @@ feature
 					metrique.afficher( std_output )
 
 					std_output.put_new_line
+				end
+
+				-- production du fichier d'analyse
+
+				if configuration.differentiel.examen then
+					nom_sortie := nom_but.twin
+					nom_sortie.append( once ".cma" )
+					create sortie.connect_to( nom_sortie )
+					if sortie.is_connected then
+						but.afficher( sortie )
+						sortie.disconnect
+					else
+						std_error.put_string( traduire( once "*** Error: file %"" ) )
+						std_error.put_string( nom_sortie )
+						std_error.put_string( traduire( once "%" cannot be written" ) )
+						std_error.put_new_line
+					end
 				end
 			end
 

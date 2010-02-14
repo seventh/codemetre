@@ -50,7 +50,7 @@ feature
 			-- analyse les arguments de la ligne de commande et produit
 			-- les commandes en conséquences
 		local
-			analyse_demande : BOOLEAN
+			examen_demande : BOOLEAN
 			analyseur_precise : BOOLEAN
 			apres_est_lot, apres_est_repertoire : BOOLEAN
 			avant, apres : STRING
@@ -90,9 +90,20 @@ feature
 						-- analyse lexicale
 
 					when "--anal" then
+						avertir( once "--anal is deprecated. Use --dump instead" )
 						if mode = mode_indetermine then
 							mode := mode_unitaire
-							analyse_demande := true
+							examen_demande := true
+						elseif mode = mode_unitaire then
+							avertir( once "mode is enforced more than once" )
+							etat := etat_final
+						end
+						lexeme := lexeme + 1
+
+					when "--dump" then
+						if mode = mode_indetermine then
+							mode := mode_unitaire
+							examen_demande := true
 						elseif mode = mode_unitaire then
 							avertir( once "mode is enforced more than once" )
 							etat := etat_final
@@ -258,6 +269,9 @@ feature
 						if bilan_final_precise then
 							configuration.differentiel.met_statut( true )
 						end
+						if examen_demande then
+							configuration.differentiel.met_examen( true )
+						end
 						if sortie_compacte_precise then
 							configuration.differentiel.met_abrege( true )
 						end
@@ -277,8 +291,8 @@ feature
 						if bilan_final_precise then
 							configuration.unitaire.met_statut( true )
 						end
-						if analyse_demande then
-							configuration.unitaire.met_analyse( true )
+						if examen_demande then
+							configuration.unitaire.met_examen( true )
 						end
 
 						if modele_precise then

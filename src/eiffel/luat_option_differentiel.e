@@ -12,6 +12,13 @@ class
 		-- de comparaison
 		--
 
+inherit
+
+	LUAT_OPTION
+		redefine
+			fabriquer, initialiser, afficher
+		end
+
 creation
 
 	fabriquer
@@ -19,9 +26,8 @@ creation
 feature {}
 
 	fabriquer is
-			-- constructeur
 		do
-			create filtre.initialiser
+			precursor
 			create {LUAT_METRIQUE_NORMAL} modele.fabriquer
 		end
 
@@ -34,12 +40,11 @@ feature
 			filtre.met( true, false, false )
 			create {LUAT_METRIQUE_NORMAL} modele.fabriquer
 			statut := false
-		ensure
+		ensure then
 			aucun_abrege : not abrege
 			filtre_code : filtre.code
 			filtre_commentaire : not filtre.commentaire
 			filtre_total : not filtre.total
-			aucun_statut : not statut
 		end
 
 feature
@@ -48,15 +53,8 @@ feature
 			-- est-ce que seuls les fichiers en écarts doivent produire
 			-- des métriques ?
 
-	filtre : LUAT_FILTRE
-			-- éléments à prendre en compte pour l'analyse et la
-			-- production de métriques
-
 	modele : LUAT_METRIQUE_DIFFERENTIEL
 			-- modèle de métrique à produire
-
-	statut : BOOLEAN
-			-- un bilan final doit-il être produit ?
 
 feature
 
@@ -78,12 +76,19 @@ feature
 			modele_ok : modele = p_modele
 		end
 
-	met_statut( p_statut : BOOLEAN ) is
-			-- modifie la valeur de 'statut'
+feature
+
+	afficher( p_flux : OUTPUT_STREAM ) is
 		do
-			statut := p_statut
-		ensure
-			statut_ok : statut = p_statut
+			precursor( p_flux )
+
+			std_output.put_string( once "%Tmodel := " )
+			std_output.put_string( modele.nom )
+			std_output.put_new_line
+
+			std_output.put_string( once "%Tshort := " )
+			std_output.put_boolean( abrege )
+			std_output.put_new_line
 		end
 
 end
