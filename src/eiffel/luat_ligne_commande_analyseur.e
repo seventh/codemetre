@@ -425,7 +425,7 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once "%Tcodemetre%N%T [--code] [--comment] [--total]%N%T [--lang <>] [--status]%N%T [--anal|--diff [--model <>] [--short]]%N%T [--noconfig]%N%T [--]%N%T " )
+			std_error.put_string( once "%Tcodemetre%N%T [--code] [--comment] [--total]%N%T [--lang <>] [--status]%N%T [--dump|--diff [--model <>] [--short]]%N%T [--noconfig]%N%T [--]%N%T " )
 			std_error.put_string( traduire( once "FILE|DIRECTORY|BATCH..." ) )
 			std_error.put_new_line
 			std_error.put_new_line

@@ -1,3 +1,8 @@
+*** v0.26.2
+
+ - Ada : Les formulations du type '["03C0"]' sont désormais acceptées.
+ - Correction du message d'aide pour favoriser '--dump'.
+
 *** v0.26.1
 
  - HTML : les commentaires qui ne sont pas séparés de ce qui les précède par un

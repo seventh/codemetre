@@ -582,7 +582,7 @@ feature {}
 			when '=' then
 				chaine.add_last( caractere )
 				etat := etat_apres_egal
-			when '&', '(', ')', '+', ',', ';', '|', '!' then
+			when '&', '(', ')', '+', ',', ';', '|', '!', '[', ']' then
 				chaine.add_last( caractere )
 				produire_code
 				etat := etat_initial
