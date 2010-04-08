@@ -1,3 +1,9 @@
+*** v0.27.0
+
+ - Ada : association avec l'extension '.adc' ajoutée.
+ - SH : support rudimentaire de la syntaxe. La différenciation des chaînes de
+ caractères n'est par exemple pas encore effectué.
+
 *** v0.26.2
 
  - Ada : Les formulations du type '["03C0"]' sont désormais acceptées.

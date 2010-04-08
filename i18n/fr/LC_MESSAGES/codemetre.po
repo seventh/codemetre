@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.26.1\n"
+"Project-Id-Version: 0.27.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-14 10:00+0100\n"
-"PO-Revision-Date: 2010-02-14 10:01+0100\n"
+"POT-Creation-Date: 2010-04-08 21:27+0200\n"
+"PO-Revision-Date: 2010-04-08 21:31+0200\n"
 "Last-Translator: Guillaume Lemaître <guillaume.lemaitre@gmail.com>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -51,6 +51,7 @@ msgstr "aucune valeur n'est associée à la variable"
 #: luat_analyseur_eiffel.e:750
 #: luat_analyseur_famille_c.e:731
 #: luat_analyseur_html.e:138
+#: luat_analyseur_shell.e:95
 #: luat_analyseur_sql.e:277
 #, c-format
 msgid "lexer is buggy!"
@@ -308,174 +309,174 @@ msgstr ""
 msgid "\" cannot be written"
 msgstr "\" ne peut être écrit"
 
-#: luat_configuration.e:162
-#: luat_configuration.e:175
+#: luat_configuration.e:173
+#: luat_configuration.e:186
 #, c-format
 msgid "Error: extension of file \""
 msgstr "L'extension du fichier \""
 
-#: luat_configuration.e:164
-#: luat_configuration.e:177
+#: luat_configuration.e:175
+#: luat_configuration.e:188
 #, c-format
 msgid "\" is unknown"
 msgstr "\" n'est pas reconnue"
 
-#: luat_configuration.e:348
-#: luat_configuration.e:559
+#: luat_configuration.e:359
+#: luat_configuration.e:570
 #, c-format
 msgid "analysis:filter can only have a single value"
 msgstr "une seule valeur est autorisée dans 'analysis:filter'"
 
-#: luat_configuration.e:350
-#: luat_configuration.e:415
-#: luat_configuration.e:561
+#: luat_configuration.e:361
+#: luat_configuration.e:426
+#: luat_configuration.e:572
 #, c-format
 msgid "unknown parameter in analysis section"
 msgstr "paramètre inconnu dans section 'analysis'"
 
-#: luat_configuration.e:356
-#: luat_configuration.e:567
+#: luat_configuration.e:367
+#: luat_configuration.e:578
 #, c-format
 msgid "diff:filter can only have a single value"
 msgstr "une seule valeur est autorisée dans 'diff:filter'"
 
-#: luat_configuration.e:358
-#: luat_configuration.e:569
+#: luat_configuration.e:369
+#: luat_configuration.e:580
 #, c-format
 msgid "diff:model is not a list"
 msgstr "la variable 'diff:model' n'est pas une liste"
 
-#: luat_configuration.e:360
-#: luat_configuration.e:571
+#: luat_configuration.e:371
+#: luat_configuration.e:582
 #, c-format
 msgid "diff:short is not a list"
 msgstr "la variable 'diff:short' n'est pas une liste"
 
-#: luat_configuration.e:362
-#: luat_configuration.e:573
+#: luat_configuration.e:373
+#: luat_configuration.e:584
 #, c-format
 msgid "diff:status is not a list"
 msgstr "la variable 'diff:status' n'est pas une liste"
 
-#: luat_configuration.e:364
-#: luat_configuration.e:429
-#: luat_configuration.e:501
-#: luat_configuration.e:575
+#: luat_configuration.e:375
+#: luat_configuration.e:440
+#: luat_configuration.e:512
+#: luat_configuration.e:586
 #, c-format
 msgid "unknown parameter in diff section"
 msgstr "paramètre inconnu dans section 'diff'"
 
-#: luat_configuration.e:371
-#: luat_configuration.e:436
-#: luat_configuration.e:508
-#: luat_configuration.e:582
+#: luat_configuration.e:382
+#: luat_configuration.e:447
+#: luat_configuration.e:519
+#: luat_configuration.e:593
 #, c-format
 msgid "language not yet supported"
 msgstr "langage non encore supporté"
 
-#: luat_configuration.e:379
+#: luat_configuration.e:390
 #, c-format
 msgid "suffix is already associated with another language"
 msgstr "suffixe déjà associé à un autre langage"
 
-#: luat_configuration.e:381
+#: luat_configuration.e:392
 #, c-format
 msgid "redundant association"
 msgstr "couplage redondant"
 
-#: luat_configuration.e:391
-#: luat_configuration.e:600
+#: luat_configuration.e:402
+#: luat_configuration.e:611
 #, c-format
 msgid "unit:status is not a list"
 msgstr "la variable 'unit:status' n'est pas une liste"
 
-#: luat_configuration.e:393
-#: luat_configuration.e:459
-#: luat_configuration.e:537
-#: luat_configuration.e:602
+#: luat_configuration.e:404
+#: luat_configuration.e:470
+#: luat_configuration.e:548
+#: luat_configuration.e:613
 #, c-format
 msgid "unknown parameter in unit section"
 msgstr "paramètre inconnu dans section 'unit'"
 
-#: luat_configuration.e:398
-#: luat_configuration.e:464
-#: luat_configuration.e:542
-#: luat_configuration.e:607
+#: luat_configuration.e:409
+#: luat_configuration.e:475
+#: luat_configuration.e:553
+#: luat_configuration.e:618
 #, c-format
 msgid "unknown section"
 msgstr "section inconnue"
 
-#: luat_configuration.e:413
+#: luat_configuration.e:424
 #, c-format
 msgid "analysis:filter is mandatory"
 msgstr "'analysis:filter' doit avoir une valeur associée"
 
-#: luat_configuration.e:421
+#: luat_configuration.e:432
 #, c-format
 msgid "diff:filter is mandatory"
 msgstr "'diff:filter' doit avoir une valeur associée"
 
-#: luat_configuration.e:423
+#: luat_configuration.e:434
 #, c-format
 msgid "diff:model is mandatory"
 msgstr "la variable 'diff:model' est obligatoire"
 
-#: luat_configuration.e:425
+#: luat_configuration.e:436
 #, c-format
 msgid "diff:short is not clearable"
 msgstr "'diff:short' doit avoir une valeur associée"
 
-#: luat_configuration.e:427
+#: luat_configuration.e:438
 #, c-format
 msgid "diff:status is not clearable"
 msgstr "'diff:status' doit avoir une valeur associée"
 
-#: luat_configuration.e:455
+#: luat_configuration.e:466
 #, c-format
 msgid "unit:filter is mandatory"
 msgstr "'unit:filter' doit avoir une valeur associée"
 
-#: luat_configuration.e:457
+#: luat_configuration.e:468
 #, c-format
 msgid "unit:status is not clearable"
 msgstr "'unit:status' doit avoir une valeur associée"
 
-#: luat_configuration.e:478
+#: luat_configuration.e:489
 #, c-format
 msgid "obsolete section. Have a look at 'unit' section"
 msgstr "section obsolète, transférée dans la section 'unit'"
 
-#: luat_configuration.e:486
+#: luat_configuration.e:497
 #: luat_ligne_commande_analyseur.e:246
 #, c-format
 msgid "unknown diff model"
 msgstr "modèle de comparaison inconnu"
 
-#: luat_configuration.e:492
-#: luat_configuration.e:498
-#: luat_configuration.e:534
+#: luat_configuration.e:503
+#: luat_configuration.e:509
+#: luat_configuration.e:545
 #, c-format
 msgid "invalid boolean value"
 msgstr "la valeur passée n'est pas un booléen"
 
-#: luat_configuration.e:588
+#: luat_configuration.e:599
 #, c-format
 msgid "no such association exists"
 msgstr "une telle association n'existe pas"
 
-#: luat_configuration.e:613
+#: luat_configuration.e:624
 #, c-format
 msgid "Syntax error"
 msgstr "Syntaxe incorrecte"
 
-#: luat_configuration.e:813
-#: luat_configuration.e:831
-#: luat_configuration.e:853
+#: luat_configuration.e:830
+#: luat_configuration.e:848
+#: luat_configuration.e:870
 #, c-format
 msgid "unknown filter"
 msgstr "option de filtrage non reconnue"
 
-#: luat_configuration.e:858
+#: luat_configuration.e:875
 #, c-format
 msgid "removing filters leaves empty set"
 msgstr "supprimer ce filtre empêcherait toute analyse"

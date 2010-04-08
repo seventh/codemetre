@@ -161,13 +161,13 @@ feature {}
 	etat_initial : INTEGER is 0
 			-- aucun contexte
 
-	etat_code : INTEGER is 10
+	etat_code : INTEGER is unique
 
 	etat_apres_chevron_ouvrant : INTEGER is unique
 	etat_apres_chevron_ouvrant_exclamation : INTEGER is unique
 	etat_apres_chevron_ouvrant_exclamation_tiret : INTEGER is unique
 
-	etat_commentaire : INTEGER is 100
+	etat_commentaire : INTEGER is unique
 
 	etat_commentaire_apres_tiret : INTEGER is unique
 	etat_commentaire_apres_tiret_tiret : INTEGER is unique

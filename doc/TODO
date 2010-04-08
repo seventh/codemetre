@@ -12,10 +12,10 @@ oOo Développements futurs oOo
  * Repenser et réécrire la page de manuel UNIX, qui est actuellement un modèle de ce qu'il ne faut pas faire.
  * Étudier la possibilité de coupler l'application à un SCM, et de donner des révisions plutôt que des noms de fichier par exemple.
  * Intégrer le support du langage Python.
- * Intégrer le support du langage HTML.
  * Intégrer le support du langage Bash.
  * Assurer la portabilité des fichiers de traitement par lot (support natif ou script Python)
  * Insensibiliser la casse pour les variables booléennes du fichier de configuration
+ * Simplifier la sortie en cas de comparaison de répertoires
 
 oOo Développement refusés oOo
 

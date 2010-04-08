@@ -64,6 +64,8 @@ feature
 
 			create suffixe.fabriquer( once ".adb", analyseur_ada.langage )
 			associations.ajouter( suffixe )
+			create suffixe.fabriquer( once ".adc", analyseur_ada.langage )
+			associations.ajouter( suffixe )
 			create suffixe.fabriquer( once ".ads", analyseur_ada.langage )
 			associations.ajouter( suffixe )
 
@@ -95,6 +97,15 @@ feature
 			-- HTML
 
 			create suffixe.fabriquer( once ".html", analyseur_html.langage )
+			associations.ajouter( suffixe )
+
+			-- Shell
+
+			create suffixe.fabriquer( once ".bash", analyseur_shell.langage )
+			associations.ajouter( suffixe )
+			create suffixe.fabriquer( once ".ksh", analyseur_shell.langage )
+			associations.ajouter( suffixe )
+			create suffixe.fabriquer( once ".sh", analyseur_shell.langage )
 			associations.ajouter( suffixe )
 
 			-- SQL
@@ -682,9 +693,14 @@ feature {}
 			result := analyseurs.item( 4 )
 		end
 
-	analyseur_sql : LUAT_ANALYSEUR is
+	analyseur_shell : LUAT_ANALYSEUR is
 		once
 			result := analyseurs.item( 5 )
+		end
+
+	analyseur_sql : LUAT_ANALYSEUR is
+		once
+			result := analyseurs.item( 6 )
 		end
 
 	analyseur_lot : STRING is "batch"
@@ -698,6 +714,7 @@ feature {}
 			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c++" ) )
 			result.add_last( create {LUAT_ANALYSEUR_EIFFEL}.fabriquer )
 			result.add_last( create {LUAT_ANALYSEUR_HTML}.fabriquer )
+			result.add_last( create {LUAT_ANALYSEUR_SHELL}.fabriquer )
 			result.add_last( create {LUAT_ANALYSEUR_SQL}.fabriquer )
 		end
 
