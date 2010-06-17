@@ -14,9 +14,6 @@ class
 inherit
 
 	LUAT_ANALYSEUR
-		redefine
-			retenir_erreur
-		end
 
 creation
 
@@ -155,12 +152,6 @@ feature {LUAT_ANALYSEUR}
 
 feature {}
 
-	etat : INTEGER
-			-- état courant de l'automate de reconnaissance de lexèmes
-
-	etat_initial : INTEGER is 0
-			-- aucun contexte
-
 	etat_code : INTEGER is unique
 
 	etat_apres_chevron_ouvrant : INTEGER is unique
@@ -171,9 +162,6 @@ feature {}
 
 	etat_commentaire_apres_tiret : INTEGER is unique
 	etat_commentaire_apres_tiret_tiret : INTEGER is unique
-
-	etat_final : INTEGER is -1
-			-- état puits
 
 	marqueur_chaine : CHARACTER
 
@@ -220,14 +208,6 @@ feature {}
 				chaine.add_last( caractere )
 				etat := etat_commentaire
 			end
-		end
-
-feature {}
-
-	retenir_erreur( p_message : STRING ) is
-		do
-			precursor( p_message )
-			etat := etat_final
 		end
 
 end

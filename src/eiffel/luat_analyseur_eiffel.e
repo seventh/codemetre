@@ -16,8 +16,7 @@ inherit
 
 	LUAT_ANALYSEUR
 		redefine
-			fabriquer,
-			retenir_erreur
+			fabriquer
 		end
 
 insert
@@ -772,12 +771,6 @@ feature {LUAT_ANALYSEUR}
 
 feature {}
 
-	etat : INTEGER
-			-- état courant de l'automate de reconnaissance de lexèmes
-
-	etat_initial : INTEGER is unique
-			-- aucun contexte
-
 	etat_apres_lettre : INTEGER is unique
 	etat_apres_u_majuscule : INTEGER is unique
 
@@ -815,9 +808,6 @@ feature {}
 	etat_apres_double_tiret : INTEGER is unique
 	etat_attente_egal : INTEGER is unique
 	etat_operateur_personalise : INTEGER is unique
-
-	etat_final : INTEGER is unique
-			-- état puits
 
 	chaine_litterale : STRING
 			-- littéral chaîne après interprétation
@@ -888,14 +878,6 @@ feature {}
 			else
 				retenir_erreur( once "forbidden character" )
 			end
-		end
-
-feature {}
-
-	retenir_erreur( p_message : STRING ) is
-		do
-			precursor( p_message )
-			etat := etat_final
 		end
 
 end

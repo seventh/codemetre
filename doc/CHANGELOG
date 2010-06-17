@@ -1,3 +1,11 @@
+*** v0.27.1
+
+ - Outils / codemetre_disciple.py : ajout d'un paramètre optionnel permettant de
+ régler la hauteur de l'arborescence à prendre en compte pour définir l'unicité
+ des fichiers.
+ - Outils : renommage et robustification. Particulièrement, on peut désormais
+ créer ses propres modèles de mesure.
+
 *** v0.27.0
 
  - Ada : association avec l'extension '.adc' ajoutée.

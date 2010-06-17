@@ -10,7 +10,7 @@ class
 		--
 		-- Tampon d'entrée ne permettant que d'avancer caractère par
 		-- caractère, et filtrant les retours-chariot (%R) avant les
-		-- nouvelles lignes (%N)
+		-- sauts de ligne (%N)
 		--
 		-- La fin d'un fichier est matérialisée par la valeur de
 		-- 'caractere' qui est alors positionné à '%U'
@@ -70,7 +70,7 @@ feature
 feature
 
 	avancer is
-			-- passe au caractère suivant, tout en sautant tout
+			-- passe au caractère suivant, tout en filtrant tout
 			-- retour-chariot précédant une nouvelle ligne
 		require
 			est_ouvert
@@ -89,19 +89,22 @@ feature
 					tampon.clear_count
 				end
 				fichier.read_available_in( tampon, taille )
-
 				if tampon.is_empty then
 					tampon.append_character( '%U' )
 				end
 				indice := tampon.lower
 			end
 
-			-- on saute les retours-chariot s'ils précèdent un retour à
-			-- la ligne
+			-- on saute les retours-chariot s'ils précèdent un saut de
+			-- ligne
+
+			-- le premier 'and then' n'est pas fondamentalement requis,
+			-- mais a un impact significatif sur les performances
+			-- globales
 
 			if tampon.item( indice ) = '%R'
-				and ( tampon.valid_index( indice + 1 )
-						and then tampon.item( indice + 1 ) = '%N' )
+				and then ( tampon.valid_index( indice + 1 )
+							  and then tampon.item( indice + 1 ) = '%N' )
 			 then
 				indice := indice + 1
 			end
@@ -127,9 +130,11 @@ feature
 	est_epuise : BOOLEAN is
 			-- vrai si et seulement si la tête de lecture est arrivée en
 			-- fin de fichier
+		require
+			est_ouvert
 		do
-			result := not tampon.is_empty
-				and then tampon.first = '%U'
+			result := fichier.end_of_input
+				and indice = tampon.upper
 		ensure
 			definition : result implies caractere = '%U'
 		end

@@ -1,43 +1,59 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Abstraction d'un lot de fichiers pour traitement par codemetre
+"""
+
+import metreur
 import os
 import sys
 
 class Lot:
     """Liste de fichiers à traiter"""
 
-    lignes = []
-
     def __init__(self):
         """Constructeur"""
-        pass
-
+        self.lignes = []
 
     def charger(self, p_nom_lot):
-        """Mémorise le lot dans une table en résolvant les effets des directives"""
-        self.lignes = []
+        """
+        Mémorise le lot dans une table en résolvant les effets des directives
+        """
+        self.lignes[:] = []
         racine = ""
-        flux = open(p_nom_lot, "r")
+        flux = None
+        try:
+            flux = open(p_nom_lot, "r")
+        except IOError:
+            pass
 
-        for chemin_et_fichier in flux:
-            chemin_et_fichier = self._extraire_valeur(chemin_et_fichier)
+        if flux is not None:
+            for chemin_et_fichier in flux:
+                # Suppression des sauts de ligne
+                chemin_et_fichier = chemin_et_fichier.translate(None, '\n\r')
 
-            # On filtre les commentaires, et on prend en compte les directives
-
-            if len(chemin_et_fichier) > 0 and chemin_et_fichier[0] == '#':
-                if len(chemin_et_fichier) > 10 and chemin_et_fichier[0:10] == "#dirname:=":
+                # On filtre les commentaires, et on prend en compte les
+                # directives
+                if chemin_et_fichier.startswith("#dirname:="):
                     racine = chemin_et_fichier[10:]
 
-            # On charge les fichiers
-
-            else:
-                if chemin_et_fichier != "" and racine != "":
-                    chemin_et_fichier = racine + chemin_et_fichier
+                # On charge les fichiers
+                else:
+                    if chemin_et_fichier != "" and racine != "":
+                        chemin_et_fichier = racine + chemin_et_fichier
                 self.lignes.append(chemin_et_fichier)
 
-        flux.close()
+            flux.close()
 
+    def lister(self, p_racine):
+        """
+        Initialise le lot à partir de la liste des fichiers du répertoire de
+        racine correspondante
+        """
+        self.lignes[:] = []
+        for racine, repertoires, fichiers in os.walk(p_racine):
+            for fichier in fichiers:
+                self.lignes.append(os.path.join(racine, fichier))
 
     def racine(self):
         """
@@ -45,8 +61,8 @@ class Lot:
         """
         retour = ""
 
-        for i in range(len(self.lignes)):
-            retour = self._prefixe_commun(retour, self.lignes[i])
+        for ligne in self.lignes:
+            retour = _prefixe_commun(retour, ligne)
 
         # on remonte jusqu'au séparateur
         i = len(retour)
@@ -54,28 +70,106 @@ class Lot:
             i = i - 1
         return retour[:i]
 
+    def aligner(self, p_reference, p_hauteur=0):
+        """
+        Modifie le lot courant en établissant une correspondance sur les noms
+        de fichiers en considérant le nom du fichier et leurs arborescences
+        relatives. À hauteur nulle, seul le nom de fichier compte. Le répertoire
+        amont est pris en compte pour une hauteur de 1, et ainsi de suite. Les
+        fichiers ne trouvant pas de correspondance sont décalés à la fin, de
+        manière à ne pas provoquer d'association non désirée.
+        """
+        retour = []
 
-    def _prefixe_commun(self, p_a, p_b):
-        """Préfixe commun aux deux chaînes a et b le plus long"""
+        self.oter_doublons(p_hauteur)
+        p_reference.oter_doublons(p_hauteur)
 
-        if p_a == "":
-            return p_b
-        elif p_b == "":
-            return p_a
-        else:
-            l = min(len(p_a), len(p_b))
+        reference = map((lambda x: _extraire_clef(x, p_hauteur)),
+                        p_reference.lignes)
+        evol = self._table_en_dictionnaire(p_hauteur)
 
-            i = 0
-            while i < l and p_a[i] == p_b[i]:
-                i = i + 1
+        for clef in reference:
+            if clef in evol:
+                retour.append(evol[clef])
+                del evol[clef]
+            else:
+                retour.append("")
+        for clef in evol:
+            retour.append(evol[clef])
 
-            return p_a[:i]
+        self.lignes[:] = retour
 
+    def oter_doublons(self, p_hauteur=0):
+        """
+        Deux entrées sont considérées comme doublons si elles ont la même clef.
+        La clef est constituée du nom du fichier préfixé d'un certain nombre de
+        répertoires, nombre paramétré par l'argument 'hauteur'
+        """
+        retour = []
+        clefs = []
+        for ligne in self.lignes:
+            clef = _extraire_clef(ligne, p_hauteur)
+            if clef in clefs:
+                print >> sys.stderr, "Attention doublon sur", ligne
+            else:
+                retour.append(ligne)
+                clefs.append(clef)
+        self.lignes[:] = retour
 
-    def _extraire_valeur(self, p_ligne):
-        """Supprime les marques de fin de ligne d'une chaîne de caractère"""
-        retour = p_ligne
-        while len(retour) > 0 and retour[-1] in ( '\n', '\r' ):
-            retour = retour[:-1]
+    def mesurer(self):
+        """
+        Fournit une mesure unitaire du lot
+        """
+        retour = metreur.Mesure()
+        retour.effectuer_lot(self)
+        return retour
 
-            return retour
+    def comparer(self, p_reference):
+        """
+        Fournit une mesure comparative du lot par rapport à la référence donnée
+        """
+        retour = metreur.Distance()
+        retour.effectuer_lot(self, p_reference)
+        return retour
+
+    def _table_en_dictionnaire(self, p_hauteur):
+        """
+        À partir de la liste de fichiers de la table, produit un dictionnaire
+        dont la clef est le nom de fichier précédé du nombre de répertoires
+        précisé par 'hauteur'
+        """
+        retour = {}
+
+        for chemin_et_fichier in self.lignes:
+            if chemin_et_fichier != "":
+                fichier = _extraire_clef(chemin_et_fichier, p_hauteur)
+                if fichier in retour:
+                    print >> sys.stderr, "Attention doublon sur", fichier
+                else:
+                    retour[fichier] = chemin_et_fichier
+
+        return retour
+
+def _prefixe_commun(p_a, p_b):
+    """Préfixe commun aux deux chaînes a et b le plus long"""
+
+    if p_a == "":
+        return p_b
+    elif p_b == "":
+        return p_a
+    else:
+        l = min(len(p_a), len(p_b))
+
+        i = 0
+        while i < l and p_a[i] == p_b[i]:
+            i = i + 1
+
+    return p_a[:i]
+
+def _extraire_clef(p_chemin_et_fichier, p_hauteur):
+    parties = p_chemin_et_fichier.rsplit("/", p_hauteur+1)
+    return "/".join(parties[1:])
+
+def _extraire_valeur(p_ligne):
+    """Supprime les marques de fin de ligne d'une chaîne de caractère"""
+    return p_ligne.translate(None, '\n\r')

@@ -18,8 +18,6 @@ inherit
 	LUAT_ANALYSEUR
 		rename
 			fabriquer as fabriquer_analyseur
-		redefine
-			retenir_erreur
 		end
 
 creation
@@ -748,12 +746,6 @@ feature {LUAT_ANALYSEUR}
 
 feature {}
 
-	etat : INTEGER
-			-- état courant de l'automate de reconnaissance de lexèmes
-
-	etat_initial : INTEGER is 0
-			-- aucun contexte
-
 	etat_apres_antislash : INTEGER is unique
 	etat_apres_apostrophe : INTEGER is unique
 	etat_apres_barre_verticale : INTEGER is unique
@@ -806,9 +798,6 @@ feature {}
 	etat_notation_octale : INTEGER is unique
 	etat_notation_octale_dans_constante_caractere : INTEGER is unique
 	etat_notation_octale_dans_constante_chaine : INTEGER is unique
-
-	etat_final : INTEGER is -1
-			-- état puits
 
 feature {}
 
@@ -983,14 +972,6 @@ feature {}
 				chaine.add_last( caractere )
 				etat := etat_commentaire_multiligne
 			end
-		end
-
-feature {}
-
-	retenir_erreur( p_message : STRING ) is
-		do
-			precursor( p_message )
-			etat := etat_final
 		end
 
 end

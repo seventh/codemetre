@@ -128,7 +128,7 @@ feature
 
 	debrayer_fabrique is
 			-- désactive l'utilisation d'une fabrique : deux lexèmes
-			-- équivalents seront malgré tout différents
+			-- équivalents resteront différents
 		require
 			lecture_non_debutee : listage = void or else listage.est_vide
 			appel_judicieux : est_utilise_fabrique
@@ -271,6 +271,17 @@ feature {}
 
 feature {}
 
+	etat : INTEGER
+			-- état courant de l'automate de reconnaissance de lexèmes
+
+	etat_initial : INTEGER is 0
+			-- aucun contexte
+
+	etat_final : INTEGER is -1
+			-- état puits
+
+feature {}
+
 	erreur : BOOLEAN
 			-- vrai si et seulement si une erreur lexicale a été rencontrée
 
@@ -292,8 +303,10 @@ feature {}
 			end
 
 			erreur := true
+			etat := etat_final
 		ensure
 			definition : erreur
+			corollaire : etat = etat_final
 		end
 
 end
