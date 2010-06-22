@@ -38,7 +38,7 @@ feature {LUAT_GLOBAL}
 
 feature {LUAT_GLOBAL}
 
-	version_majeure : STRING is "v0.27.1"
+	version_majeure : STRING is "v0.28.0"
 			-- identifiant de la branche officielle
 
 	version_mineure : STRING is ""

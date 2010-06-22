@@ -27,6 +27,7 @@ feature {}
 			-- constructeur
 		do
 			create commandes.with_capacity( 1 )
+			aucune_commande_executee := true
 		end
 
 feature {}
@@ -89,24 +90,12 @@ feature
 
 						-- analyse lexicale
 
-					when "--anal" then
-						avertir( once "--anal is deprecated. Use --dump instead" )
-						if mode = mode_indetermine then
-							mode := mode_unitaire
-							examen_demande := true
-						elseif mode = mode_unitaire then
-							avertir( once "mode is enforced more than once" )
-							etat := etat_final
-						end
-						lexeme := lexeme + 1
-
 					when "--dump" then
-						if mode = mode_indetermine then
-							mode := mode_unitaire
-							examen_demande := true
-						elseif mode = mode_unitaire then
-							avertir( once "mode is enforced more than once" )
+						if examen_demande then
+							avertir( once "too many %"--dump%" option" )
 							etat := etat_final
+						else
+							examen_demande := true
 						end
 						lexeme := lexeme + 1
 
@@ -130,7 +119,7 @@ feature
 							configuration.appliquer_choix_fichier
 							commandes.add_last( create {LUAT_COMMANDE_CONFIGURATION}.fabriquer )
 						else
-							avertir( once "cannot both show config and measure files" )
+							avertir( once "%"--config%" is incompatible with any other argument" )
 						end
 						etat := etat_final
 
@@ -425,7 +414,7 @@ feature
 			-- de l'outil
 		do
 			std_error.put_string( traduire( once "usage:" ) )
-			std_error.put_string( once "%Tcodemetre%N%T [--code] [--comment] [--total]%N%T [--lang <>] [--status]%N%T [--dump|--diff [--model <>] [--short]]%N%T [--noconfig]%N%T [--]%N%T " )
+			std_error.put_string( once "%Tcodemetre%N%T [--code] [--comment] [--total]%N%T [--dump] [--lang <>] [--status]%N%T [--diff [--model <>] [--short]]%N%T [--noconfig]%N%T [--]%N%T " )
 			std_error.put_string( traduire( once "FILE|DIRECTORY|BATCH..." ) )
 			std_error.put_new_line
 			std_error.put_new_line
@@ -643,7 +632,8 @@ feature {}
 
 				if analyseur /= void then
 					create commande.fabriquer( analyseur, p_avant, p_apres )
-					commandes.add_last( commande )
+					commande.executer
+					aucune_commande_executee := false
 				end
 			end
 		end
@@ -711,8 +701,15 @@ feature {}
 
 			if analyseur /= void then
 				create commande.fabriquer( analyseur, p_nom_fichier )
-				commandes.add_last( commande )
+				commande.executer
+				aucune_commande_executee := false
 			end
 		end
+
+feature
+
+	aucune_commande_executee : BOOLEAN
+			-- vrai si et seulement si aucune commande n'a été exécutée
+			-- suite à l'analyse de la ligne de commande
 
 end

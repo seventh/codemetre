@@ -1,3 +1,14 @@
+*** v0.28.0
+
+ - L'accent a été mis sur les performances (mémoire et CPU). L'impact sur le fonctionnement est que les commandes sont désormais exécutées immédiatement. Ainsi,
+ les statuts d'erreur liés aux fichiers non reconnus sont mélangés au flot des
+ résultats (mais toujours sur un canal de sortie séparé).
+ - Réécriture de la page de manuel UNIX.
+ - Suppression de la rétro-compatibilité avec l'option --anal. Seule l'option
+ --dump est désormais reconnue.
+ - Contrairement à ce qui était annoncé dès la version 0.26.1, l'option --dump
+ n'était pas compatible du mode différentiel. Ce problème est corrigé.
+
 *** v0.27.1
 
  - Outils / codemetre_disciple.py : ajout d'un paramètre optionnel permettant de

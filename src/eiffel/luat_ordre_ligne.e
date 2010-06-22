@@ -19,22 +19,36 @@ feature
 
 	est_verifie( a, b : LUAT_LIGNE ) : BOOLEAN is
 		local
-			i, commun : INTEGER
+			i : INTEGER
+			ordre : INTEGER
 		do
-			commun := a.nb_element.min( b.nb_element )
+			-- pour des raisons d'efficacité, on choisit une relation
+			-- d'ordre un peu particulière, avant tout liée à la
+			-- longueur des chaînes plutôt qu'à leur contenu
 
-			from i := 0
-			variant commun - 1 - i
-			until i >= commun
-				or else a.element( i ) /= b.element( i )
-			loop
-				i := i + 1
-			end
+			ordre := a.nb_element.compare( b.nb_element )
+			inspect ordre
+			when -1 then
+				result := true
+			when 0 then
+				from i := 0
+				variant a.nb_element - 1 - i
+				until i = a.nb_element
+					or else a.element( i ) /= b.element( i )
+				loop
+					i := i + 1
+				end
 
-			if i = commun then
-				result := a.nb_element <= b.nb_element
-			else -- if i < commun then
-				result := ordre_source.est_verifie( a.element( i ), b.element( i ) )
+				if i = a.nb_element then
+					result := true
+				else -- if i < a.nb_element then
+					result := ordre_source.est_verifie( a.element( i ),
+																	b.element( i ) )
+				end
+			else
+				-- cette clause 'else' est obligatoire pour ne pas faire
+				-- planter l'exécutable à l'exécution.
+				-- result := false
 			end
 		end
 

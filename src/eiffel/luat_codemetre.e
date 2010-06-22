@@ -31,16 +31,19 @@ feature
 		do
 			afficher_mention_legale
 
-			-- analyse la ligne de commande et détermine l'action
-			-- souhaitée par l'utilsateur
+			-- analyse de la ligne de commande et exécution simultanée
+			-- des commandes que celle-ci provoque
 
 			create analyseur.fabriquer
 
 			analyseur.analyser
 
-			-- si la commande est valide, on la lance
+			-- il peut rester des commandes différées (statut par
+			-- exemple) qui ont été empilées.
 
-			if analyseur.commandes.is_empty then
+			if analyseur.commandes.is_empty
+				and analyseur.aucune_commande_executee
+			 then
 				analyseur.usage
 			else
 				analyseur.commandes.do_all( agent {LUAT_COMMANDE}.executer )

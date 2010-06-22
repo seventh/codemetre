@@ -8,8 +8,8 @@ class
 	LUAT_LOT_ARBRE
 
 		--
-		-- Réunit l'ensemble des fichiers à partir d'un répertoire
-		-- nommé 'racine'. Cet ensemble peut-être trié sur demande
+		-- Itérateur de la liste des fichiers accessibles depuis un
+		-- répertoire 'racine', éventuellement préalablement triée.
 		--
 
 inherit
@@ -28,7 +28,30 @@ feature {}
 		local
 			tri : COLLECTION_SORTER[ STRING ]
 		do
-			-- récupération des fichiers
+			-- La liste des fichiers est établie dès l'instanciation,
+			-- ceci car on peut vouloir itérer sur une liste triée.
+			--
+			-- Une alternative a été envisagée de construire la liste au
+			-- fur et à mesure des appels à LUAT_LOT_ARBRE.lire, en
+			-- assurant que tout ce qui n'avait pas encore été parcouru
+			-- était mémorisé ordonné.
+			-- Cependant, la méthode DIRECTORY.scan fournit des entrées
+			-- dont le type est indéterminé. Le seul moyen de savoir si
+			-- un DIRECTORY.item est un répertoire ou non est d'y
+			-- appliquer DIRECTORY.scan à son tour, ce qui va à
+			-- l'encontre de l'idée d'une construction minimale et
+			-- progressive.
+			--
+			-- Typiquement, supposons que l'on ait deux entrées :
+			--  * ip2
+			--  * ip2.c
+			-- Alors elles seront mémorisées dans cet ordre en attendant
+			-- d'être elles-même analysées ; analyse qui révélera que
+			-- "ip2" est un répertoire, l'ordre aurait donc dû être :
+			--  * ip2.c
+			--  * ip2/
+			-- L'ordre ne peut donc être garanti, il faut nécessairement
+			-- connaître tous les fichiers pour pouvoir les trier.
 
 			lister_fichier( p_racine )
 			ligne := fichiers.lower - 1

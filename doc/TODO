@@ -14,7 +14,6 @@ oOo Développements futurs - autres oOo
  * Permettre de trier les résultats différentiels par impact décroissant.
  * Produire un code filtré de tout commentaire qui compile encore grâce au mode analytique.
  * Rendre l'application multi-tâche, afin de paralléliser les mesures (en fonction de l'architecture)
- * Repenser et réécrire la page de manuel UNIX, qui est actuellement un modèle de ce qu'il ne faut pas faire.
  * Étudier la possibilité de coupler l'application à un SCM, et de donner des révisions plutôt que des noms de fichier par exemple.
  * Simplifier la sortie en cas de comparaison de répertoires
  * Permettre d'analyser directement des archives (tar, zip, bz2)

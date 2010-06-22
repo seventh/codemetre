@@ -81,21 +81,21 @@ class Lot:
         """
         retour = []
 
-        self.oter_doublons(p_hauteur)
-        p_reference.oter_doublons(p_hauteur)
+        # On extrait d'abord la liste de clefs issues de la référence sur
+        # laquelle il faudra s'aligner
 
-        reference = map((lambda x: _extraire_clef(x, p_hauteur)),
-                        p_reference.lignes)
         evol = self._table_en_dictionnaire(p_hauteur)
 
-        for clef in reference:
+        for ligne in p_reference.lignes:
+            clef = _extraire_clef(ligne, p_hauteur)
             if clef in evol:
+                self.lignes.remove(evol[clef])
                 retour.append(evol[clef])
                 del evol[clef]
             else:
                 retour.append("")
-        for clef in evol:
-            retour.append(evol[clef])
+        for ligne in self.lignes:
+            retour.append(ligne)
 
         self.lignes[:] = retour
 
@@ -167,6 +167,8 @@ def _prefixe_commun(p_a, p_b):
     return p_a[:i]
 
 def _extraire_clef(p_chemin_et_fichier, p_hauteur):
+    """Fournit un suffixe de 'chemin_et_fichier' afin de servir de clef. La clef
+    contient exactement 'hauteur' séparateurs de répertoires"""
     parties = p_chemin_et_fichier.rsplit("/", p_hauteur+1)
     return "/".join(parties[1:])
 
