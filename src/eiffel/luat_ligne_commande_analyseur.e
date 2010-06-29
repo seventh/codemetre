@@ -26,7 +26,6 @@ feature {}
 	fabriquer is
 			-- constructeur
 		do
-			create commandes.with_capacity( 1 )
 			aucune_commande_executee := true
 		end
 
@@ -62,6 +61,8 @@ feature
 			lexeme, etat, mode : INTEGER
 			modele_precise : BOOLEAN
 			sortie_compacte_precise : BOOLEAN
+			commande : LUAT_COMMANDE_CONFIGURATION
+			modele_force : LUAT_METRIQUE_DIFFERENTIEL
 		do
 			create filtre.initialiser
 			mode := mode_indetermine
@@ -117,7 +118,9 @@ feature
 							and argument_count = 1
 						 then
 							configuration.appliquer_choix_fichier
-							commandes.add_last( create {LUAT_COMMANDE_CONFIGURATION}.fabriquer )
+							create commande.fabriquer
+							commande.executer
+							aucune_commande_executee := false
 						else
 							avertir( once "%"--config%" is incompatible with any other argument" )
 						end
@@ -230,6 +233,7 @@ feature
 					-- différentielle que celui par défaut
 
 					if configuration.forcer_metrique( argument( lexeme ) ) then
+						modele_force := configuration.differentiel.modele
 						etat := etat_lecture_options
 					else
 						avertir( once "unknown diff model" )
@@ -243,6 +247,9 @@ feature
 
 					if not fichier_configuration_est_inhibe then
 						configuration.appliquer_choix_fichier
+						if modele_force /= void then
+							configuration.differentiel.met_modele( modele_force )
+						end
 					end
 
 					-- sélection du spectre de l'analyse en fonction du
@@ -274,6 +281,7 @@ feature
 							configuration.differentiel.filtre.copy( filtre )
 							etat := etat_commande_comparaison
 						end
+						configuration.appliquer_configuration_differentiel
 
 					when mode_unitaire then
 						bilan.forcer_metrique( create {LUAT_METRIQUE_UNITAIRE}.fabriquer )
@@ -296,6 +304,7 @@ feature
 						else
 							etat := etat_commande_unitaire
 						end
+						configuration.appliquer_configuration_unitaire
 					end
 
 				when etat_commande_comparaison then
@@ -388,7 +397,7 @@ feature
 				when etat_commande_bilan then
 					-- commande de type bilan
 
-					commandes.add_last( create {LUAT_COMMANDE_BILAN}.fabriquer )
+					create commande_statut.fabriquer
 					etat := etat_final
 
 				else
@@ -403,9 +412,8 @@ feature
 			end
 		end
 
-	commandes : FAST_ARRAY[ LUAT_COMMANDE ]
-			-- traduction des directives de la ligne de commande en un
-			-- ensemble de commandes
+	commande_statut : LUAT_COMMANDE_BILAN
+			-- commande différée
 
 feature
 

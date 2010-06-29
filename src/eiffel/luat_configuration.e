@@ -35,10 +35,37 @@ feature {}
 
 	fabriquer is
 			-- constructeur
+		local
+			i : INTEGER
 		do
-			create associations.fabriquer( create {LUAT_ORDRE_SUFFIXE} )
+			-- options
 			create differentiel.fabriquer
 			create unitaire.fabriquer
+
+			-- analyseurs lexicaux initiaux
+			create analyseurs.with_capacity( 7 )
+			analyseurs.add_last( analyseur_ada )
+			analyseurs.add_last( analyseur_c )
+			analyseurs.add_last( analyseur_c_plus_plus )
+			analyseurs.add_last( analyseur_eiffel )
+			analyseurs.add_last( analyseur_html )
+			analyseurs.add_last( analyseur_shell )
+			analyseurs.add_last( analyseur_sql )
+
+			-- langages associés
+			create langages.with_capacity( analyseurs.count + 1 )
+			from i := analyseurs.lower
+			variant analyseurs.upper - i
+			until i > analyseurs.upper
+			loop
+				langages.add_last( analyseurs.item( i ).langage )
+				i := i + 1
+			end
+			langages.add_last( analyseur_lot )
+			tri.sort( langages )
+
+			-- associations entre extension de fichier et langage
+			create associations.fabriquer( create {LUAT_ORDRE_SUFFIXE} )
 		end
 
 feature
@@ -334,6 +361,21 @@ feature
 			end
 		end
 
+feature
+
+	appliquer_configuration_unitaire is
+			-- modifie la configuration de tous les analyseurs
+		do
+			analyseurs.do_all( agent {LUAT_ANALYSEUR}.appliquer( unitaire.filtre ) )
+		end
+
+	appliquer_configuration_differentiel is
+			-- modifie la configuration de tous les analyseurs
+		do
+			analyseurs.do_all( agent {LUAT_ANALYSEUR}.appliquer( differentiel.filtre ) )
+			analyseurs.do_all( agent {LUAT_ANALYSEUR}.embrayer_fabrique )
+		end
+
 feature {LUAT_CONFIGURATION}
 
 	analyseur_force : LUAT_ANALYSEUR
@@ -347,6 +389,7 @@ feature {DANG_ANALYSEUR}
 				p_variable : STRING
 				p_valeur : STRING ) is
 		local
+			nouvel_analyseur : LUAT_ANALYSEUR_SIMPLET
 			suffixe : LUAT_SUFFIXE
 			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
 			l : STRING
@@ -354,15 +397,12 @@ feature {DANG_ANALYSEUR}
 			inspect p_section
 
 			when "analysis" then
-				inspect p_variable
-				when "filter" then
-					avertir( once "analysis:filter can only have a single value" )
-				else
-					avertir( once "unknown parameter in analysis section" )
-				end
+				avertir( once "analysis section is obsolete. Use diff:dump and unit:dump instead" )
 
 			when "diff" then
 				inspect p_variable
+				when "dump" then
+					avertir( once "diff:dump is not a list" )
 				when "filter" then
 					avertir( once "diff:filter can only have a single value" )
 				when "model" then
@@ -376,26 +416,36 @@ feature {DANG_ANALYSEUR}
 				end
 
 			when "language" then
+				-- retrouver l'analyseur ne peut reposer entièrement sur
+				-- l'ensemble des associations connues. Si ce dernier
+				-- devient vide à un moment donné, on ne saurait plus
+				-- ensuite associer langages et extensions de fichier.
+
 				l := trouver_langage( p_variable )
 
 				if l = void then
-					avertir( once "language not yet supported" )
-				else
-					create suffixe.fabriquer( p_valeur.twin, l )
-					create it.attacher( associations )
-					associations.trouver( suffixe, it )
-					if it.est_hors_borne then
-						associations.ajouter( suffixe )
-					elseif it.dereferencer.langage /= suffixe.langage then
-						avertir( once "suffix is already associated with another language" )
-					else
-						avertir( once "redundant association" )
-					end
-					it.detacher
+					create nouvel_analyseur.fabriquer( p_variable.twin )
+					analyseurs.add_last( nouvel_analyseur )
+					tri.add( langages, nouvel_analyseur.langage )
+					l := nouvel_analyseur.langage
 				end
+
+				create suffixe.fabriquer( p_valeur.twin, l )
+				create it.attacher( associations )
+				associations.trouver( suffixe, it )
+				if it.est_hors_borne then
+					associations.ajouter( suffixe )
+				elseif it.dereferencer.langage /= suffixe.langage then
+					avertir( once "suffix is already associated with another language" )
+				else
+					avertir( once "redundant association" )
+				end
+				it.detacher
 
 			when "unit" then
 				inspect p_variable
+				when "dump" then
+					avertir( once "unit:dump is not a list" )
 				when "filter" then
 					ajouter_filtre( unitaire.filtre, p_valeur )
 				when "status" then
@@ -419,15 +469,12 @@ feature {DANG_ANALYSEUR}
 			inspect p_section
 
 			when "analysis" then
-				inspect p_variable
-				when "filter" then
-					avertir( once "analysis:filter is mandatory" )
-				else
-					avertir( once "unknown parameter in analysis section" )
-				end
+				avertir( once "analysis section is obsolete. Use diff:dump and unit:dump instead" )
 
 			when "diff" then
 				inspect p_variable
+				when "dump" then
+					avertir( once "diff:dump is not clearable" )
 				when "filter" then
 					avertir( once "diff:filter is mandatory" )
 				when "model" then
@@ -441,11 +488,13 @@ feature {DANG_ANALYSEUR}
 				end
 
 			when "language" then
-				l := trouver_langage( p_variable )
+				-- retrouver l'analyseur ne peut reposer entièrement sur
+				-- l'ensemble des associations connues. Si ce dernier
+				-- devient vide à un moment donné, on ne saurait plus
+				-- ensuite associer langages et extensions de fichier.
 
-				if l = void then
-					avertir( once "language not yet supported" )
-				else
+				l := trouver_langage( p_variable )
+				if l /= void then
 					create it.attacher( associations )
 					from it.pointer_premier
 					until it.est_hors_borne
@@ -462,6 +511,8 @@ feature {DANG_ANALYSEUR}
 
 			when "unit" then
 				inspect p_variable
+				when "dump" then
+					avertir( once "unit:dump is not clearable" )
 				when "filter" then
 					avertir( once "unit:filter is mandatory" )
 				when "status" then
@@ -479,17 +530,16 @@ feature {DANG_ANALYSEUR}
 	imposer( p_section : STRING
 				p_variable : STRING
 				p_valeur : STRING ) is
-		local
-			it : ARN_ITERATEUR[ LUAT_SUFFIXE ]
-			l : STRING
 		do
 			inspect p_section
 
 			when "analysis" then
-				avertir( once "obsolete section. Have a look at 'unit' section" )
+				avertir( once "analysis section is obsolete. Use diff:dump and unit:dump instead" )
 
 			when "diff" then
 				inspect p_variable
+				when "dump" then
+					differentiel.met_examen( p_valeur.to_boolean )
 				when "filter" then
 					imposer_filtre( differentiel.filtre, p_valeur )
 				when "model" then
@@ -513,29 +563,13 @@ feature {DANG_ANALYSEUR}
 				end
 
 			when "language" then
-				l := trouver_langage( p_variable )
-
-				if l = void then
-					avertir( once "language not yet supported" )
-				else
-					create it.attacher( associations )
-					from it.pointer_premier
-					until it.est_hors_borne
-					loop
-						if it.dereferencer.langage = l then
-							associations.retirer( it )
-							it.pointer_premier
-						else
-							it.avancer
-						end
-					end
-					it.detacher
-
-					ajouter( p_section, p_variable, p_valeur )
-				end
+				effacer( p_section, p_variable )
+				ajouter( p_section, p_variable, p_valeur )
 
 			when "unit" then
 				inspect p_variable
+				when "dump" then
+					unitaire.met_examen( p_valeur.to_boolean )
 				when "filter" then
 					imposer_filtre( unitaire.filtre, p_valeur )
 				when "status" then
@@ -565,15 +599,12 @@ feature {DANG_ANALYSEUR}
 			inspect p_section
 
 			when "analysis" then
-				inspect p_variable
-				when "filter" then
-					avertir( once "analysis:filter can only have a single value" )
-				else
-					avertir( once "unknown parameter in analysis section" )
-				end
+				avertir( once "analysis section is obsolete. Use diff:dump and unit:dump instead" )
 
 			when "diff" then
 				inspect p_variable
+				when "dump" then
+					avertir( once "diff:dump is not a list" )
 				when "filter" then
 					avertir( once "diff:filter can only have a single value" )
 				when "model" then
@@ -587,11 +618,14 @@ feature {DANG_ANALYSEUR}
 				end
 
 			when "language" then
+				-- retrouver l'analyseur ne peut reposer entièrement sur
+				-- l'ensemble des associations connues. Si ce dernier
+				-- devient vide à un moment donné, on ne saurait plus
+				-- ensuite associer langages et extensions de fichier.
+
 				l := trouver_langage( p_variable )
 
-				if l = void then
-					avertir( once "language not yet supported" )
-				else
+				if l /= void then
 					create suffixe.fabriquer( p_valeur.twin, l )
 					create it.attacher( associations )
 					associations.trouver( suffixe, it )
@@ -605,6 +639,8 @@ feature {DANG_ANALYSEUR}
 
 			when "unit" then
 				inspect p_variable
+				when "dump" then
+					avertir( once "unit:dump is not a list" )
 				when "filter" then
 					retirer_filtre( unitaire.filtre, p_valeur )
 				when "status" then
@@ -670,73 +706,43 @@ feature {}
 
 	analyseur_ada : LUAT_ANALYSEUR is
 		once
-			result := analyseurs.item( 0 )
+			create {LUAT_ANALYSEUR_ADA} result.fabriquer
 		end
 
 	analyseur_c : LUAT_ANALYSEUR is
 		once
-			result := analyseurs.item( 1 )
+			create {LUAT_ANALYSEUR_FAMILLE_C} result.fabriquer( once "c" )
 		end
 
 	analyseur_c_plus_plus : LUAT_ANALYSEUR is
 		once
-			result := analyseurs.item( 2 )
+			create {LUAT_ANALYSEUR_FAMILLE_C} result.fabriquer( once "c++" )
 		end
 
 	analyseur_eiffel : LUAT_ANALYSEUR is
 		once
-			result := analyseurs.item( 3 )
+			create {LUAT_ANALYSEUR_EIFFEL} result.fabriquer
 		end
 
 	analyseur_html : LUAT_ANALYSEUR is
 		once
-			result := analyseurs.item( 4 )
+			create {LUAT_ANALYSEUR_HTML} result.fabriquer
 		end
 
 	analyseur_shell : LUAT_ANALYSEUR is
 		once
-			result := analyseurs.item( 5 )
+			create {LUAT_ANALYSEUR_SHELL} result.fabriquer
 		end
 
 	analyseur_sql : LUAT_ANALYSEUR is
 		once
-			result := analyseurs.item( 6 )
+			create {LUAT_ANALYSEUR_SQL} result.fabriquer
 		end
 
 	analyseur_lot : STRING is "batch"
 
-	analyseurs : FAST_ARRAY[ LUAT_ANALYSEUR ] is
+	analyseurs : FAST_ARRAY[ LUAT_ANALYSEUR ]
 			-- ensemble des analyseurs lexicaux
-		once
-			create result.with_capacity( 5 )
-			result.add_last( create {LUAT_ANALYSEUR_ADA}.fabriquer )
-			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c" ) )
-			result.add_last( create {LUAT_ANALYSEUR_FAMILLE_C}.fabriquer( once "c++" ) )
-			result.add_last( create {LUAT_ANALYSEUR_EIFFEL}.fabriquer )
-			result.add_last( create {LUAT_ANALYSEUR_HTML}.fabriquer )
-			result.add_last( create {LUAT_ANALYSEUR_SHELL}.fabriquer )
-			result.add_last( create {LUAT_ANALYSEUR_SQL}.fabriquer )
-		end
-
-	langages : FAST_ARRAY[ STRING ] is
-			-- ensemble des langages reconnus (y compris le langage de
-			-- lot de codemetre)
-		local
-			tri : COLLECTION_SORTER[ STRING ]
-			i : INTEGER
-		once
-			create result.with_capacity( analyseurs.count + 1 )
-			from i := analyseurs.lower
-			variant analyseurs.upper - i
-			until i > analyseurs.upper
-			loop
-				result.add_last( analyseurs.item( i ).langage )
-				i := i + 1
-			end
-			result.add_last( analyseur_lot )
-
-			tri.sort( result )
-		end
 
 	trouver_analyseur( p_clef : STRING ) : LUAT_ANALYSEUR is
 		require
@@ -750,6 +756,12 @@ feature {}
 				result := analyseurs.item( i )
 			end
 		end
+
+feature {}
+
+	langages : FAST_ARRAY[ STRING ]
+			-- ensemble trié des langages reconnus (y compris le langage
+			-- de lot de codemetre)
 
 	trouver_langage( p_langage : STRING ) : STRING is
 			-- permet de retrouver l'instance utilisée en interne d'une
@@ -896,5 +908,9 @@ feature {}
 		ensure
 			p_ensemble.valid_index( result ) implies p_ensemble.item( result ).clef.is_equal( p_clef )
 		end
+
+feature {}
+
+	tri : COLLECTION_SORTER[ STRING ]
 
 end

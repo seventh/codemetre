@@ -1,3 +1,19 @@
+*** v0.29.0
+
+ - Correction du bogue n°3 : l'option --model prend désormais bien le pas sur
+ la configuration fichier le cas échéant.
+ - Il est désormais possible d'associer un analyseur simpliste à tout langage
+ non supporté nativement via le fichier de configuration utilisateur. En
+ conséquence, toute association à un langage non natif n'est plus remontée comme
+ une erreur.
+ - En mode différentiel, une demande d'analyse (--dump) produit un fichier
+ d'analyse pour chaque version de fichier, au lieu d'un seul auparavant.
+ - La métrique différentielle n'est désormais produite que si le lecture des
+ deux versions se sont bien passées. Il peut donc y avoir un écart entre une
+ mesure unitaire et une mesure différentielle juste à cause des erreurs
+ rencontrées lors de l'analyse de la version de référence.
+ - La section 'analysis' du fichier de configuration est déclarée obsolète. La lecture des options 'dump' des sections 'diff' et 'unit' est fonctionnelle.
+
 *** v0.28.0
 
  - L'accent a été mis sur les performances (mémoire et CPU). L'impact sur le fonctionnement est que les commandes sont désormais exécutées immédiatement. Ainsi,

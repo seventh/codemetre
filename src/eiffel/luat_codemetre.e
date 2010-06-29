@@ -38,15 +38,12 @@ feature
 
 			analyseur.analyser
 
-			-- il peut rester des commandes différées (statut par
-			-- exemple) qui ont été empilées.
+			-- une seule commande peut être différée (le statut final)
 
-			if analyseur.commandes.is_empty
-				and analyseur.aucune_commande_executee
-			 then
+			if analyseur.commande_statut /= void then
+				analyseur.commande_statut.executer
+			elseif analyseur.aucune_commande_executee then
 				analyseur.usage
-			else
-				analyseur.commandes.do_all( agent {LUAT_COMMANDE}.executer )
 			end
 		end
 

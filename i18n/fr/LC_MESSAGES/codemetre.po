@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.28.0\n"
+"Project-Id-Version: 0.29.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-21 20:37+0200\n"
-"PO-Revision-Date: 2010-06-21 20:43+0200\n"
+"POT-Creation-Date: 2010-06-29 20:39+0200\n"
+"PO-Revision-Date: 2010-06-29 20:40+0200\n"
 "Last-Translator: Guillaume Lemaître <guillaume.lemaitre@gmail.com>\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -52,6 +52,7 @@ msgstr "aucune valeur n'est associée à la variable"
 #: luat_analyseur_famille_c.e:729
 #: luat_analyseur_html.e:135
 #: luat_analyseur_shell.e:92
+#: luat_analyseur_simplet.e:102
 #: luat_analyseur_sql.e:274
 #, c-format
 msgid "lexer is buggy!"
@@ -136,8 +137,7 @@ msgstr "caractère non autorisé"
 
 #: luat_analyseur.e:162
 #: luat_analyseur.e:174
-#: luat_commande_differentiel.e:141
-#: luat_commande_unitaire.e:92
+#: luat_commande.e:55
 #, c-format
 msgid "*** Error: file \""
 msgstr "*** Erreur : le fichier \""
@@ -292,7 +292,7 @@ msgstr "commentaire multi-ligne incomplet"
 msgid "incomplete comment"
 msgstr "commentaire incomplet"
 
-#: luat_codemetre.e:65
+#: luat_codemetre.e:62
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you\n"
@@ -303,321 +303,319 @@ msgstr ""
 "logiciel libre sous certaines conditions.\n"
 "\n"
 
-#: luat_commande_differentiel.e:143
-#: luat_commande_unitaire.e:94
+#: luat_commande.e:57
 #, c-format
 msgid "\" cannot be written"
 msgstr "\" ne peut être écrit"
 
-#: luat_configuration.e:173
-#: luat_configuration.e:186
+#: luat_configuration.e:200
+#: luat_configuration.e:213
 #, c-format
 msgid "Error: extension of file \""
 msgstr "L'extension du fichier \""
 
-#: luat_configuration.e:175
-#: luat_configuration.e:188
+#: luat_configuration.e:202
+#: luat_configuration.e:215
 #, c-format
 msgid "\" is unknown"
 msgstr "\" n'est pas reconnue"
 
-#: luat_configuration.e:359
-#: luat_configuration.e:570
+#: luat_configuration.e:400
+#: luat_configuration.e:472
+#: luat_configuration.e:537
+#: luat_configuration.e:602
 #, c-format
-msgid "analysis:filter can only have a single value"
-msgstr "une seule valeur est autorisée dans 'analysis:filter'"
+msgid "analysis section is obsolete. Use diff:dump and unit:dump instead"
+msgstr "'diff:dump' et 'unit:dump' remplacent la section obsolète 'analysis'"
 
-#: luat_configuration.e:361
-#: luat_configuration.e:426
-#: luat_configuration.e:572
+#: luat_configuration.e:405
+#: luat_configuration.e:607
 #, c-format
-msgid "unknown parameter in analysis section"
-msgstr "paramètre inconnu dans section 'analysis'"
+msgid "diff:dump is not a list"
+msgstr "la variable 'diff:dump' n'est pas une liste"
 
-#: luat_configuration.e:367
-#: luat_configuration.e:578
+#: luat_configuration.e:407
+#: luat_configuration.e:609
 #, c-format
 msgid "diff:filter can only have a single value"
 msgstr "une seule valeur est autorisée dans 'diff:filter'"
 
-#: luat_configuration.e:369
-#: luat_configuration.e:580
+#: luat_configuration.e:409
+#: luat_configuration.e:611
 #, c-format
 msgid "diff:model is not a list"
 msgstr "la variable 'diff:model' n'est pas une liste"
 
-#: luat_configuration.e:371
-#: luat_configuration.e:582
+#: luat_configuration.e:411
+#: luat_configuration.e:613
 #, c-format
 msgid "diff:short is not a list"
 msgstr "la variable 'diff:short' n'est pas une liste"
 
-#: luat_configuration.e:373
-#: luat_configuration.e:584
+#: luat_configuration.e:413
+#: luat_configuration.e:615
 #, c-format
 msgid "diff:status is not a list"
 msgstr "la variable 'diff:status' n'est pas une liste"
 
-#: luat_configuration.e:375
-#: luat_configuration.e:440
-#: luat_configuration.e:512
-#: luat_configuration.e:586
+#: luat_configuration.e:415
+#: luat_configuration.e:487
+#: luat_configuration.e:562
+#: luat_configuration.e:617
 #, c-format
 msgid "unknown parameter in diff section"
 msgstr "paramètre inconnu dans section 'diff'"
 
-#: luat_configuration.e:382
-#: luat_configuration.e:447
-#: luat_configuration.e:519
-#: luat_configuration.e:593
-#, c-format
-msgid "language not yet supported"
-msgstr "langage non encore supporté"
-
-#: luat_configuration.e:390
+#: luat_configuration.e:439
 #, c-format
 msgid "suffix is already associated with another language"
 msgstr "suffixe déjà associé à un autre langage"
 
-#: luat_configuration.e:392
+#: luat_configuration.e:441
 #, c-format
 msgid "redundant association"
 msgstr "couplage redondant"
 
-#: luat_configuration.e:402
-#: luat_configuration.e:611
+#: luat_configuration.e:448
+#: luat_configuration.e:643
+#, c-format
+msgid "unit:dump is not a list"
+msgstr "la variable 'unit:dump' n'est pas une liste"
+
+#: luat_configuration.e:452
+#: luat_configuration.e:647
 #, c-format
 msgid "unit:status is not a list"
 msgstr "la variable 'unit:status' n'est pas une liste"
 
-#: luat_configuration.e:404
-#: luat_configuration.e:470
-#: luat_configuration.e:548
-#: luat_configuration.e:613
+#: luat_configuration.e:454
+#: luat_configuration.e:521
+#: luat_configuration.e:582
+#: luat_configuration.e:649
 #, c-format
 msgid "unknown parameter in unit section"
 msgstr "paramètre inconnu dans section 'unit'"
 
-#: luat_configuration.e:409
-#: luat_configuration.e:475
-#: luat_configuration.e:553
-#: luat_configuration.e:618
+#: luat_configuration.e:459
+#: luat_configuration.e:526
+#: luat_configuration.e:587
+#: luat_configuration.e:654
 #, c-format
 msgid "unknown section"
 msgstr "section inconnue"
 
-#: luat_configuration.e:424
+#: luat_configuration.e:477
 #, c-format
-msgid "analysis:filter is mandatory"
-msgstr "'analysis:filter' doit avoir une valeur associée"
+msgid "diff:dump is not clearable"
+msgstr "'diff:dump' doit avoir une valeur associée"
 
-#: luat_configuration.e:432
+#: luat_configuration.e:479
 #, c-format
 msgid "diff:filter is mandatory"
 msgstr "'diff:filter' doit avoir une valeur associée"
 
-#: luat_configuration.e:434
+#: luat_configuration.e:481
 #, c-format
 msgid "diff:model is mandatory"
 msgstr "la variable 'diff:model' est obligatoire"
 
-#: luat_configuration.e:436
+#: luat_configuration.e:483
 #, c-format
 msgid "diff:short is not clearable"
 msgstr "'diff:short' doit avoir une valeur associée"
 
-#: luat_configuration.e:438
+#: luat_configuration.e:485
 #, c-format
 msgid "diff:status is not clearable"
 msgstr "'diff:status' doit avoir une valeur associée"
 
-#: luat_configuration.e:466
+#: luat_configuration.e:515
+#, c-format
+msgid "unit:dump is not clearable"
+msgstr "'unit:dump' doit avoir une valeur associée"
+
+#: luat_configuration.e:517
 #, c-format
 msgid "unit:filter is mandatory"
 msgstr "'unit:filter' doit avoir une valeur associée"
 
-#: luat_configuration.e:468
+#: luat_configuration.e:519
 #, c-format
 msgid "unit:status is not clearable"
 msgstr "'unit:status' doit avoir une valeur associée"
 
-#: luat_configuration.e:489
-#, c-format
-msgid "obsolete section. Have a look at 'unit' section"
-msgstr "section obsolète, transférée dans la section 'unit'"
-
-#: luat_configuration.e:497
-#: luat_ligne_commande_analyseur.e:235
+#: luat_configuration.e:547
+#: luat_ligne_commande_analyseur.e:239
 #, c-format
 msgid "unknown diff model"
 msgstr "modèle de comparaison inconnu"
 
-#: luat_configuration.e:503
-#: luat_configuration.e:509
-#: luat_configuration.e:545
+#: luat_configuration.e:553
+#: luat_configuration.e:559
+#: luat_configuration.e:579
 #, c-format
 msgid "invalid boolean value"
 msgstr "la valeur passée n'est pas un booléen"
 
-#: luat_configuration.e:599
+#: luat_configuration.e:633
 #, c-format
 msgid "no such association exists"
 msgstr "une telle association n'existe pas"
 
-#: luat_configuration.e:624
+#: luat_configuration.e:660
 #, c-format
 msgid "Syntax error"
 msgstr "Syntaxe incorrecte"
 
-#: luat_configuration.e:830
-#: luat_configuration.e:848
-#: luat_configuration.e:870
+#: luat_configuration.e:842
+#: luat_configuration.e:860
+#: luat_configuration.e:882
 #, c-format
 msgid "unknown filter"
 msgstr "option de filtrage non reconnue"
 
-#: luat_configuration.e:875
+#: luat_configuration.e:887
 #, c-format
 msgid "removing filters leaves empty set"
 msgstr "supprimer ce filtre empêcherait toute analyse"
 
-#: luat_ligne_commande_analyseur.e:95
+#: luat_ligne_commande_analyseur.e:96
 #, c-format
 msgid "too many \"--dump\" option"
 msgstr "option \"--dump\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:108
+#: luat_ligne_commande_analyseur.e:109
 #, c-format
 msgid "mode is enforced more than once"
 msgstr "le mode est spécifié au moins deux fois"
 
-#: luat_ligne_commande_analyseur.e:122
+#: luat_ligne_commande_analyseur.e:125
 #, c-format
 msgid "\"--config\" is incompatible with any other argument"
 msgstr "\"--config\" ne peut être associé avec aucun autre argument"
 
-#: luat_ligne_commande_analyseur.e:134
+#: luat_ligne_commande_analyseur.e:137
 #, c-format
 msgid "too many \"--code\" option"
 msgstr "option \"--code\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:143
+#: luat_ligne_commande_analyseur.e:146
 #, c-format
 msgid "too many \"--comment\" option"
 msgstr "option \"--comment\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:152
+#: luat_ligne_commande_analyseur.e:155
 #, c-format
 msgid "too many \"--total\" option"
 msgstr "option \"--total\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:163
+#: luat_ligne_commande_analyseur.e:166
 #, c-format
 msgid "language is enforced more than once"
 msgstr "le langage est spécifié au moins deux fois"
 
-#: luat_ligne_commande_analyseur.e:175
+#: luat_ligne_commande_analyseur.e:178
 #, c-format
 msgid "too many diff models"
 msgstr "le modèle de comparaison est précisé au moins deux fois"
 
-#: luat_ligne_commande_analyseur.e:187
+#: luat_ligne_commande_analyseur.e:190
 #, c-format
 msgid "too many \"--status\" option"
 msgstr "option \"--status\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:198
+#: luat_ligne_commande_analyseur.e:201
 #, c-format
 msgid "too many \"--short\" option"
 msgstr "option \"--short\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:223
+#: luat_ligne_commande_analyseur.e:226
 #, c-format
 msgid "unknown language"
 msgstr "langage inconnu"
 
-#: luat_ligne_commande_analyseur.e:271
+#: luat_ligne_commande_analyseur.e:278
 #, c-format
 msgid "one filter only for diff"
 msgstr "une seule filtre autorisé lors d'une demande de comparaison"
 
-#: luat_ligne_commande_analyseur.e:288
+#: luat_ligne_commande_analyseur.e:296
 #, c-format
 msgid "no diff model is required for measure"
 msgstr "il n'est pas utile de préciser le modèle de comptage différentiel pour un comptage unitaire"
 
-#: luat_ligne_commande_analyseur.e:291
+#: luat_ligne_commande_analyseur.e:299
 #, c-format
 msgid "short output is available only for diff"
 msgstr "l'affichage court n'est possible que lors d'une demande de comparaison"
 
-#: luat_ligne_commande_analyseur.e:305
+#: luat_ligne_commande_analyseur.e:314
 #, c-format
 msgid "two files are required in diff mode"
 msgstr "il faut deux fichiers en mode différentiel"
 
-#: luat_ligne_commande_analyseur.e:319
-#: luat_ligne_commande_analyseur.e:617
+#: luat_ligne_commande_analyseur.e:328
+#: luat_ligne_commande_analyseur.e:625
 #, c-format
 msgid "at least one of the two arguments shall exists"
 msgstr "on ne peut comparer ce qui n'existait pas et ce qui n'existe plus"
 
-#: luat_ligne_commande_analyseur.e:339
+#: luat_ligne_commande_analyseur.e:348
 #, c-format
 msgid "batch file cannot be compared to single file or directory"
 msgstr "un lot ne peut qu'être comparé à un autre lot"
 
-#: luat_ligne_commande_analyseur.e:346
+#: luat_ligne_commande_analyseur.e:355
 #, c-format
 msgid "directory cannot be compared to single or batch file"
 msgstr "un répertoire ne peut qu'être comparé à un autre répertoire"
 
-#: luat_ligne_commande_analyseur.e:416
+#: luat_ligne_commande_analyseur.e:424
 #, c-format
 msgid "usage:"
 msgstr "usage :"
 
-#: luat_ligne_commande_analyseur.e:418
+#: luat_ligne_commande_analyseur.e:426
 #, c-format
 msgid "FILE|DIRECTORY|BATCH..."
 msgstr "FICHIER|RÉPERTOIRE|LOT ..."
 
-#: luat_ligne_commande_analyseur.e:428
+#: luat_ligne_commande_analyseur.e:436
 #, c-format
 msgid "For further information:"
 msgstr "Pour de plus amples informations :"
 
-#: luat_ligne_commande_analyseur.e:430
+#: luat_ligne_commande_analyseur.e:438
 #, c-format
 msgid " - see "
 msgstr " - voyez "
 
-#: luat_ligne_commande_analyseur.e:433
+#: luat_ligne_commande_analyseur.e:441
 #, c-format
 msgid " - visit "
 msgstr " - visitez "
 
-#: luat_ligne_commande_analyseur.e:447
+#: luat_ligne_commande_analyseur.e:455
 #, c-format
 msgid "Syntax error: "
 msgstr "Syntaxe incorrecte : "
 
-#: luat_ligne_commande_analyseur.e:495
+#: luat_ligne_commande_analyseur.e:503
 #, c-format
 msgid "Error: batch file \""
 msgstr "Erreur : le lot \""
 
-#: luat_ligne_commande_analyseur.e:497
+#: luat_ligne_commande_analyseur.e:505
 #, c-format
 msgid "\" cannot be open for reading"
 msgstr "\" est inaccessible en lecture"
 
-#: luat_lot_arbre.e:39
+#: luat_lot_arbre.e:62
 #, c-format
 msgid "Error: \""
 msgstr "Erreur : \""
 
-#: luat_lot_arbre.e:41
+#: luat_lot_arbre.e:64
 #, c-format
 msgid "\" is empty"
 msgstr "est vide"

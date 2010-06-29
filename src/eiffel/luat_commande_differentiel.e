@@ -48,21 +48,13 @@ feature
 feature
 
 	executer is
+		require
+			analyseur.est_utilise_fabrique
 		local
 			metrique : LUAT_METRIQUE_DIFFERENTIEL
 			nid, but : LUAT_LISTAGE
 			erreur : BOOLEAN
-			nom_sortie : STRING
-			sortie : TEXT_FILE_WRITE
 		do
-			-- configuration de l'analyseur
-
-			if not analyseur.est_utilise_fabrique then
-				analyseur.embrayer_fabrique
-			end
-
-			analyseur.appliquer( filtre )
-
 			-- chargement des fichiers : si théoriquement il ne sert à
 			-- rien de lire le second fichier si l'analyse du premier
 			-- sort en erreur, en pratique cette analyse est également
@@ -76,7 +68,9 @@ feature
 
 			if nom_but /= void then
 				but := analyseur.lire( nom_but )
-				erreur := but = void
+				if but = void then
+					erreur := true
+				end
 			end
 
 			-- Production des métriques différentielles
@@ -84,7 +78,7 @@ feature
 			if not erreur then
 				-- l'ordre des tests et l'utilisation de 'or else' est
 				-- ici très important pour les performances de
-				-- l'application
+				-- l'application.
 				if not configuration.differentiel.abrege
 					or else not sont_equivalents( nid, but )
 				 then
@@ -107,11 +101,11 @@ feature
 					std_output.put_string( analyseur.langage )
 					std_output.put_string( once ") " )
 
-					if filtre.total then
-						std_output.put_string( once "[total|" )
-					elseif filtre.code then
+					if configuration.differentiel.filtre.total then
+							std_output.put_string( once "[total|" )
+					elseif configuration.differentiel.filtre.code then
 						std_output.put_string( once "[code|" )
-					else -- if filtre.commentaire then
+					else -- if configuration.differentiel.filtre.commentaire then
 						std_output.put_string( once "[comment|" )
 					end
 
@@ -131,17 +125,11 @@ feature
 				-- production du fichier d'analyse
 
 				if configuration.differentiel.examen then
-					nom_sortie := nom_but.twin
-					nom_sortie.append( once ".cma" )
-					create sortie.connect_to( nom_sortie )
-					if sortie.is_connected then
-						but.afficher( sortie )
-						sortie.disconnect
-					else
-						std_error.put_string( traduire( once "*** Error: file %"" ) )
-						std_error.put_string( nom_sortie )
-						std_error.put_string( traduire( once "%" cannot be written" ) )
-						std_error.put_new_line
+					if nid /= void then
+						produire_analyse( nom_nid, nid )
+					end
+					if but /= void then
+						produire_analyse( nom_but, but )
 					end
 				end
 			end
@@ -155,14 +143,6 @@ feature
 		end
 
 feature {}
-
-	filtre : LUAT_FILTRE is
-			-- filtres de l'analyse
-		do
-			result := configuration.differentiel.filtre
-		ensure
-			contrat : result.choix_est_unique
-		end
 
 	sont_equivalents( p_a, p_b : LUAT_LISTAGE ) : BOOLEAN is
 		do

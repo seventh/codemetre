@@ -5,24 +5,39 @@ indexing
 
 class
 
-	LUAT_ANALYSEUR_SHELL
+	LUAT_ANALYSEUR_SIMPLET
 
 		--
-		-- Analyseur syntaxique du langage SHELL et ses variantes bash,
-		-- ksh et sh
+		-- Analyseur lexical d'aucun langage en particulier. Toute
+		-- ligne non vide une fois expurgés ses éventuels préfixes et
+		-- suffixes blancs est considérée comme une instruction.
 		--
 
 inherit
 
 	LUAT_ANALYSEUR
+		rename
+			fabriquer as fabriquer_analyseur
+		end
 
 creation
 
 	fabriquer
 
+feature {}
+
+	fabriquer( p_langage : STRING ) is
+			-- constructeur
+		do
+			fabriquer_analyseur
+			langage := p_langage
+		ensure
+			langage_ok : langage = p_langage
+		end
+
 feature
 
-	langage : STRING is "shell"
+	langage : STRING
 
 feature {LUAT_ANALYSEUR}
 
@@ -44,23 +59,11 @@ feature {LUAT_ANALYSEUR}
 
 				inspect etat
 				when etat_initial then
-					traiter_etat_initial
-
-				-- code
-
-				when etat_code then
 					inspect caractere
-					when '#' then
-						produire_code
-						chaine.add_last( caractere )
-						etat := etat_commentaire
 					when ' ', '%F', '%R', '%T' then
-						produire_code
-						etat := etat_initial
+						-- les séparateurs ne sont pas mémorisés
 					when '%N' then
-						produire_code
 						produire_ligne
-						etat := etat_initial
 					when '%U' then
 						-- fin de fichier
 						produire_ligne
@@ -70,16 +73,23 @@ feature {LUAT_ANALYSEUR}
 						etat := etat_code
 					end
 
-				-- commentaire
+				-- code
 
-				when etat_commentaire then
+				when etat_code then
 					inspect caractere
 					when '%N' then
-						produire_commentaire
+						filtrer_blancs_terminaux
+						if not chaine.is_empty then
+							produire_code
+						end
 						produire_ligne
 						etat := etat_initial
 					when '%U' then
-						produire_commentaire
+						-- fin de fichier
+						filtrer_blancs_terminaux
+						if not chaine.is_empty then
+							produire_code
+						end
 						produire_ligne
 						etat := etat_final
 					else
@@ -111,31 +121,24 @@ feature {}
 
 	etat_code : INTEGER is unique
 
-	etat_commentaire : INTEGER is unique
-
 feature {}
 
-	traiter_etat_initial is
-			-- aucun préfixe
+	filtrer_blancs_terminaux is
+			-- supprime les blancs en fin de chaîne
+		local
+			i : INTEGER
 		do
-			inspect caractere
-			when '#' then
-				chaine.add_last( caractere )
-				etat := etat_commentaire
-			when ' ', '%F', '%R', '%T' then
-				-- les séparateurs ne sont pas mémorisés
-				etat := etat_initial
-			when '%N' then
-				produire_ligne
-				etat := etat_initial
-			when '%U' then
-				-- fin de fichier
-				produire_ligne
-				etat := etat_final
-			else
-				chaine.add_last( caractere )
-				etat := etat_code
+			from i := chaine.upper
+			variant i - chaine.lower
+			until i < chaine.lower
+				or else ( chaine.item( i ) /= ' '
+							 and chaine.item( i ) /= '%F'
+							 and chaine.item( i ) /= '%R'
+							 and chaine.item( i ) /= '%T' )
+			loop
+				i := i - 1
 			end
+			chaine.keep_head( i - chaine.lower )
 		end
 
 end

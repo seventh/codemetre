@@ -19,6 +19,8 @@ oOo Développements futurs - autres oOo
  * Permettre d'analyser directement des archives (tar, zip, bz2)
  * Modifier le système de numérotation de version, sur la base de ce qui est fait pour Ubuntu par exemple : ANNEE.MOIS.JOUR, deux chiffres à chaque fois.
  * Introduire un langage de script (comme sed -f ou gawk -f)
+ * Comptabiliser le nombre de fichiers non reconnus (extensions ou erreurs de
+ lecture)
 
 oOo Développement refusés oOo
 

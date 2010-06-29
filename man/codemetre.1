@@ -1,7 +1,7 @@
 .\" Formater ce fichier par la commande :
 .\" less codemetre.fr.1
 .\"
-.TH CODEMETRE 1 "juin 2010" "codemetre-0.28.0" "Manuel de l'utilisateur Linux"
+.TH CODEMETRE 1 "juin 2010" "codemetre-0.29.0" "Manuel de l'utilisateur Linux"
 .\" Pour empêcher toute velléité de césure des mots
 .nh
 .SH NOM
@@ -96,6 +96,10 @@ Conforme aux variantes bash et ksh. Extensions ".bash", ".ksh" et ".sh".
 .TP
 .BR sql
 Respecte le standard MySQL 5.1. Extension ".sql".
+.PP
+La prise en charge de n'importe quel langage peut être simulée par
+.B codemetre
+de façon simpliste, ceci à travers le fichier de configuration utilisateur (voir plus loin).
 .SH TOLÉRANCE PAR RAPPORT AUX NORMES OFFICIELLES
 .IP Ada95
 théoriquement, seuls les caractères ASCII 7 bits sont autorisés pour les constantes littérales.
@@ -125,15 +129,17 @@ Chaque utilisateur peut surcharger les options par défaut de
 dans un fichier au format similaire à ce qui peut-être obtenu par le biais de la commande
 .B codemetre --config.
 .SS "Localisation du fichier de configuration"
-Le fichier de configuration
-.B .codemetrerc
-est recherché à des endroits différents en fonction du système d'exploitation employé.
+Le fichier de configuration est recherché à des endroits différents en fonction du système d'exploitation employé.
 .TP
 .BR Linux
-Le fichier est cherché dans $(HOME).
+Le fichier
+.B .codemetrerc
+est cherché dans ${HOME}.
 .TP
 .BR Windows
-Le fichier est cherché dans %APPDATA%.
+Le fichier
+.B codemetre.ini
+est cherché dans %APPDATA%.
 .SS "Opérateurs"
 La valeur d'une variable est fixée grâce à l'opérateur
 .B :=. En l'absence d'opérande à droite, ceci est interprété comme un effacement de la variable.
@@ -142,6 +148,20 @@ Il existe aussi deux autres opérateurs pour modifier les listes,
 et
 .B -=
 , qui modifient la variable en y respectivement ajoutant et supprimant des valeurs.
+.SS "Simulation de support de langages"
+L'ajout d'associations dans la section [langage] du fichier de configuration permet une prise en charge simpliste de langages non officiellement supportés. Par exemple, un support du langage Python peut être fait à peu de frais en rajoutant dans le fichier de configuration le code suivant :
+.nf
+.RS 4
+\&...
+[langage]
+  python := .py
+\&...
+.RE
+.fi
+.PP
+Ceci peut être répété pour autant de langages que l'on veut.
+.PP
+Le simulateur considère que chaque ligne du fichier d'entrée, hormis les blancs de début et de fin, est une ligne de code si elle est non vide. Ainsi, le simulateur ne permettra jamais de faire de distinction code/commentaire.
 .SH CODE DE RETOUR
 .B codemetre
 renvoit toujours 0.

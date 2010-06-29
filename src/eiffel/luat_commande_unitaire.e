@@ -39,20 +39,12 @@ feature {}
 feature
 
 	executer is
+		require
+			not analyseur.est_utilise_fabrique
 		local
 			source : LUAT_LISTAGE
 			metrique : LUAT_METRIQUE_UNITAIRE
-			nom_sortie : STRING
-			sortie : TEXT_FILE_WRITE
 		do
-			-- configuration de l'analyseur
-
-			analyseur.appliquer( filtre )
-
-			if analyseur.est_utilise_fabrique then
-				analyseur.debrayer_fabrique
-			end
-
 			-- chargement du fichier
 
 			source := analyseur.lire( nom_fichier )
@@ -82,30 +74,9 @@ feature
 				-- production du fichier d'analyse
 
 				if configuration.unitaire.examen then
-					nom_sortie := nom_fichier.twin
-					nom_sortie.append( once ".cma" )
-					create sortie.connect_to( nom_sortie )
-					if sortie.is_connected then
-						source.afficher( sortie )
-						sortie.disconnect
-					else
-						std_error.put_string( traduire( once "*** Error: file %"" ) )
-						std_error.put_string( nom_sortie )
-						std_error.put_string( traduire( once "%" cannot be written" ) )
-						std_error.put_new_line
-					end
+					produire_analyse( nom_fichier, source )
 				end
 			end
-		end
-
-feature {}
-
-	filtre : LUAT_FILTRE is
-			-- filtres de l'analyse
-		do
-			result := configuration.unitaire.filtre
-		ensure
-			contrat : result.choix_est_effectue
 		end
 
 end
