@@ -1,3 +1,9 @@
+*** v0.29.1
+
+ - Remplacement du caractère "ø" par "-nil-" dans le cas de mesures
+ différentielles sans référence, pour se conformer à l'utilisation de l'encodage
+ ASCII dans la version de base non traduite.
+
 *** v0.29.0
 
  - Correction du bogue n°3 : l'option --model prend désormais bien le pas sur
@@ -12,13 +18,15 @@
  deux versions se sont bien passées. Il peut donc y avoir un écart entre une
  mesure unitaire et une mesure différentielle juste à cause des erreurs
  rencontrées lors de l'analyse de la version de référence.
- - La section 'analysis' du fichier de configuration est déclarée obsolète. La lecture des options 'dump' des sections 'diff' et 'unit' est fonctionnelle.
+ - La section 'analysis' du fichier de configuration est déclarée obsolète. La
+ lecture des options 'dump' des sections 'diff' et 'unit' est fonctionnelle.
 
 *** v0.28.0
 
- - L'accent a été mis sur les performances (mémoire et CPU). L'impact sur le fonctionnement est que les commandes sont désormais exécutées immédiatement. Ainsi,
- les statuts d'erreur liés aux fichiers non reconnus sont mélangés au flot des
- résultats (mais toujours sur un canal de sortie séparé).
+ - L'accent a été mis sur les performances (mémoire et CPU). L'impact sur le
+ fonctionnement est que les commandes sont désormais exécutées immédiatement.
+ Ainsi, les statuts d'erreur liés aux fichiers non reconnus sont mélangés au
+ flot des résultats (mais toujours sur un canal de sortie séparé).
  - Réécriture de la page de manuel UNIX.
  - Suppression de la rétro-compatibilité avec l'option --anal. Seule l'option
  --dump est désormais reconnue.

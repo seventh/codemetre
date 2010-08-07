@@ -92,7 +92,7 @@ feature
 					-- sortie
 
 					if but = void then
-						std_output.put_string( once "ø" )
+						std_output.put_string( once "-nil-" )
 					else
 						std_output.put_string( nom_but )
 					end
@@ -110,7 +110,7 @@ feature
 					end
 
 					if nid = void then
-						std_output.put_string( once "ø" )
+						std_output.put_string( once "-nil-" )
 					else
 						std_output.put_string( nom_nid )
 					end
