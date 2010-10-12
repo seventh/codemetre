@@ -1,3 +1,10 @@
+*** v0.29.2
+
+ - Outils : réécriture pour portabilité des traitements. Principalement, des
+ URLs sont utilisées en lieu et place de simples noms de fichiers.
+ - Outils : utiliation de popen2 plutôt que subprocess, plus mûr sur toutes les
+ plateformes.
+
 *** v0.29.1
 
  - Remplacement du caractère "ø" par "-nil-" dans le cas de mesures

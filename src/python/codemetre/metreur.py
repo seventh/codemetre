@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
 
 """
-Ce paquetage permet d'obtenir des métriques pour un fichier donné,
-éventuellement en comparaison d'une ancienne version dite "de référence"
+Ce paquetage permet d'obtenir des métriques pour un fichier donné, brutes ou
+en comparaison d'une ancienne version dite "de référence"
 """
 
 import copy
-import subprocess
+from popen2 import popen3
+import sys
+import urllib
 
-BIN_CODEMETRE = "codemetre"
+if sys.platform == "win32":
+    BIN_CODEMETRE = "codemetre.exe"
+else:
+    BIN_CODEMETRE = "codemetre"
 
 class Mesure:
-    """Résultat de mesure unitaire de codemetre"""
-
+    """
+    Résultat de mesure unitaire de codemetre
+    """
     def __init__(self):
         self.fichier = None
         self.nb_fichier = 0
@@ -20,7 +26,7 @@ class Mesure:
         self.commentaire = 0
         self.total = 0
 
-    def __repr__(self):
+    def __str__(self):
         retour = self.fichier + " "
         retour += str(self.nb_fichier) + " "
         retour += str(self.code) + " "
@@ -29,7 +35,9 @@ class Mesure:
         return retour
 
     def accumuler(self, autre):
-        """Consolide les résultats dans l'instance courante"""
+        """
+        Consolide les résultats dans l'instance courante
+        """
         self.fichier = None
         self.nb_fichier = self.nb_fichier + autre.nb_fichier
         self.code = self.code + autre.code
@@ -37,21 +45,19 @@ class Mesure:
         self.total = self.total + autre.total
 
     def effectuer(self, fichier):
-        """Réalise la mesure du fichier correspondant"""
+        """
+        Réalise la mesure du fichier correspondant
+        """
         self.fichier = fichier
         self.nb_fichier = 0
         self.code = 0
         self.commentaire = 0
         self.total = 0
 
-        sp = subprocess.Popen([BIN_CODEMETRE,
-                               "--code", "--comment", "--total",
-                               fichier],
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE)
-        out, err = sp.communicate()
-        out = out.split()
-        err = err.split('\n')
+        f_out, f_in, f_err = popen3(BIN_CODEMETRE + " --code --comment" \
+                                        + " --total " + fichier)
+        out = f_out.read().split()
+        err = f_err.read().split('\n')
 
         if len(err) <= 5:
             self.nb_fichier = 1
@@ -64,16 +70,20 @@ class Mesure:
                     self.total = int(out[i + 1])
 
     def effectuer_lot(self, p_lot):
-        """Réalise la mesure du fichier correspondant"""
+        """
+        Réalise la mesure du lot correspondant
+        """
         self.__init__()
         tampon = copy.copy(self)
-        for fichier in p_lot.lignes:
-            tampon.effectuer(fichier)
+        for url in p_lot:
+            tampon.effectuer(urllib.url2pathname(url))
             self.accumuler(tampon)
 
 
 class Distance:
-    """Résultat de mesure différentielle de codemetre"""
+    """
+    Résultat de mesure différentielle de codemetre
+    """
     def __init__(self):
         self.fichier = None
         self.reference = None
@@ -82,7 +92,7 @@ class Distance:
         self.commun = 0
         self.apres = 0
 
-    def __repr__(self):
+    def __str__(self):
         retour = self.fichier + " "
         retour += str(self.nb_fichier) + " "
         retour += str(self.avant) + " "
@@ -92,7 +102,9 @@ class Distance:
         return retour
 
     def accumuler(self, autre):
-        """Consolide les résultats dans l'instance courante"""
+        """
+        Consolide les résultats dans l'instance courante
+        """
         self.fichier = None
         self.reference = None
         self.nb_fichier = self.nb_fichier + autre.nb_fichier
@@ -101,7 +113,9 @@ class Distance:
         self.commun = self.commun + autre.commun
 
     def effectuer(self, fichier, reference):
-        """Réalise la mesure du fichier correspondant"""
+        """
+        Réalise la mesure du fichier correspondant
+        """
         self.fichier = fichier
         self.reference = reference
         self.nb_fichier = 0
@@ -117,12 +131,11 @@ class Distance:
         if fichier is None or fichier == "":
             apres = "-nil-"
 
-        sp = subprocess.Popen([BIN_CODEMETRE, "--diff", "--code", avant, apres],
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.PIPE)
-        out, err = sp.communicate()
-        out = out.split()
-        err = err.split('\n')
+        f_out, f_in, f_err = popen3(BIN_CODEMETRE + " --diff --code" \
+                                        + " --model normal " + avant \
+                                        + " " + apres)
+        out = f_out.read().split()
+        err = f_err.read().split('\n')
 
         if len(err) <= 5:
             self.nb_fichier = 1
@@ -135,17 +148,23 @@ class Distance:
                     self.commun = int(out[i + 1])
 
     def effectuer_lot(self, p_lot, p_lot_ref):
-        """Réalise la mesure du fichier correspondant"""
+        """
+        Réalise la comparaison des lots correspondants
+        """
         self.__init__()
         tampon = copy.copy(self)
-        lg_min = min(len(p_lot.lignes), len(p_lot_ref.lignes))
+        lg_max = max(len(p_lot.lignes), len(p_lot_ref.lignes))
 
-        for i in range(lg_min):
-            tampon.effectuer(p_lot.lignes[i], p_lot_ref.lignes[i])
-            self.accumuler(tampon)
-        for i in range(lg_min, len(p_lot.lignes)):
-            tampon.effectuer(p_lot.lignes[i], None)
-            self.accumuler(tampon)
-        for i in range(lg_min, len(p_lot_ref.lignes)):
-            tampon.effectuer(None, p_lot_ref.lignes[i])
+        for i in range(lg_max):
+            try:
+                avant = urllib.url2pathname(p_lot_ref.urls[i])
+            except IndexError:
+                avant = None
+
+            try:
+                apres = urllib.url2pathname(p_lot.urls[i])
+            except IndexError:
+                apres = None
+
+            tampon.effectuer(apres, avant)
             self.accumuler(tampon)

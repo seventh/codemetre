@@ -1,40 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from codemetre.lot import *
-import os
-import string
+"""
+Utilitaire d'alignement de différents Lots codemetre pour en faciliter la
+comparaison
+"""
+
+from codemetre.lot import Lot
+import copy
+import getopt
 import sys
 
-def table_en_dictionnaire(p_table, p_lg_prefixe):
-    retour = {}
 
-    for chemin_et_fichier in p_table:
-        if chemin_et_fichier != "":
-            parties = string.rsplit(chemin_et_fichier,"/",p_lg_prefixe+1)
-            fichier = string.join(parties[1:],"/")
-            if fichier in retour:
-                print >> sys.stderr, "Attention doublon sur", fichier
-            else:
-                retour[fichier] = chemin_et_fichier
-
-    return retour
-
-# Récupération des paramètres : hauteur d'unicité et nom des fichiers
-
-lg_prefixe = 0
-fichiers = []
-try:
-    fichiers[:] = sys.argv[1:]
-    if sys.argv[1] == '-p':
-        lg_prefixe = max(lg_prefixe,int(sys.argv[2]))
-        fichiers[:] = sys.argv[3:]
-except Exception, e:
-    pass
-
-# Vérification de la ligne de commande hors paramètres optionnels
-
-if len(fichiers) < 2:
+def usage():
+    """
+    Affiche sur la sortie standard une aide rapide et sort immédiatement
+    """
     print """
 Usage : %s [-p N] <reference.txt> <evolution1.txt> [<evolution2.txt> ...]
 
@@ -49,50 +30,33 @@ Usage : %s [-p N] <reference.txt> <evolution1.txt> [<evolution2.txt> ...]
 """ % sys.argv[0]
     exit(0)
 
+if __name__ == "__main__":
+    # Récupération des paramètres : hauteur d'unicité et nom des fichiers
+    try:
+        OPTS, ARGS = getopt.getopt(sys.argv[1:], "p:")
+    except getopt.GetoptError, erreur:
+        print str(erreur)
+        usage()
 
-lot = Lot()
+    LG_PREFIXE = 0
+    for opt, arg in OPTS:
+        if opt == "-p":
+            LG_PREFIXE = int(arg)
+    if len(ARGS) < 2:
+        usage()
 
-# La table 'reference' liste les clefs dans l'ordre
-reference = []
+    # On compare chaque fichier avec le suivant et la référence consolidée,
+    # et on produit une nouvelle version de celui-ci.
 
-# On compare chaque fichier avec le suivant et la référence consolidée, et on
-# produit une nouvelle version de celui-ci.
+    REFERENCE = Lot()
 
-for i, fichier in enumerate(fichiers):
-    # Conversion du lot en dictionnaire
-    lot.charger(fichier)
-    base = table_en_dictionnaire(lot.lignes, lg_prefixe)
+    for fichier in ARGS:
+        LOT = Lot()
+        LOT.charger(fichier)
+        LOT.aligner(REFERENCE, LG_PREFIXE)
 
-    if i == len(fichiers)-1:
-        evol = {}
-    else:
-        lot.charger(fichiers[i+1])
-        evol = table_en_dictionnaire(lot.lignes, lg_prefixe)
+        flux = open(fichier, "w")
+        print >> flux, str(LOT),
+        flux.close()
 
-    flux = open(fichier, "w")
-
-    # alignement sur la référence
-    print >> flux, "#Base"
-    for clef in reference:
-        if clef in base:
-            print >> flux, base[clef]
-            del base[clef]
-        else:
-            print >> flux, ""
-
-    # production des lignes à la fois dans la base et l'évolution
-    print >> flux, "#Commun"
-    ref = base.copy()
-    for clef in ref:
-        if clef in evol:
-            reference.append(clef)
-            print >> flux, base[clef]
-            del base[clef]
-
-    # production des lignes uniquement dans la base
-    print >> flux, "#Spécifique"
-    for clef in base:
-        reference.append(clef)
-        print >> flux, base[clef]
-
-    flux.close()
+        REFERENCE = LOT
