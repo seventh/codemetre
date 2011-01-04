@@ -2,7 +2,6 @@ oOo Développements futurs prioritaires oOo
  * Permettre d'appliquer plusieurs modèles par mesure.
  * Offrir la possibilité de lister des répertoires lors du traitement par lot en mode différentiel.
  * Produire le .cmb équivalent aux entrées fournies. Ceci doit par exemple permettre de bâtir un .cmb en l'absence de commande de type 'find', ou d'assurer un rejeu à l'identique.
- * Assurer la portabilité des fichiers de traitement par lot (support natif et script Python), particulièrement vis-à-vis du séparateur de répertoire
  * Insensibiliser la casse pour les variables booléennes du fichier de configuration
  * Intégrer le support du langage Python.
 
@@ -26,4 +25,5 @@ oOo Développement refusés oOo
 
  * Ajouter une directive "auto/manual" qui permet de comptabiliser différemment le code automatique et manuel (avec une métrique associée bien entendu)
   - La notion code automatique/manuelle étant uniquement disponible par lot, mais l'impact portant sur le type de métrique utilisée, cela impliquerait que des métriques ne seraient utilisables qu'en traitement par lot, ce qui est déroutant.
- * Lier directement l'analyse lexicale et la production de métriques sans mémoriser le listage dans le cas des métriques unitaires. Si cela permettrait a priori de gagner en performances, cela entraverait gravement l'évolutivité du logiciel vis-à-vis de l'introduction de nouvelles métriques.
+
+  * Lier directement l'analyse lexicale et la production de métriques sans mémoriser le listage dans le cas des métriques unitaires. Si cela permettrait a priori de gagner en performances, cela entraverait gravement l'évolutivité du logiciel vis-à-vis de l'introduction de nouvelles métriques.

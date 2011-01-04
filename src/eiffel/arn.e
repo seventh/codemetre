@@ -1,22 +1,22 @@
 indexing
 
-	auteur : "seventh"
-	license : "GPL 3.0"
-	reference : "Introduction à l'algorithmique - chapitre 14 - Cormen, Leiserson, Rivest"
+   auteur : "seventh"
+   license : "GPL 3.0"
+   reference : "Introduction à l'algorithmique - chapitre 14 - Cormen, Leiserson, Rivest"
 
 class
 
-	ARN
+   ARN
 
-		--
-		-- Contexte global des Arbres Rouge et Noir
-		--
+      --
+      -- Contexte global des Arbres Rouge et Noir
+      --
 
 feature {ARN}
 
-	couleurs : ARN_ENSEMBLE_COULEUR is
-		once
-			create result
-		end
+   couleurs : ARN_ENSEMBLE_COULEUR is
+      once
+         create result
+      end
 
 end

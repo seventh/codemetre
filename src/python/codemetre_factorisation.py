@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Rajoute une directive "#dirname:=" en tête de lot pour en faciliter la
-comparaison
+Rajoute des directives 'dirtype' et 'dirname' en tête de lot pour en
+faciliter la comparaison
 """
 
 import sys

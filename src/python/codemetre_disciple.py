@@ -7,7 +7,6 @@ comparaison
 """
 
 from codemetre.lot import Lot
-import copy
 import getopt
 import sys
 
@@ -17,11 +16,11 @@ def usage():
     Affiche sur la sortie standard une aide rapide et sort immédiatement
     """
     print """
-Usage : %s [-p N] <reference.txt> <evolution1.txt> [<evolution2.txt> ...]
+Usage : %s [-p N] <reference.txt> <evolution.txt> [...]
 
          Réordonne les différents fichiers de manière à faire coïncider les
-        entrées ligne à ligne, tout en permettant à 'evolution1.txt' d'être une
-        référence de comparaison pour 'evolution2.txt', et ainsi de suite, sur
+        entrées ligne à ligne, tout en permettant à 'evolution.txt' d'être une
+        référence de comparaison pour le fichier suivant, et ainsi de suite, sur
         la base du seul nom de fichier.
 
          Le paramètre optionnel -p permet de fixer la hauteur du contexte à
@@ -59,4 +58,4 @@ if __name__ == "__main__":
         print >> flux, str(LOT),
         flux.close()
 
-        REFERENCE = LOT
+        REFERENCE.chemins.extend(LOT.chemins[:len(REFERENCE.chemins)])

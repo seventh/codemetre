@@ -1,3 +1,17 @@
+*** 0.30.0
+
+ - Il n'y a plus d'affichage systématique de la mention légale sur la sortie
+ d'erreur. À la place, elle est fournie en même temps que le numéro de version
+ via la nouvelle option '--version'.
+ - Suppression du préfixe 'v' dans les numéros de version.
+ - Lots : introduction de la direction 'dirtype' qui permet de spécifier la
+ notation utilisée.
+ - Outils : choix entre popen2 et subprocess effectué en fonction de la
+ plateforme d'exécution et de la version de l'interpréteur.
+ - Outils : prise en charge des commentaires lors du chargement de Lot.
+ - Correction d'un bogue dans codemetre_factorisation.py qui faisait qu'il
+ pouvait perdre la mémoire (visible à partir de 2 évolutions).
+
 *** v0.29.2
 
  - Outils : réécriture pour portabilité des traitements. Principalement, des

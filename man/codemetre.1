@@ -1,7 +1,7 @@
 .\" Formater ce fichier par la commande :
-.\" less codemetre.fr.1
+.\" groff -Tutf8 -mman codemetre.fr.1
 .\"
-.TH CODEMETRE 1 "juin 2010" "codemetre-0.29.0" "Manuel de l'utilisateur Linux"
+.TH CODEMETRE 1 "janvier 2011" "codemetre-0.30.0" "Manuel de l'utilisateur Linux"
 .\" Pour empêcher toute velléité de césure des mots
 .nh
 .SH NOM
@@ -13,6 +13,9 @@ FICHIER|RÉPERTOIRE|LOT...
 .br
 .B codemetre
 --config
+.br
+.B codemetre
+--version
 .SH DESCRIPTION
 .B codemetre
 mesure la taille de fichiers sources en nombre de lignes physiques de code et de commentaires. Il permet également d'évaluer l'effort réalisé entre deux versions d'un même fichier. On parle alors de mesure différentielle.
@@ -23,7 +26,7 @@ Signifier que les arguments restants ne sont pas des options mais nécessairemen
 .SS "Spectre de l'analyse"
 Les métriques produites peuvent ne porter que sur une partie du contenu des fichiers, en se limitant uniquement au code ou aux commentaires. Cependant, l'analyse est dans tous les cas menée complètement.
 .B codemetre
-peut donc échouer à analyser un fichier dont on ne souhaite connaître que le volume de commentaires parce que le code est invalide. Le contrôle de ce qui est est pris en compte lors de la mesure de chaque fichier est possible à travers les trois options suivantes :
+peut donc échouer à analyser un fichier dont on ne souhaite connaître que le volume de commentaires parce que le code est invalide. Le contrôle de ce qui est pris en compte lors de la mesure de chaque fichier est possible à travers les trois options suivantes :
 .TP
 .BR --code
 Limiter la mesure au code.
@@ -66,6 +69,12 @@ affiche la configuration appliquée, résultat de l'amendement de la configurati
 .TP
 .BR --noconfig
 Ignorer la configuration utilisateur et ne prendre en compte que la configuration par défaut.
+.SS "Identification"
+.TP
+.BR --version
+Afficher sur la sortie standard, l'identifiant de la version de
+.B codemetre
+ainsi que quelques informations liées à sa license.
 .SH LANGAGES RECONNUS
 Si aucun langage n'est choisi via l'option --lang, alors
 .B codemetre
@@ -125,7 +134,7 @@ Modèle constitué d'une unique métrique reflétant l'effort fourni pour passer
 .B (N-C)/N
 .SH FICHIER DE CONFIGURATION
 Chaque utilisateur peut surcharger les options par défaut de
-.I codemetre
+.B codemetre
 dans un fichier au format similaire à ce qui peut-être obtenu par le biais de la commande
 .B codemetre --config.
 .SS "Localisation du fichier de configuration"
@@ -142,12 +151,12 @@ Le fichier
 est cherché dans %APPDATA%.
 .SS "Opérateurs"
 La valeur d'une variable est fixée grâce à l'opérateur
-.B :=. En l'absence d'opérande à droite, ceci est interprété comme un effacement de la variable.
-Il existe aussi deux autres opérateurs pour modifier les listes,
+.B :=.
+En l'absence d'opérande à droite, ceci est interprété comme un effacement de la variable. Il existe aussi deux autres opérateurs pour modifier les listes,
 .B +=
 et
 .B -=
-, qui modifient la variable en y respectivement ajoutant et supprimant des valeurs.
+, qui modifient la variable respectivement en y ajoutant et supprimant des valeurs.
 .SS "Simulation de support de langages"
 L'ajout d'associations dans la section [langage] du fichier de configuration permet une prise en charge simpliste de langages non officiellement supportés. Par exemple, un support du langage Python peut être fait à peu de frais en rajoutant dans le fichier de configuration le code suivant :
 .nf

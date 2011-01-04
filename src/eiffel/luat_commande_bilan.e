@@ -1,39 +1,39 @@
 indexing
 
-	auteur : "seventh"
-	license : "GPL 3.0"
+   auteur : "seventh"
+   license : "GPL 3.0"
 
 class
 
-	LUAT_COMMANDE_BILAN
+   LUAT_COMMANDE_BILAN
 
-		--
-		-- Cette commande produit, sur la sortie standard, un bilan de
-		-- toute l'analyse qui a pu être menée : nombre de fichiers, et
-		-- cumul de métriques
-		--
+      --
+      -- Cette commande produit, sur la sortie standard, un bilan de
+      -- toute l'analyse qui a pu être menée : nombre de fichiers, et
+      -- cumul de métriques
+      --
 
 inherit
 
-	LUAT_COMMANDE
+   LUAT_COMMANDE
 
 creation
 
-	fabriquer
+   fabriquer
 
 feature {}
 
-	fabriquer is
-			-- constructeur
-		do
-			-- rien de particulier
-		end
+   fabriquer is
+         -- constructeur
+      do
+         -- rien de particulier
+      end
 
 feature
 
-	executer is
-		do
-			bilan.afficher( std_output )
-		end
+   executer is
+      do
+         bilan.afficher( std_output )
+      end
 
 end

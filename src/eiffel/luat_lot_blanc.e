@@ -1,54 +1,54 @@
 indexing
 
-	auteur : "seventh"
-	license : "GPL 3.0"
+   auteur : "seventh"
+   license : "GPL 3.0"
 
 class
 
-	LUAT_LOT_BLANC
+   LUAT_LOT_BLANC
 
-		--
-		-- Itérateur (à l'infini) de lot vide : toutes les entrées sont
-		-- vides
-		--
+      --
+      -- Itérateur (à l'infini) de lot vide : toutes les entrées sont
+      -- vides
+      --
 
 inherit
 
-	LUAT_LOT
+   LUAT_LOT
 
 creation
 
-	fabriquer
+   fabriquer
 
 feature {}
 
-	fabriquer is
-			-- constructeur
-		do
-		end
+   fabriquer is
+         -- constructeur
+      do
+      end
 
 feature
 
-	entree : STRING is
-		attribute
-		ensure
-			definition : result = void
-		end
+   entree : STRING is
+      attribute
+      ensure
+         definition : result = void
+      end
 
-	entree_courte : STRING is
-		attribute
-		ensure
-			definition : result = void
-		end
+   entree_courte : STRING is
+      attribute
+      ensure
+         definition : result = void
+      end
 
-	lire is
-		do
-		end
+   lire is
+      do
+      end
 
-	est_epuise : BOOLEAN is true
+   est_epuise : BOOLEAN is true
 
-	clore is
-		do
-		end
+   clore is
+      do
+      end
 
 end

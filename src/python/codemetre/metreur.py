@@ -6,9 +6,28 @@ en comparaison d'une ancienne version dite "de référence"
 """
 
 import copy
-from popen2 import popen3
 import sys
-import urllib
+
+# Interface unifiée multi-plateforme pour pouvoir faire des appels systèmes
+# fiables quelque soit la version 2.x de Python
+
+if sys.platform == "win32" and sys.version_info < (2, 6):
+    from popen2 import popen3
+
+    def _appel_systeme(arguments):
+        commande = " ".join(arguments)
+        f_out, f_in, f_err = popen3(commande)
+        out = f_out.read()
+        err = f_err.read()
+        return out, err
+else:
+    import subprocess
+
+    def _appel_systeme(arguments):
+        sp = subprocess.Popen(arguments,
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE)
+        return sp.communicate()
 
 if sys.platform == "win32":
     BIN_CODEMETRE = "codemetre.exe"
@@ -54,12 +73,12 @@ class Mesure:
         self.commentaire = 0
         self.total = 0
 
-        f_out, f_in, f_err = popen3(BIN_CODEMETRE + " --code --comment" \
-                                        + " --total " + fichier)
-        out = f_out.read().split()
-        err = f_err.read().split('\n')
+        out, err = _appel_systeme([BIN_CODEMETRE, "--code", "--comment",
+                                   "--total", fichier])
+        out = out.split()
+        err = err.split('\n')
 
-        if len(err) <= 5:
+        if len(err) == 1:
             self.nb_fichier = 1
             for i, v in enumerate(out):
                 if v == "code":
@@ -75,8 +94,8 @@ class Mesure:
         """
         self.__init__()
         tampon = copy.copy(self)
-        for url in p_lot:
-            tampon.effectuer(urllib.url2pathname(url))
+        for chemin in p_lot:
+            tampon.effectuer(chemin)
             self.accumuler(tampon)
 
 
@@ -131,13 +150,12 @@ class Distance:
         if fichier is None or fichier == "":
             apres = "-nil-"
 
-        f_out, f_in, f_err = popen3(BIN_CODEMETRE + " --diff --code" \
-                                        + " --model normal " + avant \
-                                        + " " + apres)
-        out = f_out.read().split()
-        err = f_err.read().split('\n')
+        out, err = _appel_systeme([BIN_CODEMETRE, "--diff", "--code", "--model",
+                                   "normal", avant, apres])
+        out = out.split()
+        err = err.split('\n')
 
-        if len(err) <= 5:
+        if len(err) == 1:
             self.nb_fichier = 1
             for i, v in enumerate(out):
                 if v == "A":
@@ -153,16 +171,16 @@ class Distance:
         """
         self.__init__()
         tampon = copy.copy(self)
-        lg_max = max(len(p_lot.lignes), len(p_lot_ref.lignes))
+        lg_max = max(len(p_lot.chemins), len(p_lot_ref.chemins))
 
         for i in range(lg_max):
             try:
-                avant = urllib.url2pathname(p_lot_ref.urls[i])
+                avant = p_lot_ref.chemins[i]
             except IndexError:
                 avant = None
 
             try:
-                apres = urllib.url2pathname(p_lot.urls[i])
+                apres = p_lot.chemins[i]
             except IndexError:
                 apres = None
 

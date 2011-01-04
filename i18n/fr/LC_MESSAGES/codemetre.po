@@ -1,16 +1,17 @@
 # codemetre
-# Copyright (C) 2005,2006,2007,2008,2009,2010
+# Copyright (C) 2005,2006,2007,2008,2009,2010,2011
 # This file is distributed under the same license as the codemetre package.
-# Guillaume Lemaître <guillaume.lemaitre@gmail.com>, 2010.
+# Guillaume Lemaître <guillaume.lemaitre@gmail.com>, 2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.29.0\n"
+"Project-Id-Version: 0.30.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-29 20:39+0200\n"
-"PO-Revision-Date: 2010-06-29 20:40+0200\n"
+"POT-Creation-Date: 2011-01-04 13:14+0100\n"
+"PO-Revision-Date: 2011-01-04 13:16+0100\n"
 "Last-Translator: Guillaume Lemaître <guillaume.lemaitre@gmail.com>\n"
 "Language-Team: French\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -292,7 +293,12 @@ msgstr "commentaire multi-ligne incomplet"
 msgid "incomplete comment"
 msgstr "commentaire incomplet"
 
-#: luat_codemetre.e:62
+#: luat_commande.e:57
+#, c-format
+msgid "\" cannot be written"
+msgstr "\" ne peut être écrit"
+
+#: luat_commande_version.e:42
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you\n"
@@ -302,11 +308,6 @@ msgstr ""
 "Ce programme n'est en aucun cas garanti. Vous êtes invités à redistribuer ce\n"
 "logiciel libre sous certaines conditions.\n"
 "\n"
-
-#: luat_commande.e:57
-#, c-format
-msgid "\" cannot be written"
-msgstr "\" ne peut être écrit"
 
 #: luat_configuration.e:200
 #: luat_configuration.e:213
@@ -445,7 +446,7 @@ msgid "unit:status is not clearable"
 msgstr "'unit:status' doit avoir une valeur associée"
 
 #: luat_configuration.e:547
-#: luat_ligne_commande_analyseur.e:239
+#: luat_ligne_commande_analyseur.e:252
 #, c-format
 msgid "unknown diff model"
 msgstr "modèle de comparaison inconnu"
@@ -479,133 +480,138 @@ msgstr "option de filtrage non reconnue"
 msgid "removing filters leaves empty set"
 msgstr "supprimer ce filtre empêcherait toute analyse"
 
-#: luat_ligne_commande_analyseur.e:96
+#: luat_ligne_commande_analyseur.e:97
 #, c-format
 msgid "too many \"--dump\" option"
 msgstr "option \"--dump\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:109
+#: luat_ligne_commande_analyseur.e:110
 #, c-format
 msgid "mode is enforced more than once"
 msgstr "le mode est spécifié au moins deux fois"
 
-#: luat_ligne_commande_analyseur.e:125
+#: luat_ligne_commande_analyseur.e:126
 #, c-format
 msgid "\"--config\" is incompatible with any other argument"
 msgstr "\"--config\" ne peut être associé avec aucun autre argument"
 
-#: luat_ligne_commande_analyseur.e:137
+#: luat_ligne_commande_analyseur.e:138
 #, c-format
 msgid "too many \"--code\" option"
 msgstr "option \"--code\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:146
+#: luat_ligne_commande_analyseur.e:147
 #, c-format
 msgid "too many \"--comment\" option"
 msgstr "option \"--comment\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:155
+#: luat_ligne_commande_analyseur.e:156
 #, c-format
 msgid "too many \"--total\" option"
 msgstr "option \"--total\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:166
+#: luat_ligne_commande_analyseur.e:167
 #, c-format
 msgid "language is enforced more than once"
 msgstr "le langage est spécifié au moins deux fois"
 
-#: luat_ligne_commande_analyseur.e:178
+#: luat_ligne_commande_analyseur.e:179
 #, c-format
 msgid "too many diff models"
 msgstr "le modèle de comparaison est précisé au moins deux fois"
 
-#: luat_ligne_commande_analyseur.e:190
+#: luat_ligne_commande_analyseur.e:191
 #, c-format
 msgid "too many \"--status\" option"
 msgstr "option \"--status\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:201
+#: luat_ligne_commande_analyseur.e:202
 #, c-format
 msgid "too many \"--short\" option"
 msgstr "option \"--short\" surnuméraire"
 
-#: luat_ligne_commande_analyseur.e:226
+#: luat_ligne_commande_analyseur.e:217
+#, c-format
+msgid "\"--version\" is incompatible with any other argument"
+msgstr "\"--version\" ne peut être associé avec aucun autre argument"
+
+#: luat_ligne_commande_analyseur.e:239
 #, c-format
 msgid "unknown language"
 msgstr "langage inconnu"
 
-#: luat_ligne_commande_analyseur.e:278
+#: luat_ligne_commande_analyseur.e:291
 #, c-format
 msgid "one filter only for diff"
 msgstr "une seule filtre autorisé lors d'une demande de comparaison"
 
-#: luat_ligne_commande_analyseur.e:296
+#: luat_ligne_commande_analyseur.e:309
 #, c-format
 msgid "no diff model is required for measure"
 msgstr "il n'est pas utile de préciser le modèle de comptage différentiel pour un comptage unitaire"
 
-#: luat_ligne_commande_analyseur.e:299
+#: luat_ligne_commande_analyseur.e:312
 #, c-format
 msgid "short output is available only for diff"
 msgstr "l'affichage court n'est possible que lors d'une demande de comparaison"
 
-#: luat_ligne_commande_analyseur.e:314
+#: luat_ligne_commande_analyseur.e:327
 #, c-format
 msgid "two files are required in diff mode"
 msgstr "il faut deux fichiers en mode différentiel"
 
-#: luat_ligne_commande_analyseur.e:328
-#: luat_ligne_commande_analyseur.e:625
+#: luat_ligne_commande_analyseur.e:341
+#: luat_ligne_commande_analyseur.e:645
 #, c-format
 msgid "at least one of the two arguments shall exists"
 msgstr "on ne peut comparer ce qui n'existait pas et ce qui n'existe plus"
 
-#: luat_ligne_commande_analyseur.e:348
+#: luat_ligne_commande_analyseur.e:361
 #, c-format
 msgid "batch file cannot be compared to single file or directory"
 msgstr "un lot ne peut qu'être comparé à un autre lot"
 
-#: luat_ligne_commande_analyseur.e:355
+#: luat_ligne_commande_analyseur.e:368
 #, c-format
 msgid "directory cannot be compared to single or batch file"
 msgstr "un répertoire ne peut qu'être comparé à un autre répertoire"
 
-#: luat_ligne_commande_analyseur.e:424
+#: luat_ligne_commande_analyseur.e:437
 #, c-format
 msgid "usage:"
 msgstr "usage :"
 
-#: luat_ligne_commande_analyseur.e:426
+#: luat_ligne_commande_analyseur.e:446
 #, c-format
 msgid "FILE|DIRECTORY|BATCH..."
 msgstr "FICHIER|RÉPERTOIRE|LOT ..."
 
-#: luat_ligne_commande_analyseur.e:436
+#: luat_ligne_commande_analyseur.e:456
 #, c-format
 msgid "For further information:"
 msgstr "Pour de plus amples informations :"
 
-#: luat_ligne_commande_analyseur.e:438
+#: luat_ligne_commande_analyseur.e:458
 #, c-format
 msgid " - see "
 msgstr " - voyez "
 
-#: luat_ligne_commande_analyseur.e:441
+#: luat_ligne_commande_analyseur.e:461
 #, c-format
 msgid " - visit "
 msgstr " - visitez "
 
-#: luat_ligne_commande_analyseur.e:455
+#: luat_ligne_commande_analyseur.e:475
 #, c-format
 msgid "Syntax error: "
 msgstr "Syntaxe incorrecte : "
 
-#: luat_ligne_commande_analyseur.e:503
+#: luat_ligne_commande_analyseur.e:523
 #, c-format
 msgid "Error: batch file \""
 msgstr "Erreur : le lot \""
 
-#: luat_ligne_commande_analyseur.e:505
+#: luat_ligne_commande_analyseur.e:525
 #, c-format
 msgid "\" cannot be open for reading"
 msgstr "\" est inaccessible en lecture"
@@ -620,12 +626,18 @@ msgstr "Erreur : \""
 msgid "\" is empty"
 msgstr "est vide"
 
-#: luat_lot_liste.e:120
+#: luat_lot_liste.e:126
+#: luat_lot_liste.e:138
 #, c-format
 msgid "Syntax error in batch file: "
-msgstr "Lot en erreur : \""
+msgstr "Lot en erreur : "
 
-#: luat_lot_liste.e:121
+#: luat_lot_liste.e:127
 #, c-format
-msgid "\"dirname\" directive shall end with a directory separator"
-msgstr "toute directive \"dirname\" doit se terminer par un séparateur de répertoire"
+msgid "\"dirtype\" directive shall either be empty, 'unix' or 'windows'"
+msgstr "la directive \"dirtype\" doit être soit vide, soit valoir 'unix' ou 'windows'"
+
+#: luat_lot_liste.e:139
+#, c-format
+msgid "\"dirname\" directive shall be a valid directory name"
+msgstr "toute directive \"dirname\" doit être un nom de répertoire valide"
