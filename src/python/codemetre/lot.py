@@ -63,7 +63,8 @@ class Lot:
         self.notation = notation_locale
 
         racine = ""
-        with open(p_nom_lot, "r") as flux:
+        try:
+            flux = open(p_nom_lot, "r")
             for chemin_et_fichier in flux:
                 # Suppression des sauts de ligne
                 chemin_et_fichier = chemin_et_fichier.rstrip()
@@ -85,6 +86,9 @@ class Lot:
                     chemin_et_fichier = self.notation.join(racine,
                                                            chemin_et_fichier)
                     self.chemins.append(chemin_et_fichier)
+            flux.close()
+        except IOError:
+            pass
 
     def ajouter(self, p_chemin):
         """

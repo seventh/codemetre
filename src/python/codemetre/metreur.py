@@ -7,6 +7,7 @@ en comparaison d'une ancienne version dite "de référence"
 
 import copy
 import sys
+from codemetre import BIN_CODEMETRE
 
 # Interface unifiée multi-plateforme pour pouvoir faire des appels systèmes
 # fiables quelque soit la version 2.x de Python
@@ -28,11 +29,6 @@ else:
                               stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
         return sp.communicate()
-
-if sys.platform == "win32":
-    BIN_CODEMETRE = "codemetre.exe"
-else:
-    BIN_CODEMETRE = "codemetre"
 
 class Mesure:
     """

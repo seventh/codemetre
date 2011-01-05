@@ -7,5 +7,12 @@ gestion des lots
 
 __all__ = ["lot", "metreur"]
 
+import sys
+
+if sys.platform == "win32":
+    BIN_CODEMETRE = "codemetre.exe"
+else:
+    BIN_CODEMETRE = "codemetre"
+
 from codemetre.lot import Lot
 from codemetre.metreur import Mesure, Distance

@@ -1,3 +1,11 @@
+*** 0.30.1
+
+ - Correction du bogue n°4 : si la variable $HOME n'est pas définie sous UNIX,
+ ou %APPDATA% sous WINDOWS, alors la recherche du fichier de configuration
+ provoquait le plantage de l'application. Ce problème existe depuis la version
+ 0.21.0.
+ - Outils : suppression des instructions 'with' pour plus de compatibilité.
+
 *** 0.30.0
 
  - Il n'y a plus d'affichage systématique de la mention légale sur la sortie

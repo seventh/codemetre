@@ -698,6 +698,12 @@ feature {LUAT_CONFIGURATION}
                result.append_string( once "\codemetre.ini" )
             end
          end
+
+         -- environnement inconnu
+
+         if result = void then
+            create result.make_empty
+         end
       ensure
          definition : result /= void
       end
