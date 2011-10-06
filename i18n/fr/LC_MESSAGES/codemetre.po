@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.30.0\n"
+"Project-Id-Version: 0.31.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-04 13:14+0100\n"
-"PO-Revision-Date: 2011-01-04 13:16+0100\n"
+"POT-Creation-Date: 2011-10-06 15:20+0200\n"
+"PO-Revision-Date: 2011-10-06 15:24+0200\n"
 "Last-Translator: Guillaume Lemaître <guillaume.lemaitre@gmail.com>\n"
 "Language-Team: French\n"
 "Language: \n"
@@ -52,6 +52,7 @@ msgstr "aucune valeur n'est associée à la variable"
 #: luat_analyseur_eiffel.e:749
 #: luat_analyseur_famille_c.e:729
 #: luat_analyseur_html.e:135
+#: luat_analyseur_java.e:749
 #: luat_analyseur_shell.e:92
 #: luat_analyseur_simplet.e:102
 #: luat_analyseur_sql.e:274
@@ -111,6 +112,8 @@ msgstr "caractère interdit dans partie décimale de constante littérale numér
 #: luat_analyseur_eiffel.e:202
 #: luat_analyseur_famille_c.e:504
 #: luat_analyseur_famille_c.e:914
+#: luat_analyseur_java.e:524
+#: luat_analyseur_java.e:939
 #, c-format
 msgid "incomplete character constant"
 msgstr "constante littérale caractère incomplète"
@@ -119,6 +122,8 @@ msgstr "constante littérale caractère incomplète"
 #: luat_analyseur_eiffel.e:218
 #: luat_analyseur_famille_c.e:291
 #: luat_analyseur_famille_c.e:935
+#: luat_analyseur_java.e:311
+#: luat_analyseur_java.e:960
 #: luat_analyseur_sql.e:248
 #: luat_analyseur_sql.e:256
 #, c-format
@@ -237,58 +242,69 @@ msgstr "opérateur inconnu \"\\\""
 
 #: luat_analyseur_famille_c.e:426
 #: luat_analyseur_famille_c.e:437
+#: luat_analyseur_java.e:446
+#: luat_analyseur_java.e:457
 #, c-format
 msgid "forgotten exponent in numerical constant"
 msgstr "oubli de l'exposant dans une constante littérale numérique"
 
 #: luat_analyseur_famille_c.e:485
+#: luat_analyseur_java.e:505
 #, c-format
 msgid "incomplete '%:%:' separator"
 msgstr "séparateur '%:%:' incomplet"
 
 #: luat_analyseur_famille_c.e:495
+#: luat_analyseur_java.e:515
 #, c-format
 msgid "incomplete triglyph"
 msgstr "triglyphe incomplet"
 
 #: luat_analyseur_famille_c.e:565
+#: luat_analyseur_java.e:585
 #, c-format
 msgid "non respected end-of-line marker in split string"
 msgstr "marque de saut de ligne non respectée dans chaîne multi-ligne"
 
 #: luat_analyseur_famille_c.e:588
+#: luat_analyseur_java.e:608
 #, c-format
 msgid "incomplete ellipsis"
 msgstr "ellipse incomplète"
 
 #: luat_analyseur_famille_c.e:599
+#: luat_analyseur_java.e:619
 #, c-format
 msgid "non respected end-of-line marker"
 msgstr "marque de saut de ligne non respectée"
 
 #: luat_analyseur_famille_c.e:891
+#: luat_analyseur_java.e:916
 #, c-format
 msgid "unknown prefix"
 msgstr "préfixe non reconnu"
 
 #: luat_analyseur_famille_c.e:923
+#: luat_analyseur_java.e:948
 #, c-format
 msgid "end-of-line in character constant"
 msgstr "saut de ligne dans un caractère"
 
 #: luat_analyseur_famille_c.e:944
+#: luat_analyseur_java.e:969
 #, c-format
 msgid "end-of-line in string constant"
 msgstr "saut de ligne dans une chaîne"
 
 #: luat_analyseur_famille_c.e:956
+#: luat_analyseur_java.e:981
 #: luat_analyseur_sql.e:212
 #: luat_analyseur_sql.e:228
 #, c-format
 msgid "incomplete multiline comment"
 msgstr "commentaire multi-ligne incomplet"
 
-#: luat_analyseur_html.e:206
+#: luat_analyseur_html.e:208
 #, c-format
 msgid "incomplete comment"
 msgstr "commentaire incomplet"
@@ -309,173 +325,173 @@ msgstr ""
 "logiciel libre sous certaines conditions.\n"
 "\n"
 
-#: luat_configuration.e:200
-#: luat_configuration.e:213
+#: luat_configuration.e:206
+#: luat_configuration.e:219
 #, c-format
 msgid "Error: extension of file \""
 msgstr "L'extension du fichier \""
 
-#: luat_configuration.e:202
-#: luat_configuration.e:215
+#: luat_configuration.e:208
+#: luat_configuration.e:221
 #, c-format
 msgid "\" is unknown"
 msgstr "\" n'est pas reconnue"
 
-#: luat_configuration.e:400
-#: luat_configuration.e:472
-#: luat_configuration.e:537
-#: luat_configuration.e:602
+#: luat_configuration.e:406
+#: luat_configuration.e:478
+#: luat_configuration.e:543
+#: luat_configuration.e:608
 #, c-format
 msgid "analysis section is obsolete. Use diff:dump and unit:dump instead"
 msgstr "'diff:dump' et 'unit:dump' remplacent la section obsolète 'analysis'"
 
-#: luat_configuration.e:405
-#: luat_configuration.e:607
+#: luat_configuration.e:411
+#: luat_configuration.e:613
 #, c-format
 msgid "diff:dump is not a list"
 msgstr "la variable 'diff:dump' n'est pas une liste"
 
-#: luat_configuration.e:407
-#: luat_configuration.e:609
+#: luat_configuration.e:413
+#: luat_configuration.e:615
 #, c-format
 msgid "diff:filter can only have a single value"
 msgstr "une seule valeur est autorisée dans 'diff:filter'"
 
-#: luat_configuration.e:409
-#: luat_configuration.e:611
+#: luat_configuration.e:415
+#: luat_configuration.e:617
 #, c-format
 msgid "diff:model is not a list"
 msgstr "la variable 'diff:model' n'est pas une liste"
 
-#: luat_configuration.e:411
-#: luat_configuration.e:613
+#: luat_configuration.e:417
+#: luat_configuration.e:619
 #, c-format
 msgid "diff:short is not a list"
 msgstr "la variable 'diff:short' n'est pas une liste"
 
-#: luat_configuration.e:413
-#: luat_configuration.e:615
+#: luat_configuration.e:419
+#: luat_configuration.e:621
 #, c-format
 msgid "diff:status is not a list"
 msgstr "la variable 'diff:status' n'est pas une liste"
 
-#: luat_configuration.e:415
-#: luat_configuration.e:487
-#: luat_configuration.e:562
-#: luat_configuration.e:617
+#: luat_configuration.e:421
+#: luat_configuration.e:493
+#: luat_configuration.e:568
+#: luat_configuration.e:623
 #, c-format
 msgid "unknown parameter in diff section"
 msgstr "paramètre inconnu dans section 'diff'"
 
-#: luat_configuration.e:439
+#: luat_configuration.e:445
 #, c-format
 msgid "suffix is already associated with another language"
 msgstr "suffixe déjà associé à un autre langage"
 
-#: luat_configuration.e:441
+#: luat_configuration.e:447
 #, c-format
 msgid "redundant association"
 msgstr "couplage redondant"
 
-#: luat_configuration.e:448
-#: luat_configuration.e:643
+#: luat_configuration.e:454
+#: luat_configuration.e:649
 #, c-format
 msgid "unit:dump is not a list"
 msgstr "la variable 'unit:dump' n'est pas une liste"
 
-#: luat_configuration.e:452
-#: luat_configuration.e:647
+#: luat_configuration.e:458
+#: luat_configuration.e:653
 #, c-format
 msgid "unit:status is not a list"
 msgstr "la variable 'unit:status' n'est pas une liste"
 
-#: luat_configuration.e:454
-#: luat_configuration.e:521
-#: luat_configuration.e:582
-#: luat_configuration.e:649
+#: luat_configuration.e:460
+#: luat_configuration.e:527
+#: luat_configuration.e:588
+#: luat_configuration.e:655
 #, c-format
 msgid "unknown parameter in unit section"
 msgstr "paramètre inconnu dans section 'unit'"
 
-#: luat_configuration.e:459
-#: luat_configuration.e:526
-#: luat_configuration.e:587
-#: luat_configuration.e:654
+#: luat_configuration.e:465
+#: luat_configuration.e:532
+#: luat_configuration.e:593
+#: luat_configuration.e:660
 #, c-format
 msgid "unknown section"
 msgstr "section inconnue"
 
-#: luat_configuration.e:477
+#: luat_configuration.e:483
 #, c-format
 msgid "diff:dump is not clearable"
 msgstr "'diff:dump' doit avoir une valeur associée"
 
-#: luat_configuration.e:479
+#: luat_configuration.e:485
 #, c-format
 msgid "diff:filter is mandatory"
 msgstr "'diff:filter' doit avoir une valeur associée"
 
-#: luat_configuration.e:481
+#: luat_configuration.e:487
 #, c-format
 msgid "diff:model is mandatory"
 msgstr "la variable 'diff:model' est obligatoire"
 
-#: luat_configuration.e:483
+#: luat_configuration.e:489
 #, c-format
 msgid "diff:short is not clearable"
 msgstr "'diff:short' doit avoir une valeur associée"
 
-#: luat_configuration.e:485
+#: luat_configuration.e:491
 #, c-format
 msgid "diff:status is not clearable"
 msgstr "'diff:status' doit avoir une valeur associée"
 
-#: luat_configuration.e:515
+#: luat_configuration.e:521
 #, c-format
 msgid "unit:dump is not clearable"
 msgstr "'unit:dump' doit avoir une valeur associée"
 
-#: luat_configuration.e:517
+#: luat_configuration.e:523
 #, c-format
 msgid "unit:filter is mandatory"
 msgstr "'unit:filter' doit avoir une valeur associée"
 
-#: luat_configuration.e:519
+#: luat_configuration.e:525
 #, c-format
 msgid "unit:status is not clearable"
 msgstr "'unit:status' doit avoir une valeur associée"
 
-#: luat_configuration.e:547
+#: luat_configuration.e:553
 #: luat_ligne_commande_analyseur.e:252
 #, c-format
 msgid "unknown diff model"
 msgstr "modèle de comparaison inconnu"
 
-#: luat_configuration.e:553
 #: luat_configuration.e:559
-#: luat_configuration.e:579
+#: luat_configuration.e:565
+#: luat_configuration.e:585
 #, c-format
 msgid "invalid boolean value"
 msgstr "la valeur passée n'est pas un booléen"
 
-#: luat_configuration.e:633
+#: luat_configuration.e:639
 #, c-format
 msgid "no such association exists"
 msgstr "une telle association n'existe pas"
 
-#: luat_configuration.e:660
+#: luat_configuration.e:666
 #, c-format
 msgid "Syntax error"
 msgstr "Syntaxe incorrecte"
 
-#: luat_configuration.e:842
-#: luat_configuration.e:860
-#: luat_configuration.e:882
+#: luat_configuration.e:859
+#: luat_configuration.e:877
+#: luat_configuration.e:899
 #, c-format
 msgid "unknown filter"
 msgstr "option de filtrage non reconnue"
 
-#: luat_configuration.e:887
+#: luat_configuration.e:904
 #, c-format
 msgid "removing filters leaves empty set"
 msgstr "supprimer ce filtre empêcherait toute analyse"

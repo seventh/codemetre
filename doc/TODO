@@ -1,4 +1,6 @@
 oOo Développements futurs prioritaires oOo
+ * Modifier le format de sortie des erreurs pour pouvoir uniformiser le format
+ indépendamment de la localisation.
  * Permettre d'appliquer plusieurs modèles par mesure.
  * Offrir la possibilité de lister des répertoires lors du traitement par lot en mode différentiel.
  * Produire le .cmb équivalent aux entrées fournies. Ceci doit par exemple permettre de bâtir un .cmb en l'absence de commande de type 'find', ou d'assurer un rejeu à l'identique.

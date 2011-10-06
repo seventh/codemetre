@@ -199,7 +199,9 @@ feature {}
             chaine.add_last( caractere )
             etat := etat_commentaire_apres_tiret
          when '%N' then
-            produire_commentaire
+            if not chaine.is_empty then
+               produire_commentaire
+            end
             produire_ligne
             etat := etat_commentaire
          when '%U' then

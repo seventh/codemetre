@@ -49,6 +49,7 @@ feature {}
          analyseurs.add_last( analyseur_c_plus_plus )
          analyseurs.add_last( analyseur_eiffel )
          analyseurs.add_last( analyseur_html )
+         analyseurs.add_last( analyseur_java )
          analyseurs.add_last( analyseur_shell )
          analyseurs.add_last( analyseur_sql )
 
@@ -124,6 +125,11 @@ feature
          -- HTML
 
          create suffixe.fabriquer( once ".html", analyseur_html.langage )
+         associations.ajouter( suffixe )
+
+         -- Java
+
+         create suffixe.fabriquer( once ".java", analyseur_java.langage )
          associations.ajouter( suffixe )
 
          -- Shell
@@ -733,6 +739,11 @@ feature {}
    analyseur_html : LUAT_ANALYSEUR is
       once
          create {LUAT_ANALYSEUR_HTML} result.fabriquer
+      end
+
+   analyseur_java : LUAT_ANALYSEUR is
+      once
+         create {LUAT_ANALYSEUR_JAVA} result.fabriquer
       end
 
    analyseur_shell : LUAT_ANALYSEUR is
