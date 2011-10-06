@@ -1,3 +1,7 @@
+*** 0.31.1
+
+ - Langage quelconque : correction d'un bogue qui supprimait systématiquement le dernier caractère du lexème reconnu, et donc faisait disparaître les lignes constituées d'un unique caractère non blanc. L'implémentation d'un analyseur Java a permis de détecter ce problème.
+
 *** 0.31.0
 
  - HTML : les lignes de commentaires vides sont désormais autorisées

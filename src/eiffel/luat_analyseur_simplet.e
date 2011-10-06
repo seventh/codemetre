@@ -138,7 +138,7 @@ feature {}
          loop
             i := i - 1
          end
-         chaine.keep_head( i - chaine.lower )
+         chaine.keep_head( i - chaine.lower + 1 )
       end
 
 end
