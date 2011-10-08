@@ -4,7 +4,7 @@
 from distutils.core import setup
 
 setup(name="codemetre-python",
-      version="0.30.0",
+      version="0.31.2",
       license="GPL 3.0",
       description="Python wrapper and utilities for codemetre",
       author="seventh",

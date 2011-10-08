@@ -1,6 +1,15 @@
+*** 0.31.2
+
+ - Outils : les versions 0.31.0 et 0.31.1 comportaient des outils encore en
+ phase de développement. Le temps que ceux-ci soient stabilisés, les anciennes
+ versions sont fournies à la place.
+
 *** 0.31.1
 
- - Langage quelconque : correction d'un bogue qui supprimait systématiquement le dernier caractère du lexème reconnu, et donc faisait disparaître les lignes constituées d'un unique caractère non blanc. L'implémentation d'un analyseur Java a permis de détecter ce problème.
+ - Langage quelconque : correction d'un bogue qui supprimait systématiquement le
+ dernier caractère du lexème reconnu, et donc faisait disparaître les lignes
+ constituées d'un unique caractère non blanc. L'implémentation d'un analyseur
+ Java a permis de détecter ce problème.
 
 *** 0.31.0
 
